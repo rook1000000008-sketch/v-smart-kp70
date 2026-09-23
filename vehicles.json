@@ -1,0 +1,156 @@
+[
+    {
+        "id": 1,
+        "registration": "ฆข 29 เชียงใหม่",
+        "type": "รถใช้ในงานเกษตรกรรม",
+        "brand_model": "ไม่ระบุ (YANMAR)",
+        "details": "เครื่องยนต์ TF 160L006437 (น้ำหนัก 1,600 กก.)"
+    },
+    {
+        "id": 2,
+        "registration": "1กธ 8749 เชียงใหม่",
+        "type": "รถจักรยานยนต์",
+        "brand_model": "HONDA WAVE 110 I",
+        "details": "เครื่องยนต์ JA143F-0198394"
+    },
+    {
+        "id": 3,
+        "registration": "1กธ 8751 เชียงใหม่",
+        "type": "รถจักรยานยนต์",
+        "brand_model": "HONDA WAVE 110 I",
+        "details": "เครื่องยนต์ JA143F-0193338"
+    },
+    {
+        "id": 4,
+        "registration": "84-2021 เชียงใหม่",
+        "type": "รถบรรทุกส่วนบุคคล (รถกระเช้า)",
+        "brand_model": "ISUZU NPR75HXXXB",
+        "details": "เครื่องยนต์ 4HK1FEN996 (น้ำหนัก 8,500 กก.)"
+    },
+    {
+        "id": 5,
+        "registration": "กจน 620 เชียงใหม่",
+        "type": "รถจักรยานยนต์",
+        "brand_model": "HONDA C100N",
+        "details": "เครื่องยนต์ C100NE-0263026"
+    },
+    {
+        "id": 6,
+        "registration": "กน 3655 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน",
+        "brand_model": "FORD RANGER",
+        "details": "เครื่องยนต์ P4AT2584311"
+    },
+    {
+        "id": 7,
+        "registration": "กม 5689 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน",
+        "brand_model": "FORD RANGER",
+        "details": "เครื่องยนต์ WLAT-441854"
+    },
+    {
+        "id": 8,
+        "registration": "กห 5832 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน",
+        "brand_model": "MITSUBISHI",
+        "details": "เครื่องยนต์ 4D56UCBF6364"
+    },
+    {
+        "id": 9,
+        "registration": "ขว 53 เชียงใหม่",
+        "type": "รถพยาบาล",
+        "brand_model": "TOYOTA Vigo",
+        "details": "เครื่องยนต์ 2KD-S392186"
+    },
+    {
+        "id": 10,
+        "registration": "ขห 3655 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน",
+        "brand_model": "TOYOTA Hilux Revo",
+        "details": "เครื่องยนต์ 2GD0005028"
+    },
+    {
+        "id": 11,
+        "registration": "ผน 4973 เชียงใหม่",
+        "type": "รถยนต์บรรทุกส่วนบุคคล",
+        "brand_model": "CHEVROLET COLORADO",
+        "details": "เครื่องยนต์ 4JK1GR8762 (น้ำหนัก 2,650 กก.)"
+    },
+    {
+        "id": 12,
+        "registration": "งธก 276 เชียงใหม่",
+        "type": "รถจักรยานยนต์",
+        "brand_model": "HONDA DREAM",
+        "details": "เครื่องยนต์ D125ME-0096964"
+    },
+    {
+        "id": 13,
+        "registration": "จธ 3655 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน",
+        "brand_model": "TOYOTA HILUX REVO",
+        "details": "เครื่องยนต์ 2GDD373571"
+    },
+    {
+        "id": 14,
+        "registration": "จมง 861 เชียงใหม่",
+        "type": "รถจักรยานยนต์",
+        "brand_model": "HONDA WAVE 110",
+        "details": "เครื่องยนต์ JA141E-0025680"
+    },
+    {
+        "id": 15,
+        "registration": "จยค 970 เชียงใหม่",
+        "type": "รถจักรยานยนต์",
+        "brand_model": "HONDA WAVE 110 I",
+        "details": "เครื่องยนต์ JA141E-0039366"
+    },
+    {
+        "id": 16,
+        "registration": "จร 5698 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน",
+        "brand_model": "TOYOTA HILUX REVO",
+        "details": "เครื่องยนต์ 2GDD467291"
+    },
+    {
+        "id": 17,
+        "registration": "ตค 3745 เชียงใหม่",
+        "type": "รถแทร็กเตอร์",
+        "brand_model": "EURODRIVE TD504",
+        "details": "เครื่องยนต์ B1013809367 (น้ำหนัก 2,400 กก.)"
+    },
+    {
+        "id": 18,
+        "registration": "ตค 8841 เชียงใหม่",
+        "type": "รถแทร็กเตอร์",
+        "brand_model": "EUROTRAC",
+        "details": "เครื่องยนต์ X13191260 (น้ำหนัก 2,100 กก.)"
+    },
+    {
+        "id": 19,
+        "registration": "นจ 6119 เชียงใหม่",
+        "type": "รถยนต์นั่งส่วนบุคคลเกิน 7 คน (สองแถว)",
+        "brand_model": "TOYOTA HILUX REVO",
+        "details": "เครื่องยนต์ 2005726526 (น้ำหนัก 2,850 กก.)"
+    },
+    {
+        "id": 20,
+        "registration": "ผด 593 เชียงใหม่",
+        "type": "รถยนต์บรรทุกส่วนบุคคล (รถดับเพลิง)",
+        "brand_model": "ISUZU FTR33F2",
+        "details": "เครื่องยนต์ 6HH1418506 (น้ำหนัก 15,000 กก.)"
+    },
+    {
+        "id": 21,
+        "registration": "ยพ 4470 เชียงใหม่",
+        "type": "รถยนต์บรรทุกส่วนบุคคล (รถขยะ)",
+        "brand_model": "TOYOTA HILUX REVO",
+        "details": "เครื่องยนต์ 2GD1599863 (น้ำหนัก 2,850 กก.)"
+    },
+    {
+        "id": 22,
+        "registration": "ยม 5205 เชียงใหม่",
+        "type": "รถยนต์บรรทุกส่วนบุคคล (รถดับเพลิง)",
+        "brand_model": "ISUZU FTR34JXXXB",
+        "details": "เครื่องยนต์ 6HK1FFE741 (น้ำหนัก 15,000 กก.)"
+    }
+]

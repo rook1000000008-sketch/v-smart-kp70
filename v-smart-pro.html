@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-SMART - ระบบบริหารจัดการยานพาหนะอัจฉริยะ อบต.ข่วงเปา (22 Vehicles Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; 
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f17 60%, #05070a 100%);
+            color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .odometer-font { font-family: 'Chakra Petch', sans-serif; letter-spacing: 2px; }
+        
+        .glass-panel { 
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(148, 163, 184, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.05);
+        }
+        
+        .industrial-btn { 
+            background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative;
+            overflow: hidden;
+        }
+        .industrial-btn:hover { 
+            background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%);
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+            transform: translateY(-2px); 
+        }
+
+        .custom-scroll {
+            max-height: 310px;
+            overflow-y: auto !important;
+            padding-right: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar { width: 6px !important; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6) !important; border-radius: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #475569, #334155) !important; border-radius: 8px; }
+
+        .a4-container {
+            width: 100%; max-width: 680px; background: #ffffff; color: #000000; padding: 32px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto;
+        }
+        .a4-landscape-container {
+            width: 100%; max-width: 1080px; background: #ffffff; color: #000000; padding: 36px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto;
+        }
+
+        @media print {
+            @page portrait-page { size: A4 portrait; margin: 10mm; }
+            @page landscape-page { size: A4 landscape; margin: 10mm; }
+            body { background: #ffffff !important; padding: 0 !important; color: #000 !important; }
+            .no-print { display: none !important; }
+            .print-area { page: portrait-page; display: block !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; font-size: 11px !important; }
+            .print-book { page: landscape-page; display: block !important; width: 100% !important; max-width: 100% !important; background: #fff !important; color: #000 !important; border-radius: 0 !important; box-shadow: none !important; padding: 10px !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-6xl mx-auto">
+
+    <div class="w-full space-y-4">
+        <!-- Header -->
+        <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center no-print gap-4 shadow-2xl">
+            <div class="flex items-center gap-4">
+                <div class="relative group">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full blur opacity-75"></div>
+                    <div class="relative w-14 h-14 rounded-full p-0.5 bg-slate-900 flex items-center justify-center overflow-hidden">
+                        <img src="KPLOGO.jpg" alt="ตราสัญลักษณ์ อบต.ข่วงเปา" class="w-full h-full object-cover rounded-full">
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-wider flex items-center gap-2">
+                        V-SMART <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 font-medium">Official Fleet (22 Units)</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">องค์การบริหารส่วนตำบลข่วงเปา • อำเภอจอมทอง จังหวัดเชียงใหม่</p>
+                </div>
+            </div>
+            <span class="bg-slate-800/80 text-slate-200 border border-slate-700/80 text-xs font-semibold px-4 py-2 rounded-xl shadow-inner flex items-center gap-2 backdrop-blur-md">
+                <i class="fa-solid fa-shield-halved text-sky-400"></i> 7-Steps Workflow
+            </span>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-semibold no-print">
+            <button onclick="switchStep(1)" id="step-btn-1" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow-lg">
+                <i class="fa-solid fa-warehouse text-sky-400"></i> 1. สำรวจรถ (22 คัน)
+            </button>
+            <button onclick="switchStep(2)" id="step-btn-2" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-pen text-slate-500"></i> 2-3. ขอ/แบบ3
+            </button>
+            <button onclick="switchStep(4)" id="step-btn-4" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-brain text-slate-500"></i> 4-5. จัดสรร/ผล
+            </button>
+            <button onclick="switchStep(6)" id="step-btn-6" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-book-bookmark text-slate-500"></i> 6-7. ไมล์/แบบ4
+            </button>
+        </div>
+
+        <!-- STEP 1: คลังรถ 22 คันจริง -->
+        <div id="step-view-1" class="space-y-3 no-print">
+            <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                            <i class="fa-solid fa-car-side"></i>
+                        </div>
+                        คลังยานพาหนะและเครื่องจักร (ครบถ้วนทั้ง 22 คันตามทะเบียน)
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs font-semibold">
+                    <button onclick="filterFleet('car')" id="filter-car-btn" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow">
+                        <i class="fa-solid fa-truck text-sky-400"></i> ยานพาหนะ/เครื่องจักร (16 คัน)
+                    </button>
+                    <button onclick="filterFleet('motorcycle')" id="filter-moto-btn" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5">
+                        <i class="fa-solid fa-motorcycle text-slate-500"></i> รถจักรยานยนต์ (6 คัน)
+                    </button>
+                </div>
+
+                <!-- Scrollable Fleet List (22 คันจริงจาก PDF) -->
+                <div class="custom-scroll space-y-2.5" id="fleet-container">
+                    <!-- 16 ยานพาหนะ/เครื่องจักรพิเศษ -->
+                    <div class="fleet-item car" data-stars="5" data-mile="12500">
+                        <div onclick="selectCar('84-2021 เชียงใหม่ (รถกระเช้า ISUZU)', 12500, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถกระเช้า • กองช่าง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">84-2021 เชียงใหม่ - รถกระเช้า ISUZU</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 12,500 กม. | บรรทุกเฉพาะกิจ (กระเช้า)</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="18400">
+                        <div onclick="selectCar('ผด 593 เชียงใหม่ (รถดับเพลิง ISUZU)', 18400, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถดับเพลิง • งานป้องกันฯ</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ผด 593 เชียงใหม่ - รถดับเพลิง ISUZU FTR33F2</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 18,400 กม. | บรรทุกน้ำดับเพลิง</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="9200">
+                        <div onclick="selectCar('ยม 5205 เชียงใหม่ (รถดับเพลิง ISUZU)', 9200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถดับเพลิง • งานป้องกันฯ</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ยม 5205 เชียงใหม่ - รถดับเพลิง ISUZU FTR34J</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 9,200 กม. | รถใหม่ประจำการ</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="14500">
+                        <div onclick="selectCar('ยพ 4470 เชียงใหม่ (รถขยะ TOYOTA)', 14500, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถขยะ • กองสาธารณสุขฯ</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ยพ 4470 เชียงใหม่ - รถขยะ TOYOTA Hilux Revo</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 14,500 กม. | เก็บขนขยะมูลฝอย</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="21000">
+                        <div onclick="selectCar('ขว 53 เชียงใหม่ (รถพยาบาล TOYOTA)', 21000, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถพยาบาล • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ขว 53 เชียงใหม่ - รถพยาบาล TOYOTA Vigo</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 21,000 กม. | รับส่งผู้ป่วยฉุกเฉิน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="19200">
+                        <div onclick="selectCar('นจ 6119 เชียงใหม่ (รถสองแถว TOYOTA)', 19200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถโดยสาร • ส่วนกลาง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">นจ 6119 เชียงใหม่ - รถสองแถว TOYOTA Revo</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 19,200 กม. | ขนส่งบุคลากร/ชุมชน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="4" data-mile="34500">
+                        <div onclick="selectCar('จธ 3655 เชียงใหม่ (TOYOTA Revo)', 34500, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จธ 3655 เชียงใหม่ - TOYOTA Revo</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 34,500 กม. | ปฏิบัติงานทั่วไป</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="11200">
+                        <div onclick="selectCar('จร 5698 เชียงใหม่ (TOYOTA Revo)', 11200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองคลัง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จร 5698 เชียงใหม่ - TOYOTA Revo</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 11,200 กม. | สภาพใหม่เอี่ยม</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="4" data-mile="41200">
+                        <div onclick="selectCar('ขห 3655 เชียงใหม่ (TOYOTA Revo)', 41200, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองช่าง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ขห 3655 เชียงใหม่ - TOYOTA Revo</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 41,200 กม. | ตรวจสอบงานโยธา</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="4" data-mile="58400">
+                        <div onclick="selectCar('กน 3655 เชียงใหม่ (FORD Ranger)', 58400, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กน 3655 เชียงใหม่ - FORD Ranger</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 58,400 กม. | ออกพื้นที่ชุมชน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="3" data-mile="92000">
+                        <div onclick="selectCar('กม 5689 เชียงใหม่ (FORD Ranger)', 92000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองช่าง (เก่า)</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กม 5689 เชียงใหม่ - FORD Ranger</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 92,000 กม. | ใช้งานอเนกประสงค์</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★☆☆</div><span class="text-[10px] text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full">ใช้งานปกติ</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="4" data-mile="63100">
+                        <div onclick="selectCar('กห 5832 เชียงใหม่ (MITSUBISHI Triton)', 63100, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองคลัง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กห 5832 เชียงใหม่ - MITSUBISHI Triton</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 63,100 กม. | ขนส่งเอกสารราชการ</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="4" data-mile="49500">
+                        <div onclick="selectCar('ผน 4973 เชียงใหม่ (CHEVROLET Colorado)', 49500, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ผน 4973 เชียงใหม่ - CHEVROLET Colorado</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 49,500 กม. | ปฏิบัติภารกิจทั่วไป</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="3" data-mile="115000">
+                        <div onclick="selectCar('ฆข 29 เชียงใหม่ (รถเกษตรกรรม YANMAR)', 115000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">เครื่องจักรเกษตร • กองช่าง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ฆข 29 เชียงใหม่ - รถเกษตรกรรม YANMAR</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์/ชม.การทำงาน: 115,000 | งานพัฒนาเกษตรกรรม</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★☆☆</div><span class="text-[10px] text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full">ใช้งานปกติ</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="4" data-mile="38000">
+                        <div onclick="selectCar('ตค 3745 เชียงใหม่ (รถแทร็กเตอร์ EURODRIVE)', 38000, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถแทร็กเตอร์ • กองช่าง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ตค 3745 เชียงใหม่ - แทร็กเตอร์ EURODRIVE</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์/ชม.ทำงาน: 38,000 | งานปรับพื้นที่ดิน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item car" data-stars="5" data-mile="15000">
+                        <div onclick="selectCar('ตค 8841 เชียงใหม่ (รถแทร็กเตอร์ EUROTRAC)', 15000, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถแทร็กเตอร์ • กองช่าง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ตค 8841 เชียงใหม่ - แทร็กเตอร์ EUROTRAC</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์/ชม.ทำงาน: 15,000 | รถแทร็กเตอร์ใหม่</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">พร้อมใช้งาน</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 6 รถจักรยานยนต์ -->
+                    <div class="fleet-item motorcycle hidden" data-stars="5" data-mile="5200">
+                        <div onclick="selectCar('1กธ 8749 เชียงใหม่ (HONDA Wave 110i)', 5200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">1กธ 8749 เชียงใหม่ - HONDA Wave 110i</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 5,200 กม. | ส่งหนังสือด่วน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">เกรด A+</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item motorcycle hidden" data-stars="5" data-mile="7400">
+                        <div onclick="selectCar('1กธ 8751 เชียงใหม่ (HONDA Wave 110i)', 7400, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">1กธ 8751 เชียงใหม่ - HONDA Wave 110i</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 7,400 กม. | งานบริการประชาชน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">เกรด A+</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item motorcycle hidden" data-stars="4" data-mile="18200">
+                        <div onclick="selectCar('กจน 620 เชียงใหม่ (HONDA C100N)', 18200, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • กองคลัง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กจน 620 เชียงใหม่ - HONDA C100N</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 18,200 กม. | ตรวจสอบงานการเงิน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">เกรด A</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item motorcycle hidden" data-stars="3" data-mile="45000">
+                        <div onclick="selectCar('งธก 276 เชียงใหม่ (HONDA Dream)', 45000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • กองช่าง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">งธก 276 เชียงใหม่ - HONDA Dream</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 45,000 กม. | ออกตรวจมิเตอร์น้ำ</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★☆☆</div><span class="text-[10px] text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full">เกรด B</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item motorcycle hidden" data-stars="4" data-mile="14800">
+                        <div onclick="selectCar('จมง 861 เชียงใหม่ (HONDA Wave 110)', 14800, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • กองคลัง</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จมง 861 เชียงใหม่ - HONDA Wave 110</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 14,800 กม. | ติดต่อธนาคาร/ราชการ</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★☆</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">เกรด A</span></div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-item motorcycle hidden" data-stars="5" data-mile="9800">
+                        <div onclick="selectCar('จยค 970 เชียงใหม่ (HONDA Wave 110i)', 9800, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • สำนักปลัด</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จยค 970 เชียงใหม่ - HONDA Wave 110i</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์: 9,800 กม. | งานสารบรรณด่วน</p>
+                            </div>
+                            <div class="text-right"><div class="text-amber-400 text-xs">★★★★★</div><span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">เกรด A+</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="switchStep(2)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xl">
+                ถัดไป: ระบุข้อมูลและออก "แบบ 3" <i class="fa-solid fa-arrow-right text-sky-400"></i>
+            </button>
+        </div>
+
+        <!-- STEP 2 & 3: กรอกข้อมูลและฟอร์ม แบบ 3 ทางการ -->
+        <div id="step-view-2" class="space-y-3 hidden">
+            <div id="input-container" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs no-print">
+                <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400"><i class="fa-solid fa-file-pen"></i></div>
+                    ขั้นที่ 2-3: จัดเตรียมข้อมูลออกใบขออนุญาต (แบบ 3)
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">รถที่เลือกจากคลัง:</label>
+                        <input type="text" id="inp-car-reg" value="84-2021 เชียงใหม่ (รถกระเช้า ISUZU)" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-bold text-sm shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-sky-400 mb-1 font-bold"><i class="fa-solid fa-gauge"></i> แก้ไขเลขไมล์ปัจจุบันจากหน้าปัดรถจริง:</label>
+                        <input type="number" id="inp-current-mile" value="12500" class="w-full bg-slate-950 border border-sky-500/60 rounded-xl p-3 text-sky-300 font-black text-sm shadow-inner odometer-font">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">ชื่อ-นามสกุล ผู้ขออนุญาต:</label>
+                        <input type="text" id="inp-name" value="นายมิ่งภพ ศรีชะบา" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">ตำแหน่ง:</label>
+                        <input type="text" id="inp-position" value="ปลัดองค์การบริหารส่วนตำบล" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">สังกัด:</label>
+                        <input type="text" id="inp-org" value="สำนักปลัด อบต.ข่วงเปา" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">เบอร์โทรศัพท์:</label>
+                        <input type="text" id="inp-phone" value="063 225 0303" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">ผู้ขออนุญาต (ชื่อลงนาม):</label>
+                        <input type="text" id="inp-sign-name" value="น.ส.นุศรา ปัญญาเหล็ก" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">ผู้บังคับบัญชาต้นสังกัด:</label>
+                        <input type="text" id="inp-boss" value="นางอุไรวรรณ เครือฟู" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1 font-medium">เดินทางไปที่ (จุดหมายปลายทาง):</label>
+                    <input type="text" id="inp-destination" value="ศาลากลางจังหวัดเชียงใหม่ และพื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1 font-medium">เพื่อ (วัตถุประสงค์):</label>
+                    <textarea id="inp-purpose" rows="2" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">ปฏิบัติภารกิจตรวจสอบและซ่อมแซมระบบไฟฟ้าสาธารณะในพื้นที่</textarea>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">วันที่เดินทาง:</label>
+                        <input type="text" id="inp-date" value="23 กันยายน 2569" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">เวลากลับ:</label>
+                        <input type="text" id="inp-time" value="16.30 น." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">จำนวนคนนั่ง:</label>
+                        <input type="number" id="inp-passengers" value="3" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1 font-medium">พนักงานขับรถ:</label>
+                    <input type="text" id="inp-driver" value="นายส่งเสริม ฟั่นเฟือนหา" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
+                </div>
+
+                <button onclick="generateOfficialDoc()" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl">
+                    <i class="fa-solid fa-file-lines text-sky-400"></i> สร้างใบขออนุญาต (แบบ 3) ทางการ
+                </button>
+            </div>
+
+            <!-- แบบ 3 A4 Preview -->
+            <div id="official-doc-preview" class="a4-container print-area hidden text-xs md:text-sm leading-relaxed space-y-4">
+                <div class="flex justify-end"><div class="border border-slate-800 px-3 py-0.5 font-bold text-xs">แบบ 3</div></div>
+                <div class="text-center font-bold text-base">ใบขออนุญาตใช้รถยนต์ส่วนกลาง และรถรับรอง</div>
+                <div class="text-right text-xs pt-1">วันที่ <span class="underline decoration-dotted font-semibold">23</span> เดือน <span class="underline decoration-dotted font-semibold">กันยายน</span> พ.ศ. <span class="underline decoration-dotted font-semibold">2569</span></div>
+                <div class="space-y-2 pt-1 text-xs">
+                    <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
+                    <p class="indent-8">
+                        ข้าพเจ้า <span id="out-name" class="font-bold underline decoration-dotted">นายมิ่งภพ ศรีชะบา</span> ตำแหน่ง <span id="out-position" class="underline decoration-dotted">ปลัดองค์การบริหารส่วนตำบล</span> สังกัด <span id="out-org" class="underline decoration-dotted">สำนักปลัด อบต.ข่วงเปา</span> เบอร์โทรศัพท์ <span id="out-phone" class="underline decoration-dotted">063 225 0303</span> ขออนุญาตใช้รถเดินทางไปที่ <span id="out-destination" class="font-bold underline decoration-dotted">ศาลากลางจังหวัดเชียงใหม่ และพื้นที่ตำบลข่วงเปา</span>
+                    </p>
+                    <p>เพื่อ <span id="out-purpose" class="underline decoration-dotted">ปฏิบัติภารกิจตรวจสอบและซ่อมแซมระบบไฟฟ้าสาธารณะในพื้นที่</span> มีคนนั่ง <span id="out-passengers" class="font-bold underline decoration-dotted">3</span> คน</p>
+                    <p>ในวันที่ <span id="out-date" class="underline decoration-dotted font-semibold">23 กันยายน 2569</span><br>เวลากลับ <span id="out-time" class="underline decoration-dotted font-semibold">16.30 น.</span></p>
+                </div>
+                <div class="pt-2 flex flex-col items-end space-y-3 text-xs">
+                    <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 250px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ขออนุญาต</span></p><p>( <span id="out-sign-name" class="font-bold">น.ส.นุศรา ปัญญาเหล็ก</span> )</p></div></div>
+                    <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 250px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้บังคับบัญชา</span></p><p>( <span id="out-boss" class="font-bold">นางอุไรวรรณ เครือฟู</span> )</p><p class="text-[10px] text-slate-600">ผู้อำนวยการกองคลัง</p></div></div>
+                </div>
+                <hr class="border-t border-dashed border-slate-400 my-2">
+                <div class="space-y-1.5 text-xs">
+                    <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
+                    <p class="pl-6">- เห็นควรจัดรถ หมายเลขทะเบียน <span id="out-car-reg" class="font-bold underline decoration-dotted">84-2021 เชียงใหม่ (รถกระเช้า ISUZU)</span> และให้ <span id="out-driver" class="font-bold underline decoration-dotted">นายส่งเสริม ฟั่นเฟือนหา</span> เป็นพนักงานขับรถ</p>
+                    <div class="pt-1 flex flex-col items-end space-y-2">
+                        <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 250px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ตรวจสอบ</span></p><p class="font-bold">( นางสมพร ศรีวิทะ )</p></div></div>
+                        <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 250px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ตรวจสอบ</span></p><p class="font-bold">( นางอุไรวรรณ เครือฟู )</p><p class="text-[10px] text-slate-600">ผู้อำนวยการกองคลัง</p></div></div>
+                    </div>
+                </div>
+                <div class="space-y-1.5 pt-1 text-xs">
+                    <div class="flex items-center gap-6"><span class="font-bold">คำสั่ง</span><label class="flex items-center gap-1 font-semibold"><input type="checkbox" checked class="w-3 h-3"> อนุญาต</label></div>
+                    <div class="pt-1 flex flex-col items-end">
+                        <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 250px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้มีอำนาจสั่งใช้</span></p><p class="font-bold">( นายรุ่งสุริยา เชียงชีระ )</p><p class="text-[10px] text-slate-600">นายกองค์การบริหารส่วนตำบลข่วงเปา</p></div></div>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-center gap-3 no-print border-t">
+                    <button onclick="backToEdit()" class="bg-slate-600 hover:bg-slate-700 text-white font-bold px-5 py-2 rounded-xl text-xs flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> กลับไปแก้ไข</button>
+                    <button onclick="window.print()" class="industrial-btn text-white font-bold px-5 py-2 rounded-xl text-xs flex items-center gap-2"><i class="fa-solid fa-print"></i> พิมพ์เอกสาร / PDF</button>
+                </div>
+            </div>
+            <button onclick="switchStep(4)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2.5 no-print shadow-xl">
+                ถัดไป: ประมวลผลและแจ้งสถานะ (ขั้นที่ 4-5) <i class="fa-solid fa-arrow-right text-sky-400"></i>
+            </button>
+        </div>
+
+        <!-- STEP 4 & 5: จัดสรรอัจฉริยะ -->
+        <div id="step-view-4" class="space-y-3 hidden no-print">
+            <div class="glass-panel rounded-2xl p-6 space-y-4 text-xs">
+                <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-brain"></i></div>
+                    ขั้นที่ 4-5: ระบบประมวลผลอัจฉริยะและยืนยันความพร้อม
+                </h2>
+                <div class="bg-slate-900/90 border border-slate-700/80 p-5 rounded-xl space-y-3 shadow-inner">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-400 text-sm flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span> สถานะ: พร้อมใช้งาน (Ready)</span>
+                        <span class="text-amber-400 text-xs tracking-wider">★★★★★</span>
+                    </div>
+                    <div class="border-t border-slate-800 pt-3 flex justify-between items-center text-slate-300">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-gauge-high text-sky-400"></i> เลขไมล์ก่อนเดินทาง:</span>
+                        <span id="display-current-mile" class="font-bold text-slate-100 text-lg odometer-font text-sky-400">12,500 กม.</span>
+                    </div>
+                    <p class="text-xs text-slate-400 pt-1">ตรวจสอบความพร้อมและจัดสรรพนักงานขับรถเรียบร้อยตามแบบ 3 พร้อมปฏิบัติภารกิจ</p>
+                </div>
+            </div>
+            <button onclick="switchStep(6)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-xl">
+                ถัดไป: บันทึกหลังใช้และออกรายงาน (ขั้นที่ 6-7) <i class="fa-solid fa-arrow-right text-sky-400"></i>
+            </button>
+        </div>
+
+        <!-- STEP 6 & 7: แบบ 4 แนวนอน (แก้ไขส่วนลงนามให้ตรงตามต้นฉบับฟอร์มราชการ) -->
+        <div id="step-view-6" class="space-y-4 hidden">
+            <div class="glass-panel rounded-2xl p-5 text-center border-t-4 border-sky-500 space-y-2 no-print shadow-xl">
+                <span class="text-xs uppercase tracking-widest text-slate-300 font-semibold block"><i class="fa-solid fa-gauge text-sky-400"></i> บันทึกเลขไมล์ขากลับ (ขั้นที่ 6)</span>
+                <div id="display-return-mile" class="odometer-font text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-sky-400 py-3 bg-black/60 rounded-2xl border border-slate-700/80 shadow-inner">12,575</div>
+                <p class="text-xs text-slate-400">ระยะทางรวมทริปนี้: <b id="display-trip-distance" class="text-sky-400 font-bold text-sm">75 กิโลเมตร</b></p>
+            </div>
+
+            <div id="book-preview" class="a4-landscape-container print-book text-xs leading-relaxed space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-sm">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</span>
+                    <span class="font-bold text-xs border border-slate-800 px-2.5 py-1">แบบ ๔</span>
+                </div>
+                <div class="text-center font-bold text-base tracking-wide">บันทึกการใช้รถ</div>
+                <div class="text-center text-sm font-semibold pb-1">รถหมายเลขทะเบียน <span id="book-reg" class="underline decoration-dotted font-bold">84-2021 เชียงใหม่ (รถกระเช้า ISUZU)</span></div>
+
+                <div class="overflow-x-auto pt-1">
+                    <table class="w-full border-collapse border border-black text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-center">
+                                <th rowspan="2" class="border border-black p-2 w-12">ลำดับ</th>
+                                <th colspan="2" class="border border-black p-2">ออกเดินทาง</th>
+                                <th rowspan="2" class="border border-black p-2 w-28">ผู้ใช้รถ</th>
+                                <th rowspan="2" class="border border-black p-2 w-36">สถานที่ไป</th>
+                                <th rowspan="2" class="border border-black p-2 w-24">ไมล์ออก</th>
+                                <th colspan="2" class="border border-black p-2">กลับถึงสำนักงาน</th>
+                                <th rowspan="2" class="border border-black p-2 w-24">ไมล์กลับ</th>
+                                <th rowspan="2" class="border border-black p-2 w-20">รวมระยะทาง</th>
+                                <th rowspan="2" class="border border-black p-2 w-28">พนักงานขับรถ</th>
+                                <th rowspan="2" class="border border-black p-2 w-20">หมายเหตุ</th>
+                            </tr>
+                            <tr class="bg-slate-100 text-center">
+                                <th class="border border-black p-2 w-20">วันที่</th>
+                                <th class="border border-black p-2 w-16">เวลา</th>
+                                <th class="border border-black p-2 w-20">วันที่</th>
+                                <th class="border border-black p-2 w-16">เวลา</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center h-14">
+                                <td class="border border-black p-2">1</td>
+                                <td class="border border-black p-2">23/09/69</td>
+                                <td class="border border-black p-2">08.30</td>
+                                <td class="border border-black p-2">นายมิ่งภพ</td>
+                                <td class="border border-black p-2">อบต.ข่วงเปา</td>
+                                <td id="book-start-mile" class="border border-black p-2 font-semibold">12,500</td>
+                                <td class="border border-black p-2">23/09/69</td>
+                                <td class="border border-black p-2">16.30</td>
+                                <td id="book-end-mile" class="border border-black p-2 font-semibold">12,575</td>
+                                <td id="book-total-mile" class="border border-black p-2 font-bold text-slate-800">75</td>
+                                <td class="border border-black p-2">นายส่งเสริม</td>
+                                <td class="border border-black p-2">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ปรับแก้ส่วนลงนาม แบบ 4 ให้ตรงตามระเบียบต้นฉบับ -->
+                <div class="pt-5 flex justify-end">
+                    <div class="text-center space-y-1.5 w-64 text-xs">
+                        <div class="flex items-center justify-center gap-1">
+                            <span>ผู้บันทึก</span>
+                            <span class="flex-1 border-b border-dotted border-black inline-block"></span>
+                        </div>
+                        <div class="flex items-center justify-center gap-1">
+                            <span>ตำแหน่ง</span>
+                            <span class="flex-1 border-b border-dotted border-black inline-block"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-center gap-4 no-print border-t">
+                    <button onclick="window.print()" class="industrial-btn text-white font-bold px-8 py-3.5 rounded-xl text-sm flex items-center gap-2 shadow-xl"><i class="fa-solid fa-print text-lg text-sky-400"></i> พิมพ์ทะเบียนควบคุม แบบ ๔ (แนวนอน)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-6 text-center no-print">
+        <p class="text-xs text-slate-500 font-medium">V-SMART Enterprise Fleet Management • 22 Vehicles Edition • อบต.ข่วงเปา จ.เชียงใหม่</p>
+    </div>
+
+    <script>
+        let currentType = 'car';
+        let selectedCarMile = 12500;
+
+        function filterFleet(type) {
+            currentType = type;
+            let carBtn = document.getElementById('filter-car-btn');
+            let motoBtn = document.getElementById('filter-moto-btn');
+
+            if (type === 'car') {
+                carBtn.className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
+                motoBtn.className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5";
+            } else {
+                motoBtn.className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
+                carBtn.className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5";
+            }
+
+            let container = document.getElementById('fleet-container');
+            let items = container.getElementsByClassName('fleet-item');
+
+            for (let item of items) {
+                if (item.classList.contains(type)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            }
+        }
+
+        function switchStep(stepNumber) {
+            document.getElementById('step-view-1').classList.add('hidden');
+            document.getElementById('step-view-2').classList.add('hidden');
+            document.getElementById('step-view-4').classList.add('hidden');
+            document.getElementById('step-view-6').classList.add('hidden');
+
+            document.getElementById('step-btn-1').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2";
+            document.getElementById('step-btn-2').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2";
+            document.getElementById('step-btn-4').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2";
+            document.getElementById('step-btn-6').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2";
+
+            let activeViewId = stepNumber === 2 ? 2 : (stepNumber === 4 ? 4 : (stepNumber === 6 ? 6 : 1));
+            document.getElementById('step-view-' + activeViewId).classList.remove('hidden');
+            
+            let btnMap = {1: 1, 2: 2, 4: 4, 6: 6};
+            document.getElementById('step-btn-'.concat(btnMap[stepNumber])).className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow-lg";
+        }
+
+        function selectCar(carName, mileNum, stars) {
+            selectedCarMile = mileNum;
+            let formattedMile = mileNum.toLocaleString() + ' กม.';
+            
+            document.getElementById('inp-car-reg').value = carName;
+            document.getElementById('inp-current-mile').value = mileNum;
+            document.getElementById('display-current-mile').innerText = formattedMile;
+
+            let tripDistance = 75;
+            let returnMileNum = mileNum + tripDistance;
+            document.getElementById('display-return-mile').innerText = returnMileNum.toLocaleString();
+            document.getElementById('display-trip-distance').innerText = tripDistance + ' กิโลเมตร';
+
+            document.getElementById('book-reg').innerText = carName;
+            document.getElementById('book-start-mile').innerText = mileNum.toLocaleString();
+            document.getElementById('book-end-mile').innerText = returnMileNum.toLocaleString();
+            document.getElementById('book-total-mile').innerText = tripDistance;
+
+            switchStep(2);
+        }
+
+        function generateOfficialDoc() {
+            let carRegText = document.getElementById('inp-car-reg').value;
+            let customMileVal = parseInt(document.getElementById('inp-current-mile').value) || selectedCarMile;
+            let mileFormatted = customMileVal.toLocaleString() + ' กม.';
+
+            document.getElementById('out-name').innerText = document.getElementById('inp-name').value;
+            document.getElementById('out-sign-name').innerText = document.getElementById('inp-sign-name').value;
+            document.getElementById('out-position').innerText = document.getElementById('inp-position').value;
+            document.getElementById('out-org').innerText = document.getElementById('inp-org').value;
+            document.getElementById('out-phone').innerText = document.getElementById('inp-phone').value;
+            document.getElementById('out-destination').innerText = document.getElementById('inp-destination').value;
+            document.getElementById('out-purpose').innerText = document.getElementById('inp-purpose').value;
+            document.getElementById('out-passengers').innerText = document.getElementById('inp-passengers').value;
+            document.getElementById('out-date').innerText = document.getElementById('inp-date').value;
+            document.getElementById('out-time').innerText = document.getElementById('inp-time').value;
+            document.getElementById('out-car-reg').innerText = carRegText + ' (ไมล์เริ่มต้น: ' + mileFormatted + ')';
+            document.getElementById('out-boss').innerText = document.getElementById('inp-boss').value;
+            
+            const driverName = document.getElementById('inp-driver').value;
+            document.getElementById('out-driver').innerText = driverName;
+
+            document.getElementById('display-current-mile').innerText = mileFormatted;
+            let tripDistance = 75;
+            let returnMileNum = customMileVal + tripDistance;
+            document.getElementById('display-return-mile').innerText = returnMileNum.toLocaleString();
+            document.getElementById('book-start-mile').innerText = customMileVal.toLocaleString();
+            document.getElementById('book-end-mile').innerText = returnMileNum.toLocaleString();
+
+            document.getElementById('input-container').classList.add('hidden');
+            document.getElementById('official-doc-preview').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToEdit() {
+            document.getElementById('official-doc-preview').classList.add('hidden');
+            document.getElementById('input-container').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        filterFleet('car');
+    </script>
+</body>
+</html>
