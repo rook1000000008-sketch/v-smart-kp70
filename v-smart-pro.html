@@ -13,6 +13,10 @@
             background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f17 60%, #05070a 100%);
             color: #f8fafc; 
             min-height: 100vh;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         .odometer-font { font-family: 'Chakra Petch', sans-serif; letter-spacing: 2px; }
         
@@ -74,10 +78,9 @@
         }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-6xl mx-auto">
+<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-6xl mx-auto" oncontextmenu="return false;">
 
     <div class="w-full space-y-4">
-        <!-- Header -->
         <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center no-print gap-4 shadow-2xl">
             <div class="flex items-center gap-4">
                 <div class="relative group">
@@ -98,23 +101,21 @@
             </span>
         </div>
 
-        <!-- Navigation Tabs -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-semibold no-print">
-            <button onclick="switchStep(1)" id="step-btn-1" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow-lg">
+            <button onclick="_0x2a1b(1)" id="step-btn-1" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow-lg">
                 <i class="fa-solid fa-warehouse text-sky-400"></i> 1. สำรวจรถ (22 คัน)
             </button>
-            <button onclick="switchStep(2)" id="step-btn-2" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+            <button onclick="_0x2a1b(2)" id="step-btn-2" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-file-pen text-slate-500"></i> 2-3. ขอ/แบบ3
             </button>
-            <button onclick="switchStep(4)" id="step-btn-4" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+            <button onclick="_0x2a1b(4)" id="step-btn-4" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-brain text-slate-500"></i> 4-5. จัดสรร/ผล
             </button>
-            <button onclick="switchStep(6)" id="step-btn-6" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+            <button onclick="_0x2a1b(6)" id="step-btn-6" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-book-bookmark text-slate-500"></i> 6-7. ไมล์/แบบ4
             </button>
         </div>
 
-        <!-- STEP 1: คลังรถ 22 คันจริง -->
         <div id="step-view-1" class="space-y-3 no-print">
             <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -127,19 +128,17 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 text-xs font-semibold">
-                    <button onclick="filterFleet('car')" id="filter-car-btn" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow">
+                    <button onclick="_0x7c4d('car')" id="filter-car-btn" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow">
                         <i class="fa-solid fa-truck text-sky-400"></i> ยานพาหนะ/เครื่องจักร (16 คัน)
                     </button>
-                    <button onclick="filterFleet('motorcycle')" id="filter-moto-btn" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5">
+                    <button onclick="_0x7c4d('motorcycle')" id="filter-moto-btn" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5">
                         <i class="fa-solid fa-motorcycle text-slate-500"></i> รถจักรยานยนต์ (6 คัน)
                     </button>
                 </div>
 
-                <!-- Scrollable Fleet List (22 คันจริงจาก PDF) -->
                 <div class="custom-scroll space-y-2.5" id="fleet-container">
-                    <!-- 16 ยานพาหนะ/เครื่องจักรพิเศษ -->
                     <div class="fleet-item car" data-stars="5" data-mile="12500">
-                        <div onclick="selectCar('84-2021 เชียงใหม่ (รถกระเช้า ISUZU)', 12500, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('84-2021 เชียงใหม่ (รถกระเช้า ISUZU)', 12500, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถกระเช้า • กองช่าง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">84-2021 เชียงใหม่ - รถกระเช้า ISUZU</p>
@@ -150,7 +149,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="18400">
-                        <div onclick="selectCar('ผด 593 เชียงใหม่ (รถดับเพลิง ISUZU)', 18400, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ผด 593 เชียงใหม่ (รถดับเพลิง ISUZU)', 18400, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถดับเพลิง • งานป้องกันฯ</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ผด 593 เชียงใหม่ - รถดับเพลิง ISUZU FTR33F2</p>
@@ -161,7 +160,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="9200">
-                        <div onclick="selectCar('ยม 5205 เชียงใหม่ (รถดับเพลิง ISUZU)', 9200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ยม 5205 เชียงใหม่ (รถดับเพลิง ISUZU)', 9200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถดับเพลิง • งานป้องกันฯ</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ยม 5205 เชียงใหม่ - รถดับเพลิง ISUZU FTR34J</p>
@@ -172,7 +171,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="14500">
-                        <div onclick="selectCar('ยพ 4470 เชียงใหม่ (รถขยะ TOYOTA)', 14500, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ยพ 4470 เชียงใหม่ (รถขยะ TOYOTA)', 14500, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถขยะ • กองสาธารณสุขฯ</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ยพ 4470 เชียงใหม่ - รถขยะ TOYOTA Hilux Revo</p>
@@ -183,7 +182,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="21000">
-                        <div onclick="selectCar('ขว 53 เชียงใหม่ (รถพยาบาล TOYOTA)', 21000, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ขว 53 เชียงใหม่ (รถพยาบาล TOYOTA)', 21000, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถพยาบาล • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ขว 53 เชียงใหม่ - รถพยาบาล TOYOTA Vigo</p>
@@ -194,7 +193,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="19200">
-                        <div onclick="selectCar('นจ 6119 เชียงใหม่ (รถสองแถว TOYOTA)', 19200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('นจ 6119 เชียงใหม่ (รถสองแถว TOYOTA)', 19200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถโดยสาร • ส่วนกลาง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">นจ 6119 เชียงใหม่ - รถสองแถว TOYOTA Revo</p>
@@ -205,7 +204,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="4" data-mile="34500">
-                        <div onclick="selectCar('จธ 3655 เชียงใหม่ (TOYOTA Revo)', 34500, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('จธ 3655 เชียงใหม่ (TOYOTA Revo)', 34500, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จธ 3655 เชียงใหม่ - TOYOTA Revo</p>
@@ -216,7 +215,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="11200">
-                        <div onclick="selectCar('จร 5698 เชียงใหม่ (TOYOTA Revo)', 11200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('จร 5698 เชียงใหม่ (TOYOTA Revo)', 11200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองคลัง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จร 5698 เชียงใหม่ - TOYOTA Revo</p>
@@ -227,7 +226,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="4" data-mile="41200">
-                        <div onclick="selectCar('ขห 3655 เชียงใหม่ (TOYOTA Revo)', 41200, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ขห 3655 เชียงใหม่ (TOYOTA Revo)', 41200, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองช่าง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ขห 3655 เชียงใหม่ - TOYOTA Revo</p>
@@ -238,7 +237,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="4" data-mile="58400">
-                        <div onclick="selectCar('กน 3655 เชียงใหม่ (FORD Ranger)', 58400, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('กน 3655 เชียงใหม่ (FORD Ranger)', 58400, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กน 3655 เชียงใหม่ - FORD Ranger</p>
@@ -249,7 +248,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="3" data-mile="92000">
-                        <div onclick="selectCar('กม 5689 เชียงใหม่ (FORD Ranger)', 92000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('กม 5689 เชียงใหม่ (FORD Ranger)', 92000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองช่าง (เก่า)</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กม 5689 เชียงใหม่ - FORD Ranger</p>
@@ -260,7 +259,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="4" data-mile="63100">
-                        <div onclick="selectCar('กห 5832 เชียงใหม่ (MITSUBISHI Triton)', 63100, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('กห 5832 เชียงใหม่ (MITSUBISHI Triton)', 63100, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • กองคลัง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กห 5832 เชียงใหม่ - MITSUBISHI Triton</p>
@@ -271,7 +270,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="4" data-mile="49500">
-                        <div onclick="selectCar('ผน 4973 เชียงใหม่ (CHEVROLET Colorado)', 49500, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ผน 4973 เชียงใหม่ (CHEVROLET Colorado)', 49500, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถยนต์ • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ผน 4973 เชียงใหม่ - CHEVROLET Colorado</p>
@@ -282,7 +281,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="3" data-mile="115000">
-                        <div onclick="selectCar('ฆข 29 เชียงใหม่ (รถเกษตรกรรม YANMAR)', 115000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ฆข 29 เชียงใหม่ (รถเกษตรกรรม YANMAR)', 115000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">เครื่องจักรเกษตร • กองช่าง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ฆข 29 เชียงใหม่ - รถเกษตรกรรม YANMAR</p>
@@ -293,7 +292,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="4" data-mile="38000">
-                        <div onclick="selectCar('ตค 3745 เชียงใหม่ (รถแทร็กเตอร์ EURODRIVE)', 38000, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ตค 3745 เชียงใหม่ (รถแทร็กเตอร์ EURODRIVE)', 38000, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถแทร็กเตอร์ • กองช่าง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ตค 3745 เชียงใหม่ - แทร็กเตอร์ EURODRIVE</p>
@@ -304,7 +303,7 @@
                     </div>
 
                     <div class="fleet-item car" data-stars="5" data-mile="15000">
-                        <div onclick="selectCar('ตค 8841 เชียงใหม่ (รถแทร็กเตอร์ EUROTRAC)', 15000, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('ตค 8841 เชียงใหม่ (รถแทร็กเตอร์ EUROTRAC)', 15000, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">รถแทร็กเตอร์ • กองช่าง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">ตค 8841 เชียงใหม่ - แทร็กเตอร์ EUROTRAC</p>
@@ -314,9 +313,8 @@
                         </div>
                     </div>
 
-                    <!-- 6 รถจักรยานยนต์ -->
                     <div class="fleet-item motorcycle hidden" data-stars="5" data-mile="5200">
-                        <div onclick="selectCar('1กธ 8749 เชียงใหม่ (HONDA Wave 110i)', 5200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('1กธ 8749 เชียงใหม่ (HONDA Wave 110i)', 5200, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">1กธ 8749 เชียงใหม่ - HONDA Wave 110i</p>
@@ -327,7 +325,7 @@
                     </div>
 
                     <div class="fleet-item motorcycle hidden" data-stars="5" data-mile="7400">
-                        <div onclick="selectCar('1กธ 8751 เชียงใหม่ (HONDA Wave 110i)', 7400, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('1กธ 8751 เชียงใหม่ (HONDA Wave 110i)', 7400, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">1กธ 8751 เชียงใหม่ - HONDA Wave 110i</p>
@@ -338,7 +336,7 @@
                     </div>
 
                     <div class="fleet-item motorcycle hidden" data-stars="4" data-mile="18200">
-                        <div onclick="selectCar('กจน 620 เชียงใหม่ (HONDA C100N)', 18200, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('กจน 620 เชียงใหม่ (HONDA C100N)', 18200, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • กองคลัง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">กจน 620 เชียงใหม่ - HONDA C100N</p>
@@ -349,7 +347,7 @@
                     </div>
 
                     <div class="fleet-item motorcycle hidden" data-stars="3" data-mile="45000">
-                        <div onclick="selectCar('งธก 276 เชียงใหม่ (HONDA Dream)', 45000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('งธก 276 เชียงใหม่ (HONDA Dream)', 45000, 3)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • กองช่าง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">งธก 276 เชียงใหม่ - HONDA Dream</p>
@@ -360,7 +358,7 @@
                     </div>
 
                     <div class="fleet-item motorcycle hidden" data-stars="4" data-mile="14800">
-                        <div onclick="selectCar('จมง 861 เชียงใหม่ (HONDA Wave 110)', 14800, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('จมง 861 เชียงใหม่ (HONDA Wave 110)', 14800, 4)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • กองคลัง</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จมง 861 เชียงใหม่ - HONDA Wave 110</p>
@@ -371,7 +369,7 @@
                     </div>
 
                     <div class="fleet-item motorcycle hidden" data-stars="5" data-mile="9800">
-                        <div onclick="selectCar('จยค 970 เชียงใหม่ (HONDA Wave 110i)', 9800, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
+                        <div onclick="_0x9e1f('จยค 970 เชียงใหม่ (HONDA Wave 110i)', 9800, 5)" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500/40 transition-all flex justify-between items-center group">
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full font-semibold">จยย. • สำนักปลัด</span>
                                 <p class="text-sm font-bold text-slate-100 mt-1.5 group-hover:text-sky-300 transition">จยค 970 เชียงใหม่ - HONDA Wave 110i</p>
@@ -382,12 +380,11 @@
                     </div>
                 </div>
             </div>
-            <button onclick="switchStep(2)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xl">
+            <button onclick="_0x2a1b(2)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xl">
                 ถัดไป: ระบุข้อมูลและออก "แบบ 3" <i class="fa-solid fa-arrow-right text-sky-400"></i>
             </button>
         </div>
 
-        <!-- STEP 2 & 3: กรอกข้อมูลและฟอร์ม แบบ 3 ทางการ -->
         <div id="step-view-2" class="space-y-3 hidden">
             <div id="input-container" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs no-print">
                 <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2.5">
@@ -463,12 +460,11 @@
                     <input type="text" id="inp-driver" value="นายส่งเสริม ฟั่นเฟือนหา" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-slate-100 font-semibold shadow-inner">
                 </div>
 
-                <button onclick="generateOfficialDoc()" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl">
+                <button onclick="_0x5b3e()" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl">
                     <i class="fa-solid fa-file-lines text-sky-400"></i> สร้างใบขออนุญาต (แบบ 3) ทางการ
                 </button>
             </div>
 
-            <!-- แบบ 3 A4 Preview -->
             <div id="official-doc-preview" class="a4-container print-area hidden text-xs md:text-sm leading-relaxed space-y-4">
                 <div class="flex justify-end"><div class="border border-slate-800 px-3 py-0.5 font-bold text-xs">แบบ 3</div></div>
                 <div class="text-center font-bold text-base">ใบขออนุญาตใช้รถยนต์ส่วนกลาง และรถรับรอง</div>
@@ -501,16 +497,15 @@
                     </div>
                 </div>
                 <div class="pt-3 flex justify-center gap-3 no-print border-t">
-                    <button onclick="backToEdit()" class="bg-slate-600 hover:bg-slate-700 text-white font-bold px-5 py-2 rounded-xl text-xs flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> กลับไปแก้ไข</button>
+                    <button onclick="_0x4d2a()" class="bg-slate-600 hover:bg-slate-700 text-white font-bold px-5 py-2 rounded-xl text-xs flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> กลับไปแก้ไข</button>
                     <button onclick="window.print()" class="industrial-btn text-white font-bold px-5 py-2 rounded-xl text-xs flex items-center gap-2"><i class="fa-solid fa-print"></i> พิมพ์เอกสาร / PDF</button>
                 </div>
             </div>
-            <button onclick="switchStep(4)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2.5 no-print shadow-xl">
+            <button onclick="_0x2a1b(4)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2.5 no-print shadow-xl">
                 ถัดไป: ประมวลผลและแจ้งสถานะ (ขั้นที่ 4-5) <i class="fa-solid fa-arrow-right text-sky-400"></i>
             </button>
         </div>
 
-        <!-- STEP 4 & 5: จัดสรรอัจฉริยะ -->
         <div id="step-view-4" class="space-y-3 hidden no-print">
             <div class="glass-panel rounded-2xl p-6 space-y-4 text-xs">
                 <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2.5">
@@ -529,12 +524,11 @@
                     <p class="text-xs text-slate-400 pt-1">ตรวจสอบความพร้อมและจัดสรรพนักงานขับรถเรียบร้อยตามแบบ 3 พร้อมปฏิบัติภารกิจ</p>
                 </div>
             </div>
-            <button onclick="switchStep(6)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-xl">
+            <button onclick="_0x2a1b(6)" class="w-full industrial-btn text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-xl">
                 ถัดไป: บันทึกหลังใช้และออกรายงาน (ขั้นที่ 6-7) <i class="fa-solid fa-arrow-right text-sky-400"></i>
             </button>
         </div>
 
-        <!-- STEP 6 & 7: แบบ 4 แนวนอน (แก้ไขส่วนลงนามให้ตรงตามต้นฉบับฟอร์มราชการ) -->
         <div id="step-view-6" class="space-y-4 hidden">
             <div class="glass-panel rounded-2xl p-5 text-center border-t-4 border-sky-500 space-y-2 no-print shadow-xl">
                 <span class="text-xs uppercase tracking-widest text-slate-300 font-semibold block"><i class="fa-solid fa-gauge text-sky-400"></i> บันทึกเลขไมล์ขากลับ (ขั้นที่ 6)</span>
@@ -591,7 +585,6 @@
                     </table>
                 </div>
 
-                <!-- ปรับแก้ส่วนลงนาม แบบ 4 ให้ตรงตามระเบียบต้นฉบับ -->
                 <div class="pt-5 flex justify-end">
                     <div class="text-center space-y-1.5 w-64 text-xs">
                         <div class="flex items-center justify-center gap-1">
@@ -617,35 +610,35 @@
     </div>
 
     <script>
-        let currentType = 'car';
-        let selectedCarMile = 12500;
+        let _0x98a1 = 'car';
+        let _0x3b2f = 12500;
 
-        function filterFleet(type) {
-            currentType = type;
-            let carBtn = document.getElementById('filter-car-btn');
-            let motoBtn = document.getElementById('filter-moto-btn');
+        function _0x7c4d(_0xtype) {
+            _0x98a1 = _0xtype;
+            let _0xcarBtn = document.getElementById('filter-car-btn');
+            let _0xmotoBtn = document.getElementById('filter-moto-btn');
 
-            if (type === 'car') {
-                carBtn.className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
-                motoBtn.className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5";
+            if (_0xtype === 'car') {
+                _0xcarBtn.className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
+                _0xmotoBtn.className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5";
             } else {
-                motoBtn.className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
-                carBtn.className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5";
+                _0xmotoBtn.className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
+                _0xcarBtn.className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5";
             }
 
-            let container = document.getElementById('fleet-container');
-            let items = container.getElementsByClassName('fleet-item');
+            let _0xcontainer = document.getElementById('fleet-container');
+            let _0xitems = _0xcontainer.getElementsByClassName('fleet-item');
 
-            for (let item of items) {
-                if (item.classList.contains(type)) {
-                    item.classList.remove('hidden');
+            for (let _0xitem of _0xitems) {
+                if (_0xitem.classList.contains(_0xtype)) {
+                    _0xitem.classList.remove('hidden');
                 } else {
-                    item.classList.add('hidden');
+                    _0xitem.classList.add('hidden');
                 }
             }
         }
 
-        function switchStep(stepNumber) {
+        function _0x2a1b(_0xstepNum) {
             document.getElementById('step-view-1').classList.add('hidden');
             document.getElementById('step-view-2').classList.add('hidden');
             document.getElementById('step-view-4').classList.add('hidden');
@@ -656,38 +649,38 @@
             document.getElementById('step-btn-4').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2";
             document.getElementById('step-btn-6').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2";
 
-            let activeViewId = stepNumber === 2 ? 2 : (stepNumber === 4 ? 4 : (stepNumber === 6 ? 6 : 1));
-            document.getElementById('step-view-' + activeViewId).classList.remove('hidden');
+            let _0xactiveView = _0xstepNum === 2 ? 2 : (_0xstepNum === 4 ? 4 : (_0xstepNum === 6 ? 6 : 1));
+            document.getElementById('step-view-' + _0xactiveView).classList.remove('hidden');
             
-            let btnMap = {1: 1, 2: 2, 4: 4, 6: 6};
-            document.getElementById('step-btn-'.concat(btnMap[stepNumber])).className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow-lg";
+            let _0xmap = {1: 1, 2: 2, 4: 4, 6: 6};
+            document.getElementById('step-btn-' + _0xmap[_0xstepNum]).className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow-lg";
         }
 
-        function selectCar(carName, mileNum, stars) {
-            selectedCarMile = mileNum;
-            let formattedMile = mileNum.toLocaleString() + ' กม.';
+        function _0x9e1f(_0xcarName, _0xmileNum, _0xstars) {
+            _0x3b2f = _0xmileNum;
+            let _0xformatted = _0xmileNum.toLocaleString() + ' กม.';
             
-            document.getElementById('inp-car-reg').value = carName;
-            document.getElementById('inp-current-mile').value = mileNum;
-            document.getElementById('display-current-mile').innerText = formattedMile;
+            document.getElementById('inp-car-reg').value = _0xcarName;
+            document.getElementById('inp-current-mile').value = _0xmileNum;
+            document.getElementById('display-current-mile').innerText = _0xformatted;
 
-            let tripDistance = 75;
-            let returnMileNum = mileNum + tripDistance;
-            document.getElementById('display-return-mile').innerText = returnMileNum.toLocaleString();
-            document.getElementById('display-trip-distance').innerText = tripDistance + ' กิโลเมตร';
+            let _0xtripDist = 75;
+            let _0xreturnMile = _0xmileNum + _0xtripDist;
+            document.getElementById('display-return-mile').innerText = _0xreturnMile.toLocaleString();
+            document.getElementById('display-trip-distance').innerText = _0xtripDist + ' กิโลเมตร';
 
-            document.getElementById('book-reg').innerText = carName;
-            document.getElementById('book-start-mile').innerText = mileNum.toLocaleString();
-            document.getElementById('book-end-mile').innerText = returnMileNum.toLocaleString();
-            document.getElementById('book-total-mile').innerText = tripDistance;
+            document.getElementById('book-reg').innerText = _0xcarName;
+            document.getElementById('book-start-mile').innerText = _0xmileNum.toLocaleString();
+            document.getElementById('book-end-mile').innerText = _0xreturnMile.toLocaleString();
+            document.getElementById('book-total-mile').innerText = _0xtripDist;
 
-            switchStep(2);
+            _0x2a1b(2);
         }
 
-        function generateOfficialDoc() {
-            let carRegText = document.getElementById('inp-car-reg').value;
-            let customMileVal = parseInt(document.getElementById('inp-current-mile').value) || selectedCarMile;
-            let mileFormatted = customMileVal.toLocaleString() + ' กม.';
+        function _0x5b3e() {
+            let _0xcarReg = document.getElementById('inp-car-reg').value;
+            let _0xcustomMile = parseInt(document.getElementById('inp-current-mile').value) || _0x3b2f;
+            let _0xmileFmt = _0xcustomMile.toLocaleString() + ' กม.';
 
             document.getElementById('out-name').innerText = document.getElementById('inp-name').value;
             document.getElementById('out-sign-name').innerText = document.getElementById('inp-sign-name').value;
@@ -699,31 +692,30 @@
             document.getElementById('out-passengers').innerText = document.getElementById('inp-passengers').value;
             document.getElementById('out-date').innerText = document.getElementById('inp-date').value;
             document.getElementById('out-time').innerText = document.getElementById('inp-time').value;
-            document.getElementById('out-car-reg').innerText = carRegText + ' (ไมล์เริ่มต้น: ' + mileFormatted + ')';
+            document.getElementById('out-car-reg').innerText = _0xcarReg + ' (ไมล์เริ่มต้น: ' + _0xmileFmt + ')';
             document.getElementById('out-boss').innerText = document.getElementById('inp-boss').value;
             
-            const driverName = document.getElementById('inp-driver').value;
-            document.getElementById('out-driver').innerText = driverName;
+            document.getElementById('out-driver').innerText = document.getElementById('inp-driver').value;
 
-            document.getElementById('display-current-mile').innerText = mileFormatted;
-            let tripDistance = 75;
-            let returnMileNum = customMileVal + tripDistance;
-            document.getElementById('display-return-mile').innerText = returnMileNum.toLocaleString();
-            document.getElementById('book-start-mile').innerText = customMileVal.toLocaleString();
-            document.getElementById('book-end-mile').innerText = returnMileNum.toLocaleString();
+            document.getElementById('display-current-mile').innerText = _0xmileFmt;
+            let _0xtripDist = 75;
+            let _0xreturnMile = _0xcustomMile + _0xtripDist;
+            document.getElementById('display-return-mile').innerText = _0xreturnMile.toLocaleString();
+            document.getElementById('book-start-mile').innerText = _0xcustomMile.toLocaleString();
+            document.getElementById('book-end-mile').innerText = _0xreturnMile.toLocaleString();
 
             document.getElementById('input-container').classList.add('hidden');
             document.getElementById('official-doc-preview').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function backToEdit() {
+        function _0x4d2a() {
             document.getElementById('official-doc-preview').classList.add('hidden');
             document.getElementById('input-container').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        filterFleet('car');
+        _0x7c4d('car');
     </script>
 </body>
 </html>
