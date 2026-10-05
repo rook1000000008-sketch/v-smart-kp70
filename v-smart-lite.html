@@ -115,7 +115,28 @@
 
     <div class="w-full space-y-4">
         
-        <div id="lite-step-1" class="glass-panel rounded-3xl p-6 text-center space-y-6 shadow-2xl mt-6">
+        <!-- STEP 0: หน้าจอตรวจสอบ PIN เข้าสู่ระบบ -->
+        <div id="auth-screen" class="glass-panel rounded-3xl p-6 text-center space-y-6 shadow-2xl mt-6">
+            <div class="flex justify-center">
+                <div class="w-20 h-20 bg-sky-500/10 border border-sky-500/20 rounded-full flex items-center justify-center text-sky-400 text-2xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <h1 class="text-lg font-bold text-white">V-SMART Secure Login</h1>
+                <p class="text-xs text-slate-400">กรุณากรอกรหัส PIN ส่วนตัวเพื่อเข้าสู่ระบบ (อบต.ข่วงเปา)</p>
+            </div>
+            <div class="space-y-3">
+                <input type="password" id="user-pin-input" placeholder="••••" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-center text-2xl font-black text-sky-400 odometer-font outline-none tracking-widest">
+                <button onclick="_0xverifyPin()" class="w-full industrial-btn text-white font-bold py-4 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
+                    <span>ยืนยันรหัส PIN</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            <p id="auth-error" class="text-xs text-rose-400 hidden">รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</p>
+        </div>
+
+        <!-- STEP 1: หน้าปกแอป (ตรา อบต.ข่วงเปา) -->
+        <div id="lite-step-1" class="glass-panel rounded-3xl p-6 text-center space-y-6 shadow-2xl mt-6 hidden">
             <div class="flex justify-center">
                 <div class="relative w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-sky-500 to-indigo-500 shadow-xl">
                     <img src="KPLOGO.jpg" alt="ตราสัญลักษณ์ อบต.ข่วงเปา" class="w-full h-full object-cover rounded-full bg-slate-900">
@@ -125,12 +146,14 @@
                 <h1 class="text-xl font-bold tracking-wide text-white">V-SMART Lite</h1>
                 <p class="text-xs text-sky-400 font-semibold">ระบบบริหารจัดการยานพาหนะอัจฉริยะ (ด่วน)</p>
                 <p class="text-[11px] text-slate-400">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</p>
+                <p id="logged-user-display" class="text-xs text-emerald-400 font-semibold pt-1"></p>
             </div>
             <button onclick="_0x5a1b(2)" class="w-full industrial-btn text-white font-bold py-4 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
                 <span>เริ่ม</span> <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
 
+        <!-- STEP 2: เลือกผู้ขออนุญาต -->
         <div id="lite-step-2" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 2 / 8</span>
@@ -156,6 +179,7 @@
             </div>
         </div>
 
+        <!-- STEP 3: เลือกรถ / พนักงานขับรถ -->
         <div id="lite-step-3" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 3 / 8</span>
@@ -196,6 +220,7 @@
             </div>
         </div>
 
+        <!-- STEP 4: ระบุจุดหมายปลายทาง -->
         <div id="lite-step-4" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 4 / 8</span>
@@ -222,6 +247,7 @@
             </div>
         </div>
 
+        <!-- STEP 5: กรอกเลขวัดระยะทางก่อน -->
         <div id="lite-step-5" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 5 / 8</span>
@@ -242,6 +268,7 @@
             </div>
         </div>
 
+        <!-- STEP 6: หน้าต่างสั่งพิมพ์ "แบบ 3" (แนวตั้ง ขาวสะอาด) -->
         <div id="lite-step-6" class="space-y-4 hidden mt-4">
             <div class="a4-container text-xs leading-relaxed space-y-4 shadow-2xl">
                 <div class="flex justify-end"><div class="border border-black px-3 py-0.5 font-bold text-xs">แบบ 3</div></div>
@@ -285,6 +312,7 @@
             </div>
         </div>
 
+        <!-- STEP 7: หน้าต่างกำลังดำเนินการ -->
         <div id="lite-step-7" class="glass-panel rounded-3xl p-6 text-center space-y-6 hidden mt-6">
             <div class="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto text-emerald-400 text-3xl animate-pulse">
                 <i class="fa-solid fa-car-tunnel"></i>
@@ -303,6 +331,7 @@
             </div>
         </div>
 
+        <!-- STEP 8: บันทึกเลขไมล์ขากลับ -->
         <div id="lite-step-8" class="glass-panel rounded-3xl p-6 space-y-4 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 8 / 8</span>
@@ -325,6 +354,7 @@
             </div>
         </div>
 
+        <!-- แบบ 4 ฉบับสมบูรณ์ (โครงสร้างที่ปรับแต่งสำเร็จ: "แบบ ๔" ชิดขวาเป๊ะ) -->
         <div id="doc-4-container" class="a4-landscape space-y-5 hidden">
             <div class="flex items-center">
                 <div class="ml-auto border border-black px-4 py-1 font-bold text-xs">แบบ ๔</div>
@@ -409,6 +439,53 @@
         };
         firebase.initializeApp(_0x12a3);
         const _0xdb = firebase.database();
+
+        // ฐานข้อมูลรายชื่อและ PIN เจ้าหน้าที่ (จากทะเบียนลายมือชื่ออิเล็กทรอนิกส์)
+        const authorizedUsers = [
+            { pin: "1234", name: "วิทยา ศรีจอมแล้ว", position: "ผู้ช่วยนักประชาสัมพันธ์", org: "สำนักปลัด" },
+            { pin: "2026", name: "อหิวรรตน์ พันวรรณ", position: "พนักงานขับรถยนต์", org: "สำนักปลัด" },
+            { pin: "3456", name: "นายสมศักดิ์ เปงภีระ", position: "พนักงานขับเครื่องจักรขนาดเบา", org: "สำนักปลัด" },
+            { pin: "4321", name: "ต้นภาวิน", position: "พนักงานดับเพลิง", org: "สำนักปลัด" },
+            { pin: "5678", name: "นายภควัฒน์ สมสิงห์คำ", position: "ผู้ช่วยเจ้าพนักงานป้องกันฯ", org: "สำนักปลัด" },
+            { pin: "6789", name: "จิรวุฒิ เยาว์ธา", position: "เจ้าหน้าที่ประชาสัมพันธ์", org: "สำนักปลัด" },
+            { pin: "7890", name: "นายชพล กอง", position: "พนักงานดับเพลิง", org: "สำนักปลัด" },
+            { pin: "8123", name: "นายบุญแก้ว", position: "เจ้าหน้าที่งานป้องกันฯ", org: "สำนักปลัด" },
+            { pin: "9012", name: "สมศักดิ์ วงศ์สิงห์แก้ว", position: "เจ้าหน้าที่ขับรถไถ", org: "กองช่าง" },
+            { pin: "1073", name: "นายวีระวัฒน์ ไรวาง", position: "เจ้าหน้าที่ช่างไฟฟ้า", org: "กองช่าง" },
+            { pin: "1122", name: "บวรวัฒน์ งามตา", position: "ผู้ช่วยเจ้าหน้าที่สันทนาการ", org: "กองการศึกษา" },
+            { pin: "8801", name: "นายรัชพงษ์ ชัชวาลนนท์", position: "เจ้าหน้าที่งานสาธารณสุข", org: "กองสาธารณสุขฯ" },
+            { pin: "1357", name: "ธนเดช ศรีวิชัย", position: "เจ้าหน้าที่กู้ชีพกู้ภัย", org: "สำนักปลัด" },
+            { pin: "1468", name: "ภานุพงศ์ มหาวัน", position: "เจ้าหน้าที่ป้องกัน", org: "สำนักปลัด" },
+            { pin: "1590", name: "นายฤทธิ์เกียรติ ปัญญาเหล็ก", position: "เจ้าหน้าที่จัดประโยชน์", org: "กองคลัง" },
+            { pin: "1624", name: "น.ส. สุทธิพร โล", position: "ผู้ช่วยเจ้าหน้าที่จัดเก็บรายได้", org: "กองคลัง" },
+            { pin: "1735", name: "วรรณภรณ์", position: "ผู้ช่วยเจ้าหน้าที่พัสดุ", org: "กองคลัง" },
+            { pin: "1846", name: "นายภูมิไทร ชัยยะเลิศ", position: "นักพัฒนาชุมชนชำนาญการ", org: "กองสวัสดิการสังคม" }
+        ];
+
+        let currentUser = null;
+
+        function _0xverifyPin() {
+            let enteredPin = document.getElementById('user-pin-input').value.trim();
+            let matchedUser = authorizedUsers.find(u => u.pin === enteredPin);
+
+            if (matchedUser) {
+                currentUser = matchedUser;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('lite-step-1').classList.remove('hidden');
+                document.getElementById('logged-user-display').innerText = `ผู้ใช้งาน: ${matchedUser.name} (${matchedUser.position})`;
+
+                // อัปเดตข้อมูลผู้ขออนุญาตอัตโนมัติ
+                let reqSelect = document.getElementById('select-requester');
+                let newOpt = document.createElement('option');
+                newOpt.value = `${matchedUser.name}|${matchedUser.position}|${matchedUser.org} อบต.ข่วงเปา|053 810 733`;
+                newOpt.text = `${matchedUser.name} (${matchedUser.position})`;
+                reqSelect.insertBefore(newOpt, reqSelect.firstChild);
+                reqSelect.selectedIndex = 0;
+            } else {
+                let errEl = document.getElementById('auth-error');
+                errEl.classList.remove('hidden');
+            }
+        }
 
         function _0x5a1b(_0xstep) {
             for(let _0xi=1; _0xi<=8; _0xi++) {
@@ -505,8 +582,6 @@
             window.print();
             document.body.classList.remove('print-mode-4');
         }
-
-        _0x5a1b(1);
     </script>
 </body>
 </html>
