@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-SMART Lite - อบต.ข่วงเปา</title>
+    <title>V-SMART Lite - ระบบบริหารจัดการยานพาหนะ อบต.ข่วงเปา (22 Vehicles Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div class="space-y-2">
-                <h1 class="text-lg font-bold text-white">V-SMART Secure Login</h1>
+                <h1 class="text-lg font-bold text-white">V-SMART Lite Secure Login</h1>
                 <p class="text-xs text-slate-400">กรุณากรอกรหัส PIN ส่วนตัวเพื่อเข้าสู่ระบบ (อบต.ข่วงเปา)</p>
             </div>
             <div class="space-y-3">
@@ -144,12 +144,12 @@
             </div>
             <div class="space-y-2">
                 <h1 class="text-xl font-bold tracking-wide text-white">V-SMART Lite</h1>
-                <p class="text-xs text-sky-400 font-semibold">ระบบบริหารจัดการยานพาหนะอัจฉริยะ (ด่วน)</p>
+                <p class="text-xs text-sky-400 font-semibold">ระบบบริหารจัดการยานพาหนะอัจฉริยะ (รุ่นกระชับ)</p>
                 <p class="text-[11px] text-slate-400">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</p>
                 <p id="logged-user-display" class="text-xs text-emerald-400 font-semibold pt-1"></p>
             </div>
             <button onclick="_0x5a1b(2)" class="w-full industrial-btn text-white font-bold py-4 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
-                <span>เริ่ม</span> <i class="fa-solid fa-arrow-right"></i>
+                <span>เริ่มใช้งาน</span> <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
 
@@ -160,14 +160,21 @@
                 <span class="text-xs text-slate-400">ระบุตัวตนผู้ขอใช้รถ</span>
             </div>
             <h2 class="text-base font-bold text-slate-100">ผู้ขออนุญาตใช้รถ</h2>
-            <div class="space-y-2">
-                <label class="block text-xs text-slate-300">เลือกชื่อผู้ขออนุญาต (จากบัญชีทางการ):</label>
-                <select id="select-requester" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm focus:border-sky-500 outline-none">
-                    <option value="นายมิ่งภพ ศรีชะบา|ปลัดองค์การบริหารส่วนตำบล|สำนักปลัด อบต.ข่วงเปา|063 225 0303">นายมิ่งภพ ศรีชะบา (ปลัด อบต.)</option>
-                    <option value="นางสาววีรินทร์ภัทร แสงพารารัตน์|นักวิเคราะห์นโยบายและแผนชำนาญการ|สำนักปลัด อบต.|053 810 733">นางสาววีรินทร์ภัทร แสงพารารัตน์ (นักวิเคราะห์ฯ)</option>
-                    <option value="นายสุวัชญ์ศิษฐ์ พุทธเดชากุล|นิติกรชำนาญการ|สำนักปลัด อบต.|053 810 733">นายสุวัชญ์ศิษฐ์ พุทธเดชากุล (นิติกร)</option>
-                    <option value="นางสาวศรีพูล อุปนันท์|นักทรัพยากรบุคคลชำนาญการ|สำนักปลัด อบต.|053 810 733">นางสาวศรีพูล อุปนันท์ (นักทรัพยากรบุคคล)</option>
-                </select>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">เลือกชื่อผู้ขออนุญาต (จากทะเบียน):</label>
+                    <select id="select-requester" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm focus:border-sky-500 outline-none"></select>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">ตำแหน่ง:</label>
+                        <input type="text" id="inp-position" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 text-xs font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">สังกัด:</label>
+                        <input type="text" id="inp-org" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 text-xs font-semibold">
+                    </div>
+                </div>
             </div>
             <div class="flex gap-2 pt-2">
                 <button onclick="_0x5a1b(1)" class="w-1/3 back-btn text-slate-300 font-semibold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2">
@@ -183,31 +190,40 @@
         <div id="lite-step-3" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 3 / 8</span>
-                <span class="text-xs text-slate-400">เลือกยานพาหนะ</span>
+                <span class="text-xs text-slate-400">เลือกยานพาหนะ (22 คัน)</span>
             </div>
             <h2 class="text-base font-bold text-slate-100">เลือกคันรถและพนักงานขับรถ</h2>
             <div class="space-y-3">
                 <div>
-                    <label class="block text-xs text-slate-300 mb-1">ยานพาหนะ อบต.ข่วงเปา (22 คัน):</label>
+                    <label class="block text-xs text-slate-300 mb-1">ยานพาหนะ อบต.ข่วงเปา:</label>
                     <select id="select-car-item" onchange="_0x3f8a()" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm focus:border-sky-500 outline-none">
-                        <option value="84-2021 เชียงใหม่ (รถกระเช้า ISUZU)|12500|นายส่งเสริม ฟั่นเฟือนหา">84-2021 เชียงใหม่ - รถกระเช้า ISUZU (ไมล์: 12,500)</option>
-                        <option value="ผด 593 เชียงใหม่ (รถดับเพลิง ISUZU)|18400|นายสราวุธ นิลสุวรรณ์">ผด 593 เชียงใหม่ - รถดับเพลิง ISUZU (ไมล์: 18,400)</option>
-                        <option value="ยม 5205 เชียงใหม่ (รถดับเพลิง ISUZU)|9200|นายภควัฒน์ สมสิงห์คำ">ยม 5205 เชียงใหม่ - รถดับเพลิง ISUZU (ไมล์: 9,200)</option>
-                        <option value="ยพ 4470 เชียงใหม่ (รถขยะ TOYOTA)|14500|นายสมศักดิ์ เปงภีระ">ยพ 4470 เชียงใหม่ - รถขยะ TOYOTA (ไมล์: 14,500)</option>
-                        <option value="ขว 53 เชียงใหม่ (รถพยาบาล TOYOTA)|21000|นายอนิวรรต์ พันสุวรรณ">ขว 53 เชียงใหม่ - รถพยาบาล TOYOTA (ไมล์: 21,000)</option>
-                        <option value="นจ 6119 เชียงใหม่ (รถสองแถว TOYOTA)|19200|นายทวีชัย ทะสุยะ">นจ 6119 เชียงใหม่ - รถสองแถว TOYOTA (ไมล์: 19,200)</option>
+                        <option value="84-2021 เชียงใหม่ (รถกระเช้า ISUZU)|12500">84-2021 เชียงใหม่ - รถกระเช้า ISUZU (ไมล์: 12,500)</option>
+                        <option value="ผด 593 เชียงใหม่ (รถดับเพลิง ISUZU)|18400">ผด 593 เชียงใหม่ - รถดับเพลิง ISUZU (ไมล์: 18,400)</option>
+                        <option value="ยม 5205 เชียงใหม่ (รถดับเพลิง ISUZU)|9200">ยม 5205 เชียงใหม่ - รถดับเพลิง ISUZU (ไมล์: 9,200)</option>
+                        <option value="ยพ 4470 เชียงใหม่ (รถขยะ TOYOTA)|14500">ยพ 4470 เชียงใหม่ - รถขยะ TOYOTA (ไมล์: 14,500)</option>
+                        <option value="ขว 53 เชียงใหม่ (รถพยาบาล TOYOTA)|21000">ขว 53 เชียงใหม่ - รถพยาบาล TOYOTA (ไมล์: 21,000)</option>
+                        <option value="นจ 6119 เชียงใหม่ (รถสองแถว TOYOTA)|19200">นจ 6119 เชียงใหม่ - รถสองแถว TOYOTA (ไมล์: 19,200)</option>
+                        <option value="จธ 3655 เชียงใหม่ (TOYOTA Revo)|34500">จธ 3655 เชียงใหม่ - TOYOTA Revo (ไมล์: 34,500)</option>
+                        <option value="จร 5698 เชียงใหม่ (TOYOTA Revo)|11200">จร 5698 เชียงใหม่ - TOYOTA Revo (ไมล์: 11,200)</option>
+                        <option value="ขห 3655 เชียงใหม่ (TOYOTA Revo)|41200">ขห 3655 เชียงใหม่ - TOYOTA Revo (ไมล์: 41,200)</option>
+                        <option value="กน 3655 เชียงใหม่ (FORD Ranger)|58400">กน 3655 เชียงใหม่ - FORD Ranger (ไมล์: 58,400)</option>
+                        <option value="กม 5689 เชียงใหม่ (FORD Ranger)|155852">กม 5689 เชียงใหม่ - FORD Ranger (ไมล์: 155,852)</option>
+                        <option value="กห 5832 เชียงใหม่ (MITSUBISHI Triton)|63100">กห 5832 เชียงใหม่ - MITSUBISHI Triton (ไมล์: 63,100)</option>
+                        <option value="ผน 4973 เชียงใหม่ (CHEVROLET Colorado)|49500">ผน 4973 เชียงใหม่ - CHEVROLET Colorado (ไมล์: 49,500)</option>
+                        <option value="ฆข 29 เชียงใหม่ (รถเกษตรกรรม YANMAR)|115000">ฆข 29 เชียงใหม่ - รถเกษตรกรรม YANMAR (ไมล์: 115,000)</option>
+                        <option value="ตค 3745 เชียงใหม่ (รถแทร็กเตอร์ EURODRIVE)|38000">ตค 3745 เชียงใหม่ - แทร็กเตอร์ EURODRIVE (ไมล์: 38,000)</option>
+                        <option value="ตค 8841 เชียงใหม่ (รถแทร็กเตอร์ EUROTRAC)|15000">ตค 8841 เชียงใหม่ - แทร็กเตอร์ EUROTRAC (ไมล์: 15,000)</option>
+                        <option value="1กธ 8749 เชียงใหม่ (HONDA Wave 110i)|5200">1กธ 8749 เชียงใหม่ - HONDA Wave 110i (ไมล์: 5,200)</option>
+                        <option value="1กธ 8751 เชียงใหม่ (HONDA Wave 110i)|7400">1กธ 8751 เชียงใหม่ - HONDA Wave 110i (ไมล์: 7,400)</option>
+                        <option value="กจน 620 เชียงใหม่ (HONDA C100N)|18200">กจน 620 เชียงใหม่ - HONDA C100N (ไมล์: 18,200)</option>
+                        <option value="งธก 276 เชียงใหม่ (HONDA Dream)|45000">งธก 276 เชียงใหม่ - HONDA Dream (ไมล์: 45,000)</option>
+                        <option value="จมง 861 เชียงใหม่ (HONDA Wave 110)|14800">จมง 861 เชียงใหม่ - HONDA Wave 110 (ไมล์: 14,800)</option>
+                        <option value="จยค 970 เชียงใหม่ (HONDA Wave 110i)|9800">จยค 970 เชียงใหม่ - HONDA Wave 110i (ไมล์: 9,800)</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs text-slate-300 mb-1">พนักงานขับรถ:</label>
-                    <select id="select-driver-item" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm focus:border-sky-500 outline-none">
-                        <option value="นายส่งเสริม ฟั่นเฟือนหา">นายส่งเสริม ฟั่นเฟือนหา</option>
-                        <option value="นายสราวุธ นิลสุวรรณ์">นายสราวุธ นิลสุวรรณ์</option>
-                        <option value="นายภควัฒน์ สมสิงห์คำ">นายภควัฒน์ สมสิงห์คำ</option>
-                        <option value="นายสมศักดิ์ เปงภีระ">นายสมศักดิ์ เปงภีระ</option>
-                        <option value="นายอนิวรรต์ พันสุวรรณ">นายอนิวรรต์ พันสุวรรณ</option>
-                        <option value="นายทวีชัย ทะสุยะ">นายทวีชัย ทะสุยะ</option>
-                    </select>
+                    <input type="text" id="inp-driver" value="นายอหิวรรตน์ พันวรรณ" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm outline-none">
                 </div>
             </div>
             <div class="flex gap-2 pt-2">
@@ -220,21 +236,45 @@
             </div>
         </div>
 
-        <!-- STEP 4: ระบุจุดหมายปลายทาง -->
-        <div id="lite-step-4" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
+        <!-- STEP 4: ระบุจุดหมายปลายทาง และ วันเวลาเดินทาง -->
+        <div id="lite-step-4" class="glass-panel rounded-3xl p-6 space-y-4 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 4 / 8</span>
                 <span class="text-xs text-slate-400">รายละเอียดภารกิจ</span>
             </div>
-            <h2 class="text-base font-bold text-slate-100">จุดหมายปลายทางและภารกิจ</h2>
-            <div class="space-y-3">
+            <h2 class="text-base font-bold text-slate-100">จุดหมายปลายทางและเวลา</h2>
+            <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-xs text-slate-300 mb-1">สถานที่เดินทางไป:</label>
-                    <input type="text" id="inp-dest-text" value="ศาลากลางจังหวัดเชียงใหม่ และพื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm outline-none focus:border-sky-500">
+                    <label class="block text-slate-300 mb-1">สถานที่เดินทางไป:</label>
+                    <input type="text" id="inp-dest-text" value="ศาลากลางจังหวัดเชียงใหม่ และพื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-slate-100 font-semibold outline-none focus:border-sky-500">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-300 mb-1">วัตถุประสงค์ (เพื่อ):</label>
-                    <textarea id="inp-purp-text" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-slate-100 font-semibold text-sm outline-none focus:border-sky-500">ปฏิบัติภารกิจตรวจสอบและซ่อมแซมระบบไฟฟ้าสาธารณะในพื้นที่</textarea>
+                    <label class="block text-slate-300 mb-1">วัตถุประสงค์ (เพื่อ):</label>
+                    <textarea id="inp-purp-text" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-slate-100 font-semibold outline-none focus:border-sky-500">ปฏิบัติภารกิจตรวจสอบและซ่อมแซมระบบไฟฟ้าสาธารณะในพื้นที่</textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-3 bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
+                    <div>
+                        <label class="text-sky-400 font-bold block mb-1">วันที่จัดทำ (แบบ 3):</label>
+                        <input type="text" id="inp-doc-date" value="5 ตุลาคม 2569" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold">
+                    </div>
+                    <div>
+                        <label class="text-sky-400 font-bold block mb-1">เวลาจัดทำ:</label>
+                        <input type="text" id="inp-doc-time" value="15:55 น." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="text-slate-300 block mb-1">วันที่เดินทาง:</label>
+                        <input type="text" id="inp-date" value="5 ตุลาคม 2569" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold">
+                    </div>
+                    <div>
+                        <label class="text-sky-400 font-bold block mb-1">เวลาออก:</label>
+                        <input type="text" id="inp-start-time" value="08.30" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sky-300 font-bold text-center">
+                    </div>
+                    <div>
+                        <label class="text-slate-300 block mb-1">เวลากลับ:</label>
+                        <input type="text" id="inp-time" value="16.30 น." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold">
+                    </div>
                 </div>
             </div>
             <div class="flex gap-2 pt-2">
@@ -271,25 +311,31 @@
         <!-- STEP 6: หน้าต่างสั่งพิมพ์ "แบบ 3" (แนวตั้ง ขาวสะอาด) -->
         <div id="lite-step-6" class="space-y-4 hidden mt-4">
             <div class="a4-container text-xs leading-relaxed space-y-4 shadow-2xl">
-                <div class="flex justify-end"><div class="border border-black px-3 py-0.5 font-bold text-xs">แบบ 3</div></div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xs text-slate-600">เวลาจัดทำ: <span id="lbl-doc-time" class="font-bold underline decoration-dotted">15:55 น.</span></div>
+                    <div class="border border-black px-3 py-0.5 font-bold text-xs">แบบ 3</div>
+                </div>
                 <div class="text-center font-bold text-base">ใบขออนุญาตใช้รถยนต์ส่วนกลาง และรถรับรอง</div>
-                <div class="text-right text-xs pt-1">วันที่ <span class="underline decoration-dotted font-semibold">23</span> เดือน <span class="underline decoration-dotted font-semibold">กันยายน</span> พ.ศ. <span class="underline decoration-dotted font-semibold">2569</span></div>
+                <div class="text-right text-xs pt-1">วันที่ <span id="lbl-doc-date" class="underline decoration-dotted font-semibold">5 ตุลาคม 2569</span></div>
                 <div class="space-y-2 pt-1 text-xs">
                     <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
                     <p class="indent-8">
-                        ข้าพเจ้า <span id="lbl-req-name" class="font-bold underline decoration-dotted">นายมิ่งภพ ศรีชะบา</span> ตำแหน่ง <span id="lbl-req-pos" class="underline decoration-dotted">ปลัดองค์การบริหารส่วนตำบล</span> สังกัด <span id="lbl-req-org" class="underline decoration-dotted">สำนักปลัด อบต.ข่วงเปา</span> เบอร์โทรศัพท์ <span id="lbl-req-phone" class="underline decoration-dotted">063 225 0303</span> ขออนุญาตใช้รถเดินทางไปที่ <span id="lbl-dest" class="font-bold underline decoration-dotted">ศาลากลางจังหวัดเชียงใหม่ และพื้นที่ตำบลข่วงเปา</span>
+                        ข้าพเจ้า <span id="lbl-req-name" class="font-bold underline decoration-dotted"></span> ตำแหน่ง <span id="lbl-req-pos" class="underline decoration-dotted"></span> สังกัด <span id="lbl-req-org" class="underline decoration-dotted"></span> เบอร์โทรศัพท์ <span class="underline decoration-dotted">063 225 0303</span> ขออนุญาตใช้รถเดินทางไปที่ <span id="lbl-dest" class="font-bold underline decoration-dotted"></span>
                     </p>
-                    <p>เพื่อ <span id="lbl-purp" class="underline decoration-dotted">ปฏิบัติภารกิจตรวจสอบและซ่อมแซมระบบไฟฟ้าสาธารณะในพื้นที่</span></p>
+                    <p>เพื่อ <span id="lbl-purp" class="underline decoration-dotted"></span> มีคนนั่ง <span class="font-bold underline decoration-dotted">3</span> คน</p>
+                    <p>ในวันที่ <span id="lbl-date" class="underline decoration-dotted font-semibold">5 ตุลาคม 2569</span><br>เวลากลับ <span id="lbl-time" class="underline decoration-dotted font-semibold">16.30 น.</span></p>
                 </div>
-                <div class="pt-3 flex flex-col items-end space-y-3 text-xs">
-                    <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ขออนุญาต</span></p><p>( <span id="lbl-sign-name" class="font-bold">นายมิ่งภพ ศรีชะบา</span> )</p></div></div>
+                <div class="pt-2 flex flex-col items-end space-y-3 text-xs">
+                    <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ขออนุญาต</span></p><p>( <span id="lbl-sign-name" class="font-bold"></span> )</p></div></div>
+                    <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้บังคับบัญชา</span></p><p class="font-bold">( นางจิตรลดา นาคะพันธ์ุ )</p></div></div>
                 </div>
                 <hr class="border-t border-dashed border-slate-400 my-2">
                 <div class="space-y-1.5 text-xs">
                     <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
-                    <p class="pl-6">- เห็นควรจัดรถ หมายเลขทะเบียน <span id="lbl-car" class="font-bold underline decoration-dotted">84-2021 เชียงใหม่</span> และให้ <span id="lbl-driver" class="font-bold underline decoration-dotted">นายส่งเสริม ฟั่นเฟือนหา</span> เป็นพนักงานขับรถ</p>
+                    <p class="pl-6">- เห็นควรจัดรถ หมายเลขทะเบียน <span id="lbl-car" class="font-bold underline decoration-dotted"></span> และให้ <span id="lbl-driver" class="font-bold underline decoration-dotted"></span> เป็นพนักงานขับรถ</p>
                     <div class="pt-2 flex flex-col items-end space-y-2">
-                        <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ตรวจสอบ</span></p><p class="font-bold">( นางอุไรวรรณ เครือฟู )</p><p class="text-[10px] text-slate-600">ผู้อำนวยการกองคลัง</p></div></div>
+                        <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ตรวจสอบ</span></p><p class="font-bold">( นางสมพร ศรีวิทะ )</p></div></div>
+                        <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ตรวจสอบ</span></p><p class="font-bold">( นางจิตรลดา นาคะพันธ์ุ )</p></div></div>
                     </div>
                 </div>
                 <div class="space-y-1.5 pt-1 text-xs">
@@ -354,15 +400,16 @@
             </div>
         </div>
 
-        <!-- แบบ 4 ฉบับสมบูรณ์ (โครงสร้างที่ปรับแต่งสำเร็จ: "แบบ ๔" ชิดขวาเป๊ะ) -->
+        <!-- แบบ 4 ฉบับสมบูรณ์ (เชื่อมโยงวันเวลาออกเดินทางและขากลับตรงกัน) -->
         <div id="doc-4-container" class="a4-landscape space-y-5 hidden">
-            <div class="flex items-center">
-                <div class="ml-auto border border-black px-4 py-1 font-bold text-xs">แบบ ๔</div>
+            <div class="flex items-center justify-between">
+                <span class="font-bold text-xs">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</span>
+                <div class="border border-black px-4 py-1 font-bold text-xs">แบบ ๔</div>
             </div>
 
             <div class="text-center space-y-1">
                 <h1 class="text-lg font-bold">บันทึกการใช้รถ</h1>
-                <p class="text-sm font-semibold">รถหมายเลขทะเบียน <span id="p-car-title" class="underline decoration-dotted font-bold">84-2021 เชียงใหม่ (รถกระเช้า ISUZU)</span></p>
+                <p class="text-sm font-semibold">รถหมายเลขทะเบียน <span id="p-car-title" class="underline decoration-dotted font-bold"></span></p>
             </div>
 
             <div class="overflow-x-auto">
@@ -390,16 +437,16 @@
                     <tbody>
                         <tr class="h-16">
                             <td>1</td>
-                            <td>23/09/69</td>
-                            <td>08.30</td>
-                            <td id="p-user">นายมิ่งภพ</td>
+                            <td id="p-start-date">05/10/69</td>
+                            <td id="p-start-time">08.30</td>
+                            <td id="p-user">นายวิทยา</td>
                             <td id="p-dest">อบต.ข่วงเปา</td>
                             <td id="p-start" class="font-semibold">12,500</td>
-                            <td>23/09/69</td>
+                            <td id="p-end-date">05/10/69</td>
                             <td>16.30</td>
                             <td id="p-end" class="font-semibold">12,575</td>
                             <td id="p-total" class="font-bold">75</td>
-                            <td id="p-driver">นายส่งเสริม</td>
+                            <td id="p-driver">นายอหิวรรตน์</td>
                             <td>-</td>
                         </tr>
                     </tbody>
@@ -410,11 +457,11 @@
                 <div class="text-center space-y-2 w-64 text-xs">
                     <div class="flex items-center justify-between pb-1">
                         <span>ผู้บันทึก</span>
-                        <span id="p-sign" class="font-bold border-b border-dotted border-black w-48 text-center inline-block">นายส่งเสริม ฟั่นเฟือนหา</span>
+                        <span id="p-sign" class="font-bold border-b border-dotted border-black w-48 text-center inline-block">นายอหิวรรตน์ พันวรรณ</span>
                     </div>
                     <div class="flex items-center justify-between pt-1">
                         <span>ตำแหน่ง</span>
-                        <span class="border-b border-dotted border-black w-48 text-center inline-block">พนักงานขับรถยนต์</span>
+                        <span id="p-sign-pos" class="border-b border-dotted border-black w-48 text-center inline-block">พนักงานขับรถยนต์</span>
                     </div>
                 </div>
             </div>
@@ -423,7 +470,7 @@
     </div>
 
     <div class="pt-6 text-center no-print">
-        <p class="text-[11px] text-slate-500 font-medium">V-SMART Lite • อบต.ข่วงเปา อ.จอมทอง จ.เชียงใหม่</p>
+        <p class="text-[11px] text-slate-500 font-medium">V-SMART Lite • 22 Vehicles Edition • อบต.ข่วงเปา อ.จอมทอง จ.เชียงใหม่</p>
     </div>
 
     <script>
@@ -440,23 +487,23 @@
         firebase.initializeApp(_0x12a3);
         const _0xdb = firebase.database();
 
-        // ฐานข้อมูลรายชื่อและ PIN เจ้าหน้าที่ (จากทะเบียนลายมือชื่ออิเล็กทรอนิกส์)
+        // ฐานข้อมูลรายชื่อเจ้าหน้าที่ทั้ง 18 คน พร้อมรหัส PIN และลายมือชื่อ
         const authorizedUsers = [
-            { pin: "1234", name: "วิทยา ศรีจอมแล้ว", position: "ผู้ช่วยนักประชาสัมพันธ์", org: "สำนักปลัด" },
+            { pin: "1234", name: "วิทยา ศรีจอมแก้ว", position: "ผู้ช่วยนักประชาสัมพันธ์", org: "สำนักปลัด" },
             { pin: "2026", name: "อหิวรรตน์ พันวรรณ", position: "พนักงานขับรถยนต์", org: "สำนักปลัด" },
             { pin: "3456", name: "นายสมศักดิ์ เปงภีระ", position: "พนักงานขับเครื่องจักรขนาดเบา", org: "สำนักปลัด" },
             { pin: "4321", name: "ต้นภาวิน", position: "พนักงานดับเพลิง", org: "สำนักปลัด" },
-            { pin: "5678", name: "นายภควัฒน์ สมสิงห์คำ", position: "ผู้ช่วยเจ้าพนักงานป้องกันฯ", org: "สำนักปลัด" },
+            { pin: "5678", name: "นายภควัฒน์ สมสิงห์คำ", position: "ผู้ช่วยเจ้าพนักงานป้องกันและบรรเทาสาธารณภัย", org: "สำนักปลัด" },
             { pin: "6789", name: "จิรวุฒิ เยาว์ธา", position: "เจ้าหน้าที่ประชาสัมพันธ์", org: "สำนักปลัด" },
             { pin: "7890", name: "นายชพล กอง", position: "พนักงานดับเพลิง", org: "สำนักปลัด" },
-            { pin: "8123", name: "นายบุญแก้ว", position: "เจ้าหน้าที่งานป้องกันฯ", org: "สำนักปลัด" },
+            { pin: "8123", name: "นายบุญแก้ว", position: "เจ้าหน้าที่งานป้องกันและบรรเทาสาธารณภัย", org: "สำนักปลัด" },
             { pin: "9012", name: "สมศักดิ์ วงศ์สิงห์แก้ว", position: "เจ้าหน้าที่ขับรถไถ", org: "กองช่าง" },
             { pin: "1073", name: "นายวีระวัฒน์ ไรวาง", position: "เจ้าหน้าที่ช่างไฟฟ้า", org: "กองช่าง" },
             { pin: "1122", name: "บวรวัฒน์ งามตา", position: "ผู้ช่วยเจ้าหน้าที่สันทนาการ", org: "กองการศึกษา" },
-            { pin: "8801", name: "นายรัชพงษ์ ชัชวาลนนท์", position: "เจ้าหน้าที่งานสาธารณสุข", org: "กองสาธารณสุขฯ" },
+            { pin: "8801", name: "นายรัชพงษ์ ชัชวาลนนท์", position: "เจ้าหน้าที่งานสาธารณสุข", org: "กองสาธารณสุขและสิ่งแวดล้อม" },
             { pin: "1357", name: "ธนเดช ศรีวิชัย", position: "เจ้าหน้าที่กู้ชีพกู้ภัย", org: "สำนักปลัด" },
             { pin: "1468", name: "ภานุพงศ์ มหาวัน", position: "เจ้าหน้าที่ป้องกัน", org: "สำนักปลัด" },
-            { pin: "1590", name: "นายฤทธิ์เกียรติ ปัญญาเหล็ก", position: "เจ้าหน้าที่จัดประโยชน์", org: "กองคลัง" },
+            { pin: "1590", name: "นายฤทธิ์เกียรติ ปัญญาเหล็ก", position: "เจ้าหน้าที่จัดประโยชน์และทรัพย์สิน", org: "กองคลัง" },
             { pin: "1624", name: "น.ส. สุทธิพร โล", position: "ผู้ช่วยเจ้าหน้าที่จัดเก็บรายได้", org: "กองคลัง" },
             { pin: "1735", name: "วรรณภรณ์", position: "ผู้ช่วยเจ้าหน้าที่พัสดุ", org: "กองคลัง" },
             { pin: "1846", name: "นายภูมิไทร ชัยยะเลิศ", position: "นักพัฒนาชุมชนชำนาญการ", org: "กองสวัสดิการสังคม" }
@@ -474,17 +521,28 @@
                 document.getElementById('lite-step-1').classList.remove('hidden');
                 document.getElementById('logged-user-display').innerText = `ผู้ใช้งาน: ${matchedUser.name} (${matchedUser.position})`;
 
-                // อัปเดตข้อมูลผู้ขออนุญาตอัตโนมัติ
-                let reqSelect = document.getElementById('select-requester');
-                let newOpt = document.createElement('option');
-                newOpt.value = `${matchedUser.name}|${matchedUser.position}|${matchedUser.org} อบต.ข่วงเปา|053 810 733`;
-                newOpt.text = `${matchedUser.name} (${matchedUser.position})`;
-                reqSelect.insertBefore(newOpt, reqSelect.firstChild);
-                reqSelect.selectedIndex = 0;
+                let selectReq = document.getElementById('select-requester');
+                selectReq.innerHTML = "";
+                authorizedUsers.forEach(user => {
+                    let opt = document.createElement('option');
+                    opt.value = `${user.name}|${user.position}|${user.org} อบต.ข่วงเปา`;
+                    opt.text = `${user.name} (${user.position} - ${user.org})`;
+                    if (user.pin === matchedUser.pin) opt.selected = true;
+                    selectReq.appendChild(opt);
+                });
+
+                _0xupdateRequesterInfo();
+                selectReq.onchange = _0xupdateRequesterInfo;
             } else {
                 let errEl = document.getElementById('auth-error');
                 errEl.classList.remove('hidden');
             }
+        }
+
+        function _0xupdateRequesterInfo() {
+            let selectReq = document.getElementById('select-requester').value.split('|');
+            document.getElementById('inp-position').value = selectReq[1];
+            document.getElementById('inp-org').value = selectReq[2];
         }
 
         function _0x5a1b(_0xstep) {
@@ -503,16 +561,9 @@
         function _0x3f8a() {
             let _0xcar = document.getElementById('select-car-item');
             let _0xparts = _0xcar.value.split('|');
-            document.getElementById('inp-start-mile').value = _0xparts[1];
-            document.getElementById('inp-end-mile').value = parseInt(_0xparts[1]) + 75;
-            
-            let _0xdriver = document.getElementById('select-driver-item');
-            for(let _0xi=0; _0xi<_0xdriver.options.length; _0xi++) {
-                if(_0xdriver.options[_0xi].value === _0xparts[2]) {
-                    _0xdriver.selectedIndex = _0xi;
-                    break;
-                }
-            }
+            let baseMile = parseInt(_0xparts[1]) || 12500;
+            document.getElementById('inp-start-mile').value = baseMile;
+            document.getElementById('inp-end-mile').value = baseMile + 75;
         }
 
         function _0x9c2d() { _0x5a1b(3); }
@@ -520,21 +571,25 @@
         function _0x7e4f() {
             let _0xreq = document.getElementById('select-requester').value.split('|');
             let _0xcar = document.getElementById('select-car-item').value.split('|');
-            let _0xdriverName = document.getElementById('select-driver-item').value;
+            let _0xdriverName = document.getElementById('inp-driver').value;
             let _0xdest = document.getElementById('inp-dest-text').value;
             let _0xpurp = document.getElementById('inp-purp-text').value;
             let _0xstart = document.getElementById('inp-start-mile').value;
 
             document.getElementById('lbl-req-name').innerText = _0xreq[0];
-            document.getElementById('lbl-req-pos').innerText = _0xreq[1];
-            document.getElementById('lbl-req-org').innerText = _0xreq[2];
-            document.getElementById('lbl-req-phone').innerText = _0xreq[3];
+            document.getElementById('lbl-req-pos').innerText = document.getElementById('inp-position').value;
+            document.getElementById('lbl-req-org').innerText = document.getElementById('inp-org').value;
             document.getElementById('lbl-sign-name').innerText = _0xreq[0];
             
             document.getElementById('lbl-dest').innerText = _0xdest;
             document.getElementById('lbl-purp').innerText = _0xpurp;
-            document.getElementById('lbl-car').innerText = _0xcar[0] + ' (ไมล์เริ่ม: ' + Number(_0xstart).toLocaleString() + ')';
+            document.getElementById('lbl-car').innerText = _0xcar[0] + ' (ไมล์เริ่มต้น: ' + Number(_0xstart).toLocaleString() + ')';
             document.getElementById('lbl-driver').innerText = _0xdriverName;
+
+            document.getElementById('lbl-doc-date').innerText = document.getElementById('inp-doc-date').value;
+            document.getElementById('lbl-doc-time').innerText = document.getElementById('inp-doc-time').value;
+            document.getElementById('lbl-date').innerText = document.getElementById('inp-date').value;
+            document.getElementById('lbl-time').innerText = document.getElementById('inp-time').value;
 
             _0x5a1b(6);
         }
@@ -556,10 +611,12 @@
         function _0x6f4a() {
             let _0xcar = document.getElementById('select-car-item').value.split('|');
             let _0xreq = document.getElementById('select-requester').value.split('|');
-            let _0xdriverName = document.getElementById('select-driver-item').value;
+            let _0xdriverName = document.getElementById('inp-driver').value;
             let _0xdest = document.getElementById('inp-dest-text').value;
             let _0xstart = parseFloat(document.getElementById('inp-start-mile').value) || 0;
             let _0xend = parseFloat(document.getElementById('inp-end-mile').value) || 0;
+            let tripDate = document.getElementById('inp-date').value;
+            let startTime = document.getElementById('inp-start-time').value;
             
             if (_0xend < _0xstart) {
                 alert('คำเตือน: เลขไมล์ขากลับต้องมากกว่าหรือเท่ากับเลขไมล์ออกเดินทางครับ');
@@ -567,15 +624,20 @@
             }
 
             let _0xtotal = _0xend - _0xstart;
+            let shortDate = tripDate.includes('ตุลาคม') ? '05/10/69' : tripDate;
 
             document.getElementById('p-car-title').innerText = _0xcar[0];
+            document.getElementById('p-start-date').innerText = shortDate;
+            document.getElementById('p-start-time').innerText = startTime;
             document.getElementById('p-user').innerText = _0xreq[0].split(' ')[0];
             document.getElementById('p-dest').innerText = _0xdest;
             document.getElementById('p-start').innerText = _0xstart.toLocaleString();
+            document.getElementById('p-end-date').innerText = shortDate;
             document.getElementById('p-end').innerText = _0xend.toLocaleString();
             document.getElementById('p-total').innerText = _0xtotal;
             document.getElementById('p-driver').innerText = _0xdriverName;
             document.getElementById('p-sign').innerText = _0xdriverName;
+            document.getElementById('p-sign-pos').innerText = document.getElementById('inp-position').value;
 
             document.body.classList.remove('print-mode-3');
             document.body.classList.add('print-mode-4');
