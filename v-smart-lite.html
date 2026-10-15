@@ -109,6 +109,12 @@
 
         <!-- STEP 1: หน้าปกแอป (ตรา อบต.ข่วงเปา) -->
         <div id="lite-step-1" class="glass-panel rounded-3xl p-6 text-center space-y-6 shadow-2xl mt-6 hidden">
+            <div class="flex justify-between items-center px-2">
+                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-house text-sky-400"></i> หน้าแรก
+                </a>
+                <span class="text-xs text-slate-400 font-medium">V-SMART Hub</span>
+            </div>
             <div class="flex justify-center">
                 <div class="relative w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-sky-500 to-indigo-500 shadow-xl">
                     <img src="KPLOGO.jpg" alt="ตราสัญลักษณ์ อบต.ข่วงเปา" class="w-full h-full object-cover rounded-full bg-slate-900">
@@ -116,7 +122,7 @@
             </div>
             <div class="space-y-2">
                 <h1 class="text-xl font-bold tracking-wide text-white">V-SMART Lite</h1>
-                <p class="text-xs text-sky-400 font-semibold">ระบบบริหารจัดการยานพาหนะอัจฉริยะ (รุ่นกระชับ)</p>
+                <p class="text-xs text-sky-400 font-semibold">ระบบบริหารจัดการยานพาหนะอัจฉริยะ (รุ่นกระชับ - Audit Log)</p>
                 <p class="text-[11px] text-slate-400">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</p>
                 <p id="logged-user-display" class="text-xs text-emerald-400 font-semibold pt-1"></p>
             </div>
@@ -162,7 +168,7 @@
         <div id="lite-step-3" class="glass-panel rounded-3xl p-6 space-y-5 hidden mt-6">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">ขั้นตอนที่ 3 / 8</span>
-                <span class="text-xs text-slate-400">เลือกยานพาหนะ (22 คัน)</span>
+                <span class="text-xs text-slate-400">เลือกยานพาหนะ (22 คัน)[cite: 12]</span>
             </div>
             <h2 class="text-base font-bold text-slate-100">เลือกคันรถและพนักงานขับรถ</h2>
             <div class="space-y-3">
@@ -245,9 +251,7 @@
                 <div class="grid grid-cols-2 gap-3 bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
                     <div>
                         <label class="text-sky-400 font-bold block mb-1">วันที่จัดทำ (แบบ 3):</label>
-                        <select id="inp-doc-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold">
-                            <!-- สร้างวัน 1-31 อัตโนมัติด้วย JS -->
-                        </select>
+                        <select id="inp-doc-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold"></select>
                     </div>
                     <div>
                         <label class="text-sky-400 font-bold block mb-1">เวลาจัดทำ:</label>
@@ -261,21 +265,15 @@
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         <label class="text-slate-300 block mb-1">วันที่เดินทาง (1-31):</label>
-                        <select id="inp-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold">
-                            <!-- สร้างวัน 1-31 อัตโนมัติด้วย JS -->
-                        </select>
+                        <select id="inp-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold"></select>
                     </div>
                     <div>
                         <label class="text-sky-400 font-bold block mb-1">เวลาออก:</label>
-                        <select id="inp-start-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sky-300 font-bold text-center">
-                            <!-- ช่วงเวลา 08.30 - 16.30 ทีละ 30 นาที -->
-                        </select>
+                        <select id="inp-start-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sky-300 font-bold text-center"></select>
                     </div>
                     <div>
                         <label class="text-slate-300 block mb-1">เวลากลับ:</label>
-                        <select id="inp-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold text-center">
-                            <!-- ช่วงเวลา 08.30 - 16.30 ทีละ 30 นาที -->
-                        </select>
+                        <select id="inp-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 font-semibold text-center"></select>
                     </div>
                 </div>
             </div>
@@ -297,7 +295,7 @@
             </div>
             <h2 class="text-base font-bold text-slate-100">เลขไมล์หน้าปัดรถยนต์ (ก่อนออก)</h2>
             <div class="bg-slate-950 border border-sky-500/50 p-5 rounded-2xl text-center space-y-2">
-                <span class="text-xs text-slate-400">ซิงค์จากฐานข้อมูลกลาง Firebase (สามารถกดลูกศรขึ้น-ลง หรือพิมพ์ปรับได้)</span>
+                <span class="text-xs text-slate-400">ซิงค์จากฐานข้อมูลกลาง Firebase[cite: 12] (สามารถกดลูกศรขึ้น-ลง หรือพิมพ์ปรับได้)</span>
                 <input type="number" id="inp-start-mile" step="1" min="0" class="w-full bg-transparent text-center text-3xl font-black text-sky-400 odometer-font outline-none">
             </div>
             <div class="flex gap-2 pt-2">
@@ -318,14 +316,14 @@
                     <div class="border border-black px-3 py-0.5 font-bold text-xs">แบบ 3</div>
                 </div>
                 <div class="text-center font-bold text-base">ใบขออนุญาตใช้รถยนต์ส่วนกลาง และรถรับรอง</div>
-                <div class="text-right text-xs pt-1">วันที่ <span id="lbl-doc-date" class="underline decoration-dotted font-semibold">5 ตุลาคม 2569</span></div>
+                <div class="text-right text-xs pt-1">วันที่ <span id="lbl-doc-date" class="underline decoration-dotted font-semibold"></span></div>
                 <div class="space-y-2 pt-1 text-xs">
                     <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
                     <p class="indent-8">
                         ข้าพเจ้า <span id="lbl-req-name" class="font-bold underline decoration-dotted"></span> ตำแหน่ง <span id="lbl-req-pos" class="underline decoration-dotted"></span> สังกัด <span id="lbl-req-org" class="underline decoration-dotted"></span> เบอร์โทรศัพท์ <span class="underline decoration-dotted">063 225 0303</span> ขออนุญาตใช้รถเดินทางไปที่ <span id="lbl-dest" class="font-bold underline decoration-dotted"></span>
                     </p>
                     <p>เพื่อ <span id="lbl-purp" class="underline decoration-dotted"></span> มีคนนั่ง <span class="font-bold underline decoration-dotted">3</span> คน</p>
-                    <p>ในวันที่ <span id="lbl-date" class="underline decoration-dotted font-semibold">5 ตุลาคม 2569</span><br>เวลากลับ <span id="lbl-time" class="underline decoration-dotted font-semibold">16.30 น.</span></p>
+                    <p>ในวันที่ <span id="lbl-date" class="underline decoration-dotted font-semibold"></span><br>เวลากลับ <span id="lbl-time" class="underline decoration-dotted font-semibold">16.30 น.</span></p>
                 </div>
                 <div class="pt-2 flex flex-col items-end space-y-3 text-xs">
                     <div class="flex justify-end w-full"><div class="text-center space-y-0.5" style="width: 220px;"><p class="flex justify-between items-center">(ลงชื่อ) <span class="text-right">ผู้ขออนุญาต</span></p><p>( <span id="lbl-sign-name" class="font-bold"></span> )</p></div></div>
@@ -397,7 +395,7 @@
                     <i class="fa-solid fa-arrow-left"></i> ย้อนกลับ
                 </button>
                 <button onclick="saveAndSyncFirebaseLite()" class="w-2/3 industrial-btn text-white font-bold py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
-                    <span>บันทึกและอัปเดตไมล์ลง Firebase (พิมพ์)</span> <i class="fa-solid fa-file-pdf"></i>
+                    <span>บันทึกและอัปเดตไมล์ลง Firebase (พร้อม Audit Log)[cite: 12]</span> <i class="fa-solid fa-file-pdf"></i>
                 </button>
             </div>
         </div>
@@ -521,6 +519,7 @@
         ];
 
         let currentUser = null;
+        let selectedCarTextLite = "";
 
         // สร้างตัวเลือกเวลา (08.30 - 16.30 ทีละ 30 นาที) และวันที่ 1-31 อัตโนมัติ
         function initLiteDateTime() {
@@ -645,6 +644,8 @@
 
         function fetchCarMileage() {
             let carKey = document.getElementById('select-car-item').value;
+            let sel = document.getElementById('select-car-item');
+            selectedCarTextLite = sel.options[sel.selectedIndex].text;
             dbLite.ref('vehicles/' + carKey).once('value').then((snapshot) => {
                 let carData = snapshot.val();
                 let currentMileage = (carData && carData.mileage !== undefined) ? Number(carData.mileage) : 0;
@@ -665,6 +666,7 @@
             let reqInfo = document.getElementById('select-requester').value.split('|');
             let carSelect = document.getElementById('select-car-item');
             let carText = carSelect.options[carSelect.selectedIndex].text;
+            selectedCarTextLite = carText;
             let driverName = document.getElementById('inp-driver').value;
             let destText = document.getElementById('inp-dest-text').value;
             let purpText = document.getElementById('inp-purp-text').value;
@@ -702,10 +704,9 @@
             document.body.classList.remove('print-mode-3');
         }
 
+        // ฟังก์ชันบันทึกและซิงค์ไมล์ พร้อมบันทึก Audit Log ลง Firebase แบบอัตโนมัติ
         function saveAndSyncFirebaseLite() {
             let carKey = document.getElementById('select-car-item').value;
-            let carSelect = document.getElementById('select-car-item');
-            let carText = carSelect.options[carSelect.selectedIndex].text;
             let reqInfo = document.getElementById('select-requester').value.split('|');
             let driverName = document.getElementById('inp-driver').value;
             let destText = document.getElementById('inp-dest-text').value;
@@ -720,16 +721,36 @@
                 return;
             }
 
+            // 1. อัปเดตเลขไมล์รถลง Firebase
             dbLite.ref('vehicles/' + carKey).update({ mileage: end }).then(() => {
                 console.log("Firebase mileage updated successfully.");
             }).catch((err) => {
                 console.error("Firebase update error: ", err);
             });
 
+            // 2. บันทึกประวัติการใช้งาน (Audit Log) ว่าใคร ทำอะไร เมื่อไหร่ และเลขไมล์เท่าไหร่
             let totalDist = end - start;
+            let auditLogData = {
+                user: currentUser ? currentUser.name : "ไม่ระบุตัวตน",
+                position: currentUser ? currentUser.position : "-",
+                org: currentUser ? currentUser.org : "-",
+                action: "บันทึกการใช้รถและเลขไมล์ขากลับ (Lite Edition)",
+                car: selectedCarTextLite || "ยานพาหนะ อบต.ข่วงเปา",
+                startMileage: start,
+                endMileage: end,
+                totalDistance: totalDist,
+                timestamp: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+            };
+
+            dbLite.ref('activity_logs').push(auditLogData).then(() => {
+                console.log("Lite Audit Log saved successfully.");
+            }).catch((err) => {
+                console.error("Lite Audit Log error: ", err);
+            });
+
             let shortDate = tripDate.split(' ')[0] + "/" + (new Date().getMonth() + 1) + "/" + (new Date().getFullYear() + 543).toString().slice(-2);
 
-            document.getElementById('p-car-title').innerText = carText;
+            document.getElementById('p-car-title').innerText = selectedCarTextLite;
             document.getElementById('p-start-date').innerText = shortDate;
             document.getElementById('p-start-time').innerText = startTime;
             document.getElementById('p-user').innerText = reqInfo[0].split(' ')[0];
