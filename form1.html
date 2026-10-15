@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ใบขออนุญาตใช้รถส่วนกลาง (แบบ 3)</title>
+    <style>
+        body {
+            font-family: 'Cordia New', 'Angsana New', Tahoma, sans-serif;
+            font-size: 18pt; /* ฟอนต์ Windows เช่น Cordia จะตัวเล็กกว่า Sarabun จึงปรับขนาดให้เหมาะสมขึ้น */
+            line-height: 1.4;
+            margin: 30px;
+            color: #000;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+        }
+        .form-type {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 20pt;
+            margin-bottom: 5px;
+        }
+        .sub-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .content-line {
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+        }
+        .dotted-line {
+            border-bottom: 1px dotted #000;
+            display: inline-block;
+            flex-grow: 1;
+            margin: 0 5px;
+            text-align: center;
+            min-height: 20px;
+        }
+        .signature-right {
+            text-align: right;
+            margin-top: 15px;
+        }
+        .signature-left {
+            text-align: left;
+            margin-top: 15px;
+        }
+        .btn-print {
+            text-align: center;
+            margin-top: 30px;
+        }
+        button {
+            padding: 8px 16px;
+            font-size: 16pt;
+            cursor: pointer;
+        }
+        @media print {
+            .btn-print { display: none; }
+            .container { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-type">แบบ 3</div>
+    <div class="header">ใบขออนุญาตใช้รถส่วนกลาง</div>
+    <div class="sub-header">
+        วันที่ <span class="dotted-line" style="max-width: 80px;"></span> เดือน <span class="dotted-line" style="max-width: 150px;"></span> พ.ศ. <span class="dotted-line" style="max-width: 80px;"></span>
+    </div>
+
+    <div class="content-line">
+        เรียน นายกองค์การบริหารส่วนตำบลข่วงเปา
+    </div>
+
+    <div class="content-line">
+        ข้าพเจ้า <span class="dotted-line" style="min-width: 350px;"></span> ตำแหน่ง <span class="dotted-line" style="min-width: 250px;"></span>
+    </div>
+
+    <div class="content-line">
+        ขออนุญาตใช้รถ (ไปที่ไหน) <span class="dotted-line" style="min-width: 480px;"></span>
+    </div>
+
+    <div class="content-line">
+        เพื่อ <span class="dotted-line" style="min-width: 450px;"></span> มีคนนั่ง <span class="dotted-line" style="max-width: 60px; text-align: center;"></span> คน
+    </div>
+
+    <div class="content-line">
+        ในวันที่ <span class="dotted-line" style="min-width: 300px;"></span> เวลา <span class="dotted-line" style="min-width: 120px;"></span> น.
+    </div>
+
+    <div class="content-line">
+        ถึงวันที่ <span class="dotted-line" style="min-width: 300px;"></span> เวลา <span class="dotted-line" style="min-width: 120px;"></span> น.
+    </div>
+
+    <!-- ผู้ขออนุญาต -->
+    <div class="signature-right" style="margin-right: 80px;">
+        ลงชื่อ <span class="dotted-line" style="display: inline-block; width: 200px;"></span> ผู้ขออนุญาต<br>
+        (<span class="dotted-line" style="display: inline-block; width: 220px; margin-top: 5px;"></span>)
+    </div>
+
+    <!-- ผู้อำนวยการกอง -->
+    <div class="signature-right" style="margin-right: 80px; margin-top: 25px;">
+        ลงชื่อ <span class="dotted-line" style="display: inline-block; width: 200px;"></span> ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน<br>
+        (<span class="dotted-line" style="display: inline-block; width: 220px; margin-top: 5px;"></span>)<br>
+        วันที่ <span class="dotted-line" style="display: inline-block; width: 40px;"></span> / <span class="dotted-line" style="display: inline-block; width: 40px;"></span> / <span class="dotted-line" style="display: inline-block; width: 60px;"></span>
+    </div>
+
+    <!-- ความเห็นผู้ควบคุม -->
+    <div style="margin-top: 20px;">
+        <div class="content-line">
+            เห็นควรอนุญาตให้ใช้รถ <span class="dotted-line" style="max-width: 100px;">FORD</span> หมายเลขทะเบียน <span class="dotted-line" style="max-width: 180px;">กห 3655 เชียงใหม่</span>
+        </div>
+        <div class="content-line">
+            โดยมอบหมายให้ <span class="dotted-line" style="min-width: 300px;"></span> เป็นพนักงานขับรถยนต์
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px;">
+            <!-- ผู้ควบคุมการใช้รถ (ชิดซ้าย) -->
+            <div class="signature-left" style="margin-left: 50px;">
+                (ลงชื่อ) <span class="dotted-line" style="display: inline-block; width: 180px;"></span> ผู้ควบคุมการใช้รถ<br>
+                <div style="text-align: center; width: 240px; margin-top: 3px;">(นายสุวัชญ์ศิษฎ์ พุทธเดชากุล)</div>
+                <div style="text-align: center; width: 240px;">นิติกรชำนาญการ</div>
+                <div style="margin-top: 15px;">
+                    เลขไมล์ <span class="dotted-line" style="display: inline-block; width: 150px;"></span>
+                </div>
+            </div>
+
+            <!-- อนุมัติ (ชิดขวาด้านล่าง) -->
+            <div class="signature-right" style="margin-right: 50px; text-align: center;">
+                <div style="margin-bottom: 10px;">อนุญาต</div>
+                <div style="text-align: left;">
+                    (ลงชื่อ) <span class="dotted-line" style="display: inline-block; width: 180px;"></span><br>
+                    <div style="text-align: center; width: 240px; margin-top: 3px;">(นายพรสิน นนทะธรรม)</div>
+                    <div style="text-align: center; width: 240px;">รองนายกองค์การบริหารส่วนตำบลข่วงเปา</div>
+                    <div style="text-align: center; width: 240px; margin-top: 5px;">
+                        วันที่ <span class="dotted-line" style="display: inline-block; width: 35px;"></span> / <span class="dotted-line" style="display: inline-block; width: 35px;"></span> / <span class="dotted-line" style="display: inline-block; width: 50px;"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-print">
+        <button onclick="window.print()">พิมพ์ใบขออนุญาต (แบบ 3)</button>
+    </div>
+</div>
+
+</body>
+</html>
