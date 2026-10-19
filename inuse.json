@@ -1,0 +1,388 @@
+{
+  "activity_logs": {
+    "-P4EvuyyfjsBBDH1jAlT": {
+      "action": "บันทึกการใช้รถและเลขไมล์ขากลับ (Pro Edition)",
+      "car": "กห 5832 เชียงใหม่ - MITSUBISHI",
+      "endMileage": 427956,
+      "org": "สำนักปลัด",
+      "position": "ผู้ช่วยนักประชาสัมพันธ์",
+      "startMileage": 427881,
+      "timestamp": "18/10/2569 23:54:30",
+      "totalDistance": 75,
+      "user": "นายวิทยา ศรีจอมแจ้ง"
+    },
+    "init_log": {
+      "action": "System Initialized",
+      "car": "System",
+      "endMileage": 0,
+      "org": "อบต.ข่วงเปา",
+      "position": "System Admin",
+      "startMileage": 0,
+      "timestamp": "19/10/2569 09:00:00",
+      "totalDistance": 0,
+      "user": "ระบบอัตโนมัติ"
+    }
+  },
+  "users": {
+    "user_1": {
+      "name": "นายวิทยา ศรีจอมแจ้ง",
+      "org": "สำนักปลัด",
+      "pin": "1234",
+      "position": "ผู้ช่วยนักประชาสัมพันธ์"
+    },
+    "user_10": {
+      "name": "นายฤทธิ์เกียรติ ปัญญาเหล็ก",
+      "org": "กองคลัง",
+      "pin": "1073",
+      "position": "จ้างเหมา"
+    },
+    "user_11": {
+      "name": "นายวีระวัฒน์ ไววาง",
+      "org": "กองช่าง",
+      "pin": "1122",
+      "position": "คนงาน (ผู้ช่วยช่างไฟ)"
+    },
+    "user_12": {
+      "name": "นายภาณุพงศ์ มหาวัน",
+      "org": "กองสาธารณสุขและสิ่งแวดล้อม",
+      "pin": "8801",
+      "position": "เจ้าหน้าที่กู้ชีพกู้ภัย (FR)"
+    },
+    "user_13": {
+      "name": "นายธนเดช ศรีวิชัย",
+      "org": "กองสาธารณสุขและสิ่งแวดล้อม",
+      "pin": "1357",
+      "position": "เจ้าหน้าที่กู้ชีพกู้ภัย (FR)"
+    },
+    "user_14": {
+      "name": "นายวรวัฒน์ งามตา",
+      "org": "กองการศึกษา ศาสนาและวัฒนธรรม",
+      "pin": "1468",
+      "position": "คนงานทั่วไป"
+    },
+    "user_15": {
+      "name": "นางกรนิภา ปัญญาเหล็ก",
+      "org": "งานตรวจสอบภายใน",
+      "pin": "5555",
+      "position": "นักวิชาการตรวจสอบภายใน"
+    },
+    "user_16": {
+      "name": "นายสืบศักดิ์ วงศ์สิงห์แก้ว",
+      "org": "สำนักปลัด",
+      "pin": "2468",
+      "position": "พนักงานขับรถยนต์"
+    },
+    "user_17": {
+      "name": "นายภูริภัทร ชัยยะเลิศ",
+      "org": "กองสวัสดิการสังคม",
+      "pin": "3690",
+      "position": "นักพัฒนาชุมชน"
+    },
+    "user_18": {
+      "name": "น.ส.วรรณภา กันทะ",
+      "org": "กองสวัสดิการสังคม",
+      "pin": "4820",
+      "position": "ผู้ช่วยเจ้าพนักงานธุรการ"
+    },
+    "user_19": {
+      "name": "น.ส.นุศรา ปัญญาเหล็ก",
+      "org": "กองคลัง",
+      "pin": "7744",
+      "position": "นักวิชาการการเงินและบัญชี"
+    },
+    "user_2": {
+      "name": "นายอหิวรรตน์ พันวรรณ",
+      "org": "สำนักปลัด",
+      "pin": "2026",
+      "position": "พนักงานขับรถยนต์"
+    },
+    "user_20": {
+      "name": "นายสุวัชญ์ศิษฏ์ พุทธเดชากุล",
+      "org": "สำนักปลัด",
+      "pin": "8899",
+      "position": "นิติกร"
+    },
+    "user_21": {
+      "name": "นายสุชาติ อินยะ",
+      "org": "กองคลัง",
+      "pin": "9911",
+      "position": "ผู้ช่วยเจ้าพนักงานธุรการ"
+    },
+    "user_22": {
+      "name": "นายรุ่งสุริยา เชียงชีระ",
+      "org": "คณะผู้บริหาร",
+      "pin": "7000",
+      "position": "นายกองค์การบริหารส่วนตำบลข่วงเปา"
+    },
+    "user_23": {
+      "name": "นายมิ่งภพ ศรีชะบา",
+      "org": "ศูนย์สารสนเทศ",
+      "pin": 8888,
+      "position": "ผู้ประสานงานโครงการ / ผู้ดูแลระบบ"
+    },
+    "user_3": {
+      "name": "นายสมศักดิ์ เปงภีระ",
+      "org": "สำนักปลัด",
+      "pin": "3456",
+      "position": "พนักงานขับเครื่องจักรฯ"
+    },
+    "user_4": {
+      "name": "นายณัฐพล กองวิ",
+      "org": "สำนักปลัด",
+      "pin": "4321",
+      "position": "พนักงานดับเพลิง"
+    },
+    "user_5": {
+      "name": "นายภาควัฒน์ สมสิงห์คำ",
+      "org": "สำนักปลัด",
+      "pin": "5678",
+      "position": "ผู้ช่วยเจ้าพนักงานป้องกันฯ"
+    },
+    "user_6": {
+      "name": "นายดอน ตันกาวิน",
+      "org": "สำนักปลัด",
+      "pin": "6789",
+      "position": "พนักงานดับเพลิง"
+    },
+    "user_7": {
+      "name": "นายบุญแก้ว จอมเป็ง",
+      "org": "สำนักปลัด",
+      "pin": "7890",
+      "position": "เจ้าหน้าที่งานป้องกัน"
+    },
+    "user_8": {
+      "name": "นายอนิวรรตน์ พันสุวรรณ",
+      "org": "สำนักปลัด",
+      "pin": "8123",
+      "position": "พนักงานขับรถยนต์"
+    },
+    "user_9": {
+      "name": "น.ส.สุทธิพร คำกิโล",
+      "org": "กองคลัง",
+      "pin": "9012",
+      "position": "ผู้ช่วย จพง.จัดเก็บรายได้"
+    }
+  },
+  "vehicles": {
+    "car_1": {
+      "brand_model": "ไม่ระบุ (YANMAR)",
+      "current_user": "",
+      "details": "เครื่องยนต์ TF 160L006437",
+      "id": 1,
+      "mileage": 75,
+      "registration": "ฆข 29 เชียงใหม่",
+      "status": "available",
+      "type": "รถใช้ในงานเกษตรกรรม"
+    },
+    "car_10": {
+      "brand_model": "TOYOTA Hilux Revo",
+      "current_user": "",
+      "details": "เครื่องยนต์ 2GD0005028",
+      "id": 10,
+      "mileage": 309850,
+      "registration": "ขห 3655 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน"
+    },
+    "car_11": {
+      "brand_model": "CHEVROLET COLORADO",
+      "current_user": "",
+      "details": "เครื่องยนต์ 4JK1GR8762",
+      "id": 11,
+      "mileage": 49500,
+      "registration": "ผน 4973 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์บรรทุกส่วนบุคคล"
+    },
+    "car_12": {
+      "brand_model": "HONDA DREAM",
+      "current_user": "",
+      "details": "เครื่องยนต์ D125ME-0096964",
+      "id": 12,
+      "mileage": 45000,
+      "registration": "งธก 276 เชียงใหม่",
+      "status": "available",
+      "type": "รถจักรยานยนต์"
+    },
+    "car_13": {
+      "brand_model": "TOYOTA HILUX REVO",
+      "current_user": "",
+      "details": "เครื่องยนต์ 2GDD373571",
+      "id": 13,
+      "mileage": 35930,
+      "registration": "จธ 3655 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน"
+    },
+    "car_14": {
+      "brand_model": "HONDA WAVE 110",
+      "current_user": "",
+      "details": "เครื่องยนต์ JA141E-0025680",
+      "id": 14,
+      "mileage": 36236,
+      "registration": "จมง 861 เชียงใหม่",
+      "status": "available",
+      "type": "รถจักรยานยนต์"
+    },
+    "car_15": {
+      "brand_model": "HONDA WAVE 110 I",
+      "current_user": "นายฤทธิ์เกียรติ ปัญญาเหล็ก",
+      "details": "เครื่องยนต์ JA141E-0039366",
+      "id": 15,
+      "mileage": 9800,
+      "registration": "จยค 970 เชียงใหม่",
+      "status": "available",
+      "type": "รถจักรยานยนต์"
+    },
+    "car_16": {
+      "brand_model": "TOYOTA HILUX REVO",
+      "current_user": "",
+      "details": "เครื่องยนต์ 2GDD467291",
+      "id": 16,
+      "mileage": 15840,
+      "registration": "จร 5698 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน"
+    },
+    "car_17": {
+      "brand_model": "EURODRIVE TD504",
+      "current_user": "",
+      "details": "เครื่องยนต์ B1013809367",
+      "id": 17,
+      "mileage": 38000,
+      "registration": "ตค 3745 เชียงใหม่",
+      "status": "available",
+      "type": "รถแทร็กเตอร์"
+    },
+    "car_18": {
+      "brand_model": "EUROTRAC",
+      "current_user": "",
+      "details": "เครื่องยนต์ X13191260",
+      "id": 18,
+      "mileage": 15000,
+      "registration": "ตค 8841 เชียงใหม่",
+      "status": "available",
+      "type": "รถแทร็กเตอร์"
+    },
+    "car_19": {
+      "brand_model": "TOYOTA HILUX REVO",
+      "current_user": "",
+      "details": "เครื่องยนต์ 2005726526",
+      "id": 19,
+      "mileage": 44885,
+      "registration": "นจ 6119 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลเกิน 7 คน (สองแถว)"
+    },
+    "car_2": {
+      "brand_model": "HONDA WAVE 110 I",
+      "current_user": "",
+      "details": "เครื่องยนต์ JA143F-0198394",
+      "id": 2,
+      "mileage": 17066,
+      "registration": "1กธ 8749 เชียงใหม่",
+      "status": "available",
+      "type": "รถจักรยานยนต์"
+    },
+    "car_20": {
+      "brand_model": "ISUZU FTR33F2",
+      "current_user": "นายวิทยา ศรีจอมแจ้ง",
+      "details": "เครื่องยนต์ 6HH1418506",
+      "id": 20,
+      "mileage": 18400,
+      "registration": "ผด 593 เชียงใหม่",
+      "status": "in-use",
+      "type": "รถยนต์บรรทุกส่วนบุคคล (รถดับเพลิง)"
+    },
+    "car_21": {
+      "brand_model": "TOYOTA HILX REVO",
+      "current_user": "",
+      "details": "เครื่องยนต์ 2GD1599863",
+      "id": 21,
+      "mileage": 12180,
+      "registration": "ยพ 4470 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์บรรทุกส่วนบุคคล (รถขยะ)"
+    },
+    "car_22": {
+      "brand_model": "ISUZU FTR34JXXXB",
+      "current_user": "",
+      "details": "เครื่องยนต์ 6HK1FFE741",
+      "id": 22,
+      "mileage": 9200,
+      "registration": "ยม 5205 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์บรรทุกส่วนบุคคล (รถดับเพลิง)"
+    },
+    "car_3": {
+      "brand_model": "HONDA WAVE 110 I",
+      "current_user": "",
+      "details": "เครื่องยนต์ JA143F-0193338",
+      "id": 3,
+      "mileage": 7400,
+      "registration": "1กธ 8751 เชียงใหม่",
+      "status": "available",
+      "type": "รถจักรยานยนต์"
+    },
+    "car_4": {
+      "brand_model": "ISUZU NPR75HXXXB",
+      "current_user": "",
+      "details": "เครื่องยนต์ 4HK1FEN996",
+      "id": 4,
+      "mileage": 12500,
+      "registration": "84-2021 เชียงใหม่",
+      "status": "available",
+      "type": "รถบรรทุกส่วนบุคคล (รถกระเช้า)"
+    },
+    "car_5": {
+      "brand_model": "HONDA C100N",
+      "current_user": "",
+      "details": "เครื่องยนต์ C100NE-0263026",
+      "id": 5,
+      "mileage": 18200,
+      "registration": "กจน 620 เชียงใหม่",
+      "status": "available",
+      "type": "รถจักรยานยนต์"
+    },
+    "car_6": {
+      "brand_model": "FORD RANGER",
+      "current_user": "",
+      "details": "เครื่องยนต์ P4AT2584311",
+      "id": 6,
+      "mileage": 156210,
+      "registration": "กน 3655 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน"
+    },
+    "car_7": {
+      "brand_model": "FORD RANGER",
+      "current_user": "นายวีระวัฒน์ ไววาง",
+      "details": "เครื่องยนต์ WLAT-441854",
+      "id": 7,
+      "mileage": 155960,
+      "registration": "กม 5689 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน"
+    },
+    "car_8": {
+      "brand_model": "MITSUBISHI",
+      "current_user": "",
+      "details": "เครื่องยนต์ 4D56UCBF6364",
+      "id": 8,
+      "mileage": 427956,
+      "registration": "กห 5832 เชียงใหม่",
+      "status": "available",
+      "type": "รถยนต์นั่งส่วนบุคคลไม่เกิน 7 คน"
+    },
+    "car_9": {
+      "brand_model": "TOYOTA Vigo",
+      "current_user": "",
+      "details": "เครื่องยนต์ 2KD-S392186",
+      "id": 9,
+      "mileage": 282300,
+      "registration": "ขว 53 เชียงใหม่",
+      "status": "available",
+      "type": "รถพยาบาล"
+    }
+  }
+}
