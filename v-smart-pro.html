@@ -289,7 +289,7 @@
                             <i class="fa-solid fa-arrow-left"></i> ย้อนกลับ
                         </button>
                         <button onclick="_0x5b3e()" class="w-2/3 industrial-btn text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl">
-                            <i class="fa-solid fa-file-lines text-sky-400"></i> สร้างใบขออนุญาต (จองคิวล่วงหน้าสำเร็จ)
+                            <i class="fa-solid fa-file-lines text-sky-400"></i> สร้างใบขออนุญาต (แบบ 3)
                         </button>
                     </div>
                 </div>
@@ -316,7 +316,10 @@
                             เบอร์โทรศัพท์ <span id="out-phone" class="underline decoration-dotted">-</span> 
                         </p>
                         <p>
-                            ขออนุญาตใช้รถเดินทางไปที่ <span id="out-destination" class="font-bold underline decoration-dotted"></span> 
+                            ขออนุญาตใช้รถยนต์ <span id="out-car-reg" class="font-bold underline decoration-dotted"></span> (<span id="out-car-type" class="underline">รถยนต์ส่วนกลาง</span>) 
+                        </p>
+                        <p>
+                            เดินทางไปที่ <span id="out-destination" class="font-bold underline decoration-dotted"></span> 
                         </p>
                         <p>
                             เพื่อ <span id="out-purpose" class="underline decoration-dotted"></span> 
@@ -1227,9 +1230,15 @@
             document.getElementById('out-date-end').innerText = tripDate;
             document.getElementById('out-start-time').innerText = startTime;
             document.getElementById('out-time').innerText = document.getElementById('inp-time').value;
-            document.getElementById('out-car-reg').innerText = _0xcarReg;
-            document.getElementById('out-car-type').innerText = `(${selectedCarTypeText}) ทะเบียน`;
-            document.getElementById('out-sign-requester').innerText = userName;
+            
+            let elCarReg = document.getElementById('out-car-reg');
+            if (elCarReg) elCarReg.innerText = _0xcarReg;
+            
+            let elCarType = document.getElementById('out-car-type');
+            if (elCarType) elCarType.innerText = selectedCarTypeText || 'รถยนต์ส่วนกลาง';
+            
+            let elSignReq = document.getElementById('out-sign-requester');
+            if (elSignReq) elSignReq.innerText = userName;
 
             document.getElementById('book-user-name').innerText = userName;
             let bookDriver = isSelfDrive ? userName : selectedDriver;
@@ -1256,7 +1265,7 @@
             document.getElementById('official-doc-preview').classList.remove('hidden');
             document.getElementById('input-container').classList.add('hidden');
 
-            _0x2a1b(4);
+            _0x2a1b(2);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1268,12 +1277,18 @@
 
         function downloadPDFMobile(elementId, filename) {
             const element = document.getElementById(elementId);
+            let isLandscape = (elementId === 'book-preview' || elementId === 'step-view-6');
+
             const opt = {
-                margin:       10,
+                margin:       isLandscape ? 8 : 10,
                 filename:     filename || 'V-SMART-Document.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF:        { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: isLandscape ? 'landscape' : 'portrait' 
+                }
             };
             html2pdf().from(element).set(opt).save();
         }

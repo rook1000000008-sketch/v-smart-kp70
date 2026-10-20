@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-SMART Pro - ระบบบริหารจัดการยานพาหนะ อบต.ข่วงเปา</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+    <!-- html2pdf.js สำหรับดาวน์โหลดเอกสาร PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; 
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f17 60%, #05070a 100%);
+            color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .odometer-font { font-family: 'Chakra Petch', sans-serif; letter-spacing: 2px; }
+        .glass-panel { 
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7); 
+        }
+        .industrial-btn { 
+            background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease; 
+        }
+        .industrial-btn:hover { 
+            background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%);
+            transform: translateY(-2px); 
+        }
+        .custom-scroll { max-height: 380px; overflow-y: auto; padding-right: 4px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        
+        .a4-portrait {
+            width: 100%; max-width: 720px; background: #ffffff; color: #000000; padding: 36px; border-radius: 12px; margin: 0 auto; font-size: 13.5px; line-height: 1.6;
+        }
+        .a4-landscape {
+            width: 100%; max-width: 1120px; background: #ffffff; color: #000000; padding: 24px; border-radius: 12px; margin: 0 auto; font-size: 11pt;
+        }
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body class="p-4 md:p-6 max-w-6xl mx-auto flex flex-col justify-between min-h-screen">
+
+    <div class="space-y-4 w-full">
+        
+        <!-- STEP 0: หน้าจอตรวจสอบ PIN เข้าสู่ระบบ -->
+        <div id="auth-screen" class="glass-panel rounded-3xl p-8 text-center space-y-6 max-w-md mx-auto mt-16 shadow-2xl">
+            <div class="w-16 h-16 bg-sky-500/10 border border-sky-500/20 rounded-full flex items-center justify-center text-sky-400 text-2xl mx-auto">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold text-white">V-SMART Pro Login</h1>
+                <p class="text-xs text-slate-400">กรุณากรอกรหัส PIN ส่วนตัวเพื่อเข้าสู่ระบบ (อบต.ข่วงเปา)</p>
+            </div>
+            <div class="space-y-3">
+                <input type="password" id="user-pin-input" placeholder="••••" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-center text-2xl font-black text-sky-400 odometer-font outline-none tracking-widest">
+                <button onclick="verifyUserPin()" class="w-full industrial-btn text-white font-bold py-4 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
+                    <span>เข้าสู่ระบบ</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            <p id="auth-error" class="text-xs text-rose-400 hidden font-semibold">รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</p>
+        </div>
+
+        <!-- MAIN APP WRAPPER -->
+        <div id="main-app-content" class="space-y-4 hidden">
+            
+            <!-- Header Bar -->
+            <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center no-print gap-4 shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-900 border border-sky-500/30 flex items-center justify-center overflow-hidden">
+                        <img src="KPLOGO.jpg" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h1 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                            V-SMART <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">Pro Fleet</span>
+                        </h1>
+                        <p class="text-xs text-slate-400">อบต.ข่วงเปา อ.จอมทอง จ.เชียงใหม่ <span id="logged-user-display" class="text-emerald-400 font-semibold ml-1"></span></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-house text-sky-400"></i> หน้าแรก
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-semibold no-print">
+                <button onclick="switchTab('fleet')" id="tab-btn-fleet" class="py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow">
+                    <i class="fa-solid fa-warehouse text-sky-400"></i> 1. คลังยานพาหนะ
+                </button>
+                <button onclick="switchTab('form3')" id="tab-btn-form3" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-pen text-slate-500"></i> 2-3. ใบขออนุญาต (แบบ 3)
+                </button>
+                <button onclick="switchTab('form4')" id="tab-btn-form4" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-slate-500"></i> 4-7. ทะเบียนควบคุม (แบบ 4)
+                </button>
+                <button onclick="switchTab('report')" id="tab-btn-report" class="py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-emerald-400"></i> 8. รายงานประจำวัน
+                </button>
+            </div>
+
+            <!-- TAB 1: คลังยานพาหนะ -->
+            <div id="tab-content-fleet" class="space-y-3 no-print">
+                <div class="glass-panel rounded-2xl p-5 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-car-side text-sky-400"></i> รายการยานพาหนะและเครื่องจักรทั้งหมด (22 คัน)
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <button onclick="filterFleetType('car')" id="filter-btn-car" class="py-2.5 rounded-xl industrial-btn text-white font-bold">ยานพาหนะ / เครื่องจักร (16 คัน)</button>
+                        <button onclick="filterFleetType('motorcycle')" id="filter-btn-moto" class="py-2.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800">รถจักรยานยนต์ (6 คัน)</button>
+                    </div>
+                    <div class="custom-scroll space-y-2.5" id="fleet-cards-container">
+                        <!-- โหลดข้อมูลรถผ่าน Firebase -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: แบบฟอร์มขออนุญาต (แบบ 3) และ พรีวิวเอกสาร -->
+            <div id="tab-content-form3" class="space-y-3 hidden">
+                
+                <!-- ฟอร์มกรอกข้อมูล (แบบ 3) -->
+                <div id="form3-input-card" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs no-print">
+                    <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-file-pen text-sky-400"></i> กรอกข้อมูลขออนุญาตใช้รถยนต์ส่วนกลาง (แบบ 3)
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">รถที่เลือก:</label>
+                            <input type="text" id="f3-car-name" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-sky-400 mb-1 font-bold"><i class="fa-solid fa-gauge"></i> เลขไมล์ปัจจุบัน:</label>
+                            <input type="number" id="f3-current-mile" class="w-full bg-slate-950 border border-sky-500 rounded-xl p-3 text-sky-300 font-black odometer-font">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">ผู้ขออนุญาต:</label>
+                            <select id="f3-requester-select" onchange="updateRequesterDetails()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">ตำแหน่ง:</label>
+                            <input type="text" id="f3-position" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">สังกัด:</label>
+                            <input type="text" id="f3-org" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">เบอร์โทรศัพท์:</label>
+                            <input type="text" id="f3-phone" placeholder="ระบุเบอร์โทรศัพท์ติดต่อ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100">
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="f3-self-drive" onchange="toggleSelfDriveOption()" class="w-4 h-4 accent-sky-500">
+                            <span class="font-bold text-sky-300">ผู้ขออนุญาตขับรถเอง (ขับเอง)</span>
+                        </label>
+                        <span class="text-[10px] text-slate-400">ระบบจะบันทึกชื่อผู้ขอเป็นพนักงานขับรถอัตโนมัติ</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">เดินทางไปที่ (จุดหมายปลายทาง):</label>
+                        <input type="text" id="f3-destination" value="พื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">เพื่อ (วัตถุประสงค์การใช้รถ):</label>
+                        <textarea id="f3-purpose" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100">ปฏิบัติภารกิจราชการและบริการประชาชนในพื้นที่</textarea>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div>
+                            <label class="block text-xs text-sky-400 mb-1 font-bold">วันที่เดินทาง:</label>
+                            <select id="f3-date-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sky-300 font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-sky-400 mb-1 font-bold">เวลาออก:</label>
+                            <select id="f3-time-start" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sky-300 font-bold text-center"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">เวลากลับ:</label>
+                            <select id="f3-time-end" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-slate-100 text-center"></select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">จำนวนคนนั่ง:</label>
+                        <input type="number" id="f3-passengers" value="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100">
+                    </div>
+
+                    <div id="f3-driver-box">
+                        <label class="block text-xs text-slate-300 mb-1">พนักงานขับรถ:</label>
+                        <select id="f3-driver-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 font-semibold"></select>
+                    </div>
+
+                    <div class="pt-2 flex gap-2">
+                        <button onclick="switchTab('fleet')" class="w-1/3 bg-slate-800 text-slate-300 font-semibold py-3.5 rounded-xl text-xs">ย้อนกลับ</button>
+                        <button onclick="generateForm3Document()" class="w-2/3 industrial-btn text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl">
+                            <i class="fa-solid fa-file-lines text-sky-400"></i> สร้างใบขออนุญาต (แบบ 3)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- พรีวิว แบบ 3 (สำหรับพิมพ์ / ดาวน์โหลด PDF) -->
+                <div id="form3-preview-card" class="a4-portrait hidden space-y-3">
+                    <div class="flex justify-between items-center text-xs text-slate-600">
+                        <span>ระบบ V-SMART Pro Fleet</span>
+                        <span class="border border-black px-2 py-0.5 font-bold">แบบ 3</span>
+                    </div>
+                    
+                    <div class="text-center font-bold text-lg pt-1">ใบขออนุญาตใช้รถยนต์ส่วนกลาง</div>
+                    <div class="text-right text-xs pt-1">
+                        วันที่ <span id="p3-doc-date" class="underline font-semibold"></span>
+                    </div>
+
+                    <div class="space-y-1.5 pt-1">
+                        <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
+                        <p class="indent-8">
+                            ข้าพเจ้า <span id="p3-name" class="font-bold underline"></span> 
+                            ตำแหน่ง <span id="p3-position" class="underline"></span> 
+                            สังกัด <span id="p3-org" class="underline"></span> 
+                            เบอร์โทรศัพท์ <span id="p3-phone" class="underline">-</span> 
+                        </p>
+                        <p>
+                            ขออนุญาตใช้รถยนต์ <span id="p3-car-reg" class="font-bold underline"></span> (<span id="p3-car-type" class="underline">รถยนต์ส่วนกลาง</span>) 
+                        </p>
+                        <p>
+                            เดินทางไปที่ <span id="p3-destination" class="font-bold underline"></span> 
+                        </p>
+                        <p>
+                            เพื่อ <span id="p3-purpose" class="underline"></span> มีคนนั่ง <span id="p3-passengers" class="font-bold underline"></span> คน 
+                        </p>
+                        <p>
+                            ในวันที่ <span id="p3-date" class="underline font-semibold"></span> เวลา <span id="p3-time-start" class="underline font-semibold"></span> น. 
+                            ถึงวันที่ <span id="p3-date-end" class="underline font-semibold"></span> เวลา <span id="p3-time-end" class="underline font-semibold"></span> น.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 space-y-4" style="margin-left: 3.5cm;">
+                        <div>
+                            <div>(ลงชื่อ)....................................................... ผู้ขออนุญาต</div>
+                            <div style="padding-left: 18px; margin-top: 2px;">( <span id="p3-sign-requester">-</span> )</div>
+                        </div>
+                        <div>
+                            <div>(ลงชื่อ)....................................................... ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน</div>
+                            <div style="padding-left: 18px; margin-top: 2px;">( ....................................................... )</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-300 space-y-2">
+                        <div class="flex items-center gap-6 font-bold">
+                            <span>คำสั่ง</span>
+                            <label class="flex items-center gap-1"><input type="checkbox"> อนุญาต</label>
+                            <label class="flex items-center gap-1"><input type="checkbox"> ไม่อนุญาต</label>
+                        </div>
+                        <div class="pt-2 flex justify-end">
+                            <div style="width: 320px; text-align: center;">
+                                <div>(ลงชื่อ).......................................................</div>
+                                <div style="margin-top: 2px;">( นายพรสิน นนทะธรรม )</div>
+                                <div>รองนายกองค์การบริหารส่วนตำบลข่วงเปา</div>
+                                <div>วันที่ ........ / ........ / ........</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-center gap-3 no-print border-t">
+                        <button onclick="backToForm3Input()" class="bg-slate-600 text-white font-bold px-4 py-2 rounded-xl text-xs">กลับไปแก้ไข</button>
+                        <button onclick="downloadPDFDocument('form3-preview-card', 'V-SMART-Form3.pdf', false)" class="industrial-btn text-white font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow"><i class="fa-solid fa-download text-sky-400"></i> ดาวน์โหลด PDF / พิมพ์</button>
+                        <button onclick="switchTab('form4')" class="bg-emerald-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow">ไปบันทึกทะเบียน (แบบ 4) <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: ทะเบียนควบคุม (แบบ 4) -->
+            <div id="tab-content-form4" class="space-y-4 hidden">
+                
+                <!-- แผงบันทึกเลขไมล์ขากลับ -->
+                <div class="glass-panel rounded-2xl p-5 text-center border-t-4 border-sky-500 space-y-3 no-print shadow-xl">
+                    <span class="text-xs uppercase tracking-widest text-slate-300 font-semibold block"><i class="fa-solid fa-gauge text-sky-400"></i> บันทึกเลขไมล์ขากลับ (ขั้นที่ 6) - เมื่อกดดาวน์โหลด PDF ระบบจะซิงค์ไมล์ใหม่ ปลดล็อกสถานะรถ และบันทึกประวัติลง Firebase ทันที</span>
+                    <div class="flex justify-center items-center">
+                        <input type="number" id="f4-return-mile" step="1" min="0" oninput="updateReturnMileageCalculation()" class="odometer-font text-4xl font-black text-sky-300 bg-black/80 border-2 border-sky-500/60 rounded-2xl py-3 px-6 text-center w-72 outline-none">
+                    </div>
+                    <p class="text-xs text-slate-400">ระยะทางรวมทริปนี้: <b id="f4-trip-distance" class="text-sky-400 font-bold text-sm">0 กิโลเมตร</b></p>
+                </div>
+
+                <!-- พรีวิว แบบ 4 (A4 แนวนอน) -->
+                <div id="form4-preview-card" class="a4-landscape space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold">
+                        <span>องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</span>
+                        <span class="border border-black px-2 py-0.5">แบบ 4</span>
+                    </div>
+                    <div class="text-center font-bold text-sm tracking-wide">บันทึกการใช้รถยนต์ส่วนกลาง</div>
+                    <div class="text-center text-xs font-semibold pb-1">หมายเลขทะเบียน <span id="p4-car-reg" class="underline font-bold"></span></div>
+
+                    <div class="overflow-x-auto pt-1">
+                        <table class="w-full border-collapse border border-black text-center text-[10pt]">
+                            <thead>
+                                <tr class="bg-slate-100">
+                                    <th rowspan="2" class="border border-black p-1.5 w-10">ลำดับ</th>
+                                    <th colspan="2" class="border border-black p-1.5">ออกเดินทาง</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-32">ผู้ใช้รถ</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-32">สถานที่ไป</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-20">ไมล์ออก</th>
+                                    <th colspan="2" class="border border-black p-1.5">กลับถึงสำนักงาน</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-20">ไมล์กลับ</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-16">รวมระยะทาง</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-32">พนักงานขับรถ</th>
+                                    <th rowspan="2" class="border border-black p-1.5 w-16">หมายเหตุ</th>
+                                </tr>
+                                <tr class="bg-slate-100">
+                                    <th class="border border-black p-1 w-16">วันที่</th>
+                                    <th class="border border-black p-1 w-14">เวลา</th>
+                                    <th class="border border-black p-1 w-16">วันที่</th>
+                                    <th class="border border-black p-1 w-14">เวลา</th>
+                                </tr>
+                            </thead>
+                            <tbody id="p4-table-tbody">
+                                <tr class="h-12">
+                                    <td class="border border-black p-1">1</td>
+                                    <td class="border border-black p-1" id="p4-start-date">-</td>
+                                    <td class="border border-black p-1" id="p4-start-time">08.30</td>
+                                    <td class="border border-black p-1 px-1.5 truncate" id="p4-user-name">-</td>
+                                    <td class="border border-black p-1 px-1.5 truncate">พื้นที่ตำบลข่วงเปา</td>
+                                    <td id="p4-start-mile" class="border border-black p-1 font-semibold">0</td>
+                                    <td class="border border-black p-1" id="p4-end-date">-</td>
+                                    <td class="border border-black p-1" id="p4-end-time">16.30</td>
+                                    <td id="p4-end-mile" class="border border-black p-1 font-semibold">0</td>
+                                    <td id="p4-total-mile" class="border border-black p-1 font-bold">0</td>
+                                    <td class="border border-black p-1 px-1.5 truncate" id="p4-driver-name">-</td>
+                                    <td class="border border-black p-1">ปฏิบัติภารกิจ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pt-3 flex justify-end text-xs">
+                        <div class="text-center space-y-1 w-72">
+                            <div class="flex items-center justify-center gap-1">
+                                <span>ผู้บันทึก</span>
+                                <span class="flex-1 border-b border-dotted border-black font-bold" id="p4-sign-name">-</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-1">
+                                <span>ตำแหน่ง</span>
+                                <span class="flex-1 border-b border-dotted border-black" id="p4-sign-pos">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-center gap-4 no-print border-t">
+                        <button onclick="switchTab('form3')" class="bg-slate-700 text-white font-bold px-6 py-3 rounded-xl text-xs">ย้อนกลับ</button>
+                        <button onclick="completeTripAndSyncFirebase()" class="industrial-btn text-white font-bold px-8 py-3.5 rounded-xl text-sm flex items-center gap-2 shadow-xl"><i class="fa-solid fa-download text-lg text-sky-400"></i> ดาวน์โหลด PDF แนวนอน และคืนสภาพรถ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: รายงานสรุปประจำวัน -->
+            <div id="tab-content-report" class="space-y-4 hidden">
+                <div class="glass-panel rounded-2xl p-5 space-y-4 no-print">
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-emerald-400"></i> รายงานสรุปการใช้รถยนต์ประจำวันและประเมินค่าน้ำมัน
+                        </h2>
+                        <input type="date" id="report-date-filter" onchange="renderDailyReport()" class="bg-slate-900 border border-slate-700 text-xs text-sky-300 font-semibold p-2 rounded-xl outline-none">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs">
+                        <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl">
+                            <span class="text-slate-400 block">เที่ยววิ่งทั้งหมดวันนี้</span>
+                            <span id="rep-trips-count" class="text-xl font-black text-sky-400 odometer-font">0 เที่ยว</span>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl">
+                            <span class="text-slate-400 block">ระยะทางรวมวันนี้</span>
+                            <span id="rep-total-dist" class="text-xl font-black text-emerald-400 odometer-font">0 กม.</span>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl">
+                            <span class="text-slate-400 block">ประเมินค่าน้ำมัน (10 กม./ลิตร)</span>
+                            <span id="rep-fuel-cost" class="text-xl font-black text-amber-400 odometer-font">0 บาท</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="report-preview-card" class="a4-portrait space-y-4">
+                    <div class="text-center space-y-1">
+                        <p class="font-bold text-sm">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</p>
+                        <h3 class="font-bold text-base">รายงานสรุปการใช้รถยนต์และประเมินค่าน้ำมันเชื้อเพลิงประจำวัน</h3>
+                        <p class="text-xs text-slate-600">ประจำวันที่: <span id="rep-doc-date" class="font-bold underline">--/--/----</span></p>
+                    </div>
+
+                    <table class="w-full border-collapse border border-slate-400 text-center text-xs">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="border border-slate-400 p-2">ลำดับ</th>
+                                <th class="border border-slate-400 p-2">หมายเลขทะเบียน / รถ</th>
+                                <th class="border border-slate-400 p-2">ผู้ขอใช้รถ</th>
+                                <th class="border border-slate-400 p-2">จุดหมายปลายทาง</th>
+                                <th class="border border-slate-400 p-2">ไมล์ออก - กลับ</th>
+                                <th class="border border-slate-400 p-2">รวมระยะทาง (กม.)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-table-tbody">
+                            <tr><td colspan="6" class="border border-slate-400 p-4 text-slate-500">ไม่มีประวัติการใช้งานในวันที่เลือก</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="bg-slate-50 border border-slate-300 p-3 rounded-lg text-xs space-y-1 font-semibold">
+                        <div class="flex justify-between"><span>ระยะทางรวมทั้งสิ้น:</span> <span id="rep-doc-total-dist">0 กิโลเมตร</span></div>
+                        <div class="flex justify-between text-amber-700"><span>ประมาณการใช้น้ำมัน (ลิตรละ 35 บาท):</span> <span id="rep-doc-total-cost">0 บาท</span></div>
+                    </div>
+
+                    <div class="pt-4 flex justify-end text-xs">
+                        <div class="text-center space-y-1 w-64">
+                            <div>(ลงชื่อ)....................................................... ผู้รายงาน</div>
+                            <div>( ....................................................... )</div>
+                            <div>เจ้าหน้าที่ยานพาหนะ / งานสารบรรณ</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-center gap-3 no-print border-t">
+                        <button onclick="switchTab('fleet')" class="bg-slate-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs">กลับหน้าหลัก</button>
+                        <button onclick="downloadPDFDocument('report-preview-card', 'V-SMART-DailyReport.pdf', false)" class="industrial-btn text-white font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow"><i class="fa-solid fa-download text-sky-400"></i> ดาวน์โหลดรายงาน PDF</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="pt-6 text-center no-print">
+        <p class="text-xs text-slate-500 font-medium">V-SMART ระบบขออนุญาตใช้รถยนต์ • อบต.ข่วงเปา จ.เชียงใหม่</p>
+    </div>
+
+    <script>
+        // กำหนดค่า Firebase Real-time Database
+        const firebaseConfig = {
+            apiKey: "AIzaSyABcM4oDg7Go9JO8SlZHq-MSkvgv9oIMeA",
+            authDomain: "v-smart-kp70.firebaseapp.com",
+            databaseURL: "https://v-smart-kp70-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "v-smart-kp70",
+            storageBucket: "v-smart-kp70.firebasestorage.app",
+            messagingSenderId: "952805921944",
+            appId: "1:952805921944:web:d6050895b96aaf507a2ced"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = null;
+        let selectedCarKey = "";
+        let selectedCarData = null;
+        let vehiclesMap = {};
+        let usersMap = {};
+        let activityLogsMap = {};
+        let currentFleetFilter = 'car';
+
+        // เริ่มต้นโหลดข้อมูลวันที่และเวลา
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeDateTimeSelectors();
+            listenFirebaseDatabase();
+        });
+
+        function initializeDateTimeSelectors() {
+            let startSelect = document.getElementById('f3-time-start');
+            let endSelect = document.getElementById('f3-time-end');
+            startSelect.innerHTML = "";
+            endSelect.innerHTML = "";
+
+            let times = [];
+            for (let h = 0; h <= 24; h++) {
+                for (let m of [0, 30]) {
+                    if (h === 24 && m > 0) break;
+                    let timeStr = (h < 10 ? "0" + h : h) + "." + (m === 0 ? "00" : "30");
+                    times.push(timeStr);
+                }
+            }
+
+            times.forEach(t => {
+                let opt1 = document.createElement('option');
+                opt1.value = t; opt1.text = t;
+                if (t === "08.30") opt1.selected = true;
+                startSelect.appendChild(opt1);
+
+                let opt2 = document.createElement('option');
+                opt2.value = t + " น."; opt2.text = t + " น.";
+                if (t === "16.30") opt2.selected = true;
+                endSelect.appendChild(opt2);
+            });
+
+            // สร้างตัวเลือกวันที่ 1-31 ของเดือนปัจจุบัน
+            let dateSelect = document.getElementById('f3-date-select');
+            dateSelect.innerHTML = "";
+            const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            const now = new Date();
+            let curDay = now.getDate();
+            let curMonth = monthNames[now.getMonth()];
+            let curYear = now.getFullYear() + 543;
+
+            for (let d = 1; d <= 31; d++) {
+                let opt = document.createElement('option');
+                let fullDateStr = `${d} ${curMonth} ${curYear}`;
+                opt.value = fullDateStr; opt.text = fullDateStr;
+                if (d === curDay) opt.selected = true;
+                dateSelect.appendChild(opt);
+            }
+
+            let reportDateInput = document.getElementById('report-date-filter');
+            if (reportDateInput) {
+                let isoStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+                reportDateInput.value = isoStr;
+            }
+        }
+
+        function listenFirebaseDatabase() {
+            db.ref('/').on('value', (snapshot) => {
+                let data = snapshot.val() || {};
+                vehiclesMap = data.vehicles || {};
+                usersMap = data.users || {};
+                activityLogsMap = data.activity_logs || {};
+
+                renderFleetList();
+                populateRequesterDropdown();
+                renderDailyReport();
+            });
+        }
+
+        // ระบบตรวจสอบ PIN เข้าสู่ระบบ
+        function verifyUserPin() {
+            let pinInput = document.getElementById('user-pin-input').value.trim();
+            let matchedUser = null;
+
+            Object.keys(usersMap).forEach(key => {
+                let u = usersMap[key];
+                if (String(u.pin).trim() === pinInput) {
+                    matchedUser = u;
+                }
+            });
+
+            if (matchedUser) {
+                currentUser = matchedUser;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('main-app-content').classList.remove('hidden');
+                document.getElementById('logged-user-display').innerText = `(${matchedUser.name} - ${matchedUser.position})`;
+            } else {
+                document.getElementById('auth-error').classList.remove('hidden');
+            }
+        }
+
+        // ระบบเปลี่ยนแท็บหน้าจอ
+        function switchTab(tabName) {
+            document.getElementById('tab-content-fleet').classList.add('hidden');
+            document.getElementById('tab-content-form3').classList.add('hidden');
+            document.getElementById('tab-content-form4').classList.add('hidden');
+            document.getElementById('tab-content-report').classList.add('hidden');
+
+            document.getElementById('tab-btn-fleet').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 transition flex items-center justify-center gap-2";
+            document.getElementById('tab-btn-form3').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 transition flex items-center justify-center gap-2";
+            document.getElementById('tab-btn-form4').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 transition flex items-center justify-center gap-2";
+            document.getElementById('tab-btn-report').className = "py-3 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 transition flex items-center justify-center gap-2";
+
+            if (tabName === 'fleet') {
+                document.getElementById('tab-content-fleet').classList.remove('hidden');
+                document.getElementById('tab-btn-fleet').className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow";
+            } else if (tabName === 'form3') {
+                document.getElementById('tab-content-form3').classList.remove('hidden');
+                document.getElementById('tab-btn-form3').className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow";
+                document.getElementById('form3-input-card').classList.remove('hidden');
+                document.getElementById('form3-preview-card').classList.add('hidden');
+            } else if (tabName === 'form4') {
+                document.getElementById('tab-content-form4').classList.remove('hidden');
+                document.getElementById('tab-btn-form4').className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow";
+            } else if (tabName === 'report') {
+                document.getElementById('tab-content-report').classList.remove('hidden');
+                document.getElementById('tab-btn-report').className = "py-3 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow";
+                renderDailyReport();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // แสดงรายการรถในคลัง
+        function renderFleetList() {
+            let container = document.getElementById('fleet-cards-container');
+            container.innerHTML = "";
+
+            if (!vehiclesMap || Object.keys(vehiclesMap).length === 0) {
+                container.innerHTML = "<p class='text-center text-slate-400 py-4'>ไม่พบข้อมูลยานพาหนะในระบบ</p>";
+                return;
+            }
+
+            Object.keys(vehiclesMap).forEach(carKey => {
+                let car = vehiclesMap[carKey];
+                let isMoto = car.type && car.type.includes("รถจักรยานยนต์");
+                let categoryClass = isMoto ? "motorcycle-item hidden" : "car-item";
+                let mileage = Number(car.mileage) || 0;
+                let isReserved = (car.status === "reserved" || car.status === "in-use");
+
+                let badge = isReserved 
+                    ? `<span class="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">ไม่ว่าง (${car.current_user || 'จองแล้ว'})</span>`
+                    : `<span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full">พร้อมใช้งาน</span>`;
+
+                let html = `
+                    <div class="fleet-card ${categoryClass}">
+                        <div onclick="selectCarForBooking('${carKey}')" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-sky-500 transition flex justify-between items-center group">
+                            <div>
+                                <span class="text-[10px] bg-sky-500/10 text-sky-400 px-2 py-0.5 rounded-full font-semibold">${car.type || 'รถยนต์'}</span>
+                                <p class="text-sm font-bold text-slate-100 mt-1 group-hover:text-sky-300">${car.registration} - ${car.brand_model}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์ปัจจุบัน: ${mileage.toLocaleString()} กม.</p>
+                            </div>
+                            <div class="text-right space-y-1">
+                                <div class="text-amber-400 text-xs">★★★★★</div>
+                                <div>${badge}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+            filterFleetType(currentFleetFilter);
+        }
+
+        function filterFleetType(type) {
+            currentFleetFilter = type;
+            let carBtn = document.getElementById('filter-btn-car');
+            let motoBtn = document.getElementById('filter-btn-moto');
+            
+            if (type === 'car') {
+                carBtn.className = "py-2.5 rounded-xl industrial-btn text-white font-bold";
+                motoBtn.className = "py-2.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800";
+            } else {
+                motoBtn.className = "py-2.5 rounded-xl industrial-btn text-white font-bold";
+                carBtn.className = "py-2.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800";
+            }
+
+            let cards = document.querySelectorAll('#fleet-cards-container > div');
+            cards.forEach(card => {
+                if (type === 'car') {
+                    if (card.classList.contains('car-item')) card.classList.remove('hidden');
+                    else card.classList.add('hidden');
+                } else {
+                    if (card.classList.contains('motorcycle-item')) card.classList.remove('hidden');
+                    else card.classList.add('hidden');
+                }
+            });
+        }
+
+        // เมื่อเลือกคันรถเพื่อทำเรื่องขอใช้
+        function selectCarForBooking(carKey) {
+            let car = vehiclesMap[carKey];
+            if (car.status === "in-use") {
+                alert(`รถคันนี้กำลังใช้งานโดย ${car.current_user}`);
+                return;
+            }
+
+            selectedCarKey = carKey;
+            selectedCarData = car;
+
+            document.getElementById('f3-car-name').value = `${car.registration} - ${car.brand_model}`;
+            document.getElementById('f3-current-mile').value = car.mileage || 0;
+
+            // ตั้งค่าหน้าแบบ 4 รอไว้เลย
+            document.getElementById('p4-car-reg').innerText = `${car.registration} - ${car.brand_model}`;
+            document.getElementById('p4-start-mile').innerText = Number(car.mileage || 0).toLocaleString();
+            document.getElementById('f4-return-mile').value = Number(car.mileage || 0) + 75;
+            updateReturnMileageCalculation();
+
+            switchTab('form3');
+        }
+
+        function populateRequesterDropdown() {
+            let reqSelect = document.getElementById('f3-requester-select');
+            let driverSelect = document.getElementById('f3-driver-select');
+            if (!reqSelect || !driverSelect) return;
+
+            reqSelect.innerHTML = "";
+            driverSelect.innerHTML = "";
+
+            Object.keys(usersMap).forEach(key => {
+                let u = usersMap[key];
+                let opt1 = document.createElement('option');
+                opt1.value = JSON.stringify(u);
+                opt1.text = `${u.name} (${u.position})`;
+                if (currentUser && u.pin === currentUser.pin) opt1.selected = true;
+                reqSelect.appendChild(opt1);
+
+                let opt2 = document.createElement('option');
+                opt2.value = u.name;
+                opt2.text = `${u.name} (${u.position})`;
+                driverSelect.appendChild(opt2);
+            });
+
+            updateRequesterDetails();
+        }
+
+        function updateRequesterDetails() {
+            let reqSelect = document.getElementById('f3-requester-select');
+            if (!reqSelect.value) return;
+            let u = JSON.parse(reqSelect.value);
+            document.getElementById('f3-position').value = u.position;
+            document.getElementById('f3-org').value = u.org + (u.org.includes('อบต') ? '' : ' อบต.ข่วงเปา');
+            document.getElementById('f3-phone').value = "";
+            
+            if (!document.getElementById('f3-self-drive').checked) {
+                document.getElementById('f3-driver-select').value = u.name;
+            }
+        }
+
+        function toggleSelfDriveOption() {
+            let isSelf = document.getElementById('f3-self-drive').checked;
+            let driverSel = document.getElementById('f3-driver-select');
+            let u = JSON.parse(document.getElementById('f3-requester-select').value);
+            if (isSelf) {
+                driverSel.value = u.name;
+                driverSel.disabled = true;
+            } else {
+                driverSel.disabled = false;
+            }
+        }
+
+        // ฟังก์ชันสร้างใบขออนุญาต (แบบ 3)
+        function generateForm3Document() {
+            let u = JSON.parse(document.getElementById('f3-requester-select').value);
+            let carReg = document.getElementById('f3-car-name').value;
+            let mileage = parseInt(document.getElementById('f3-current-mile').value) || 0;
+            let isSelf = document.getElementById('f3-self-drive').checked;
+            let driverName = isSelf ? u.name + " (ขับเอง)" : document.getElementById('f3-driver-select').value;
+            let phone = document.getElementById('f3-phone').value || "-";
+            let dest = document.getElementById('f3-destination').value;
+            let purpose = document.getElementById('f3-purpose').value;
+            let tripDate = document.getElementById('f3-date-select').value;
+            let startTime = document.getElementById('f3-time-start').value;
+            let endTime = document.getElementById('f3-time-end').value;
+            let passengers = document.getElementById('f3-passengers').value;
+
+            // อัปเดตสถานะรถใน Firebase เป็น reserved
+            db.ref('vehicles/' + selectedCarKey).update({
+                status: "reserved",
+                current_user: u.name,
+                destination: dest,
+                purpose: purpose,
+                reservation_date: tripDate
+            });
+
+            // แสดงผลในหน้าพรีวิว แบบ 3
+            document.getElementById('p3-doc-date').innerText = tripDate;
+            document.getElementById('p3-name').innerText = u.name;
+            document.getElementById('p3-position').innerText = u.position;
+            document.getElementById('p3-org').innerText = document.getElementById('f3-org').value;
+            document.getElementById('p3-phone').innerText = phone;
+            document.getElementById('p3-car-reg').innerText = carReg;
+            document.getElementById('p3-destination').innerText = dest;
+            document.getElementById('p3-purpose').innerText = purpose;
+            document.getElementById('p3-passengers').innerText = passengers;
+            document.getElementById('p3-date').innerText = tripDate;
+            document.getElementById('p3-date-end').innerText = tripDate;
+            document.getElementById('p3-time-start').innerText = startTime;
+            document.getElementById('p3-time-end').innerText = endTime;
+            document.getElementById('p3-sign-requester').innerText = u.name;
+
+            // เติมข้อมูลลงหน้าแบบ 4 รอไว้
+            document.getElementById('p4-user-name').innerText = u.name;
+            document.getElementById('p4-driver-name').innerText = driverName;
+            document.getElementById('p4-sign-name').innerText = driverName;
+            document.getElementById('p4-sign-pos').innerText = isSelf ? u.position : "พนักงานขับรถยนต์";
+            document.getElementById('p4-start-date').innerText = tripDate.split(' ')[0] + "/" + (new Date().getMonth() + 1);
+            document.getElementById('p4-end-date').innerText = tripDate.split(' ')[0] + "/" + (new Date().getMonth() + 1);
+            document.getElementById('p4-start-time').innerText = startTime;
+            document.getElementById('p4-end-time').innerText = endTime;
+            document.getElementById('p4-start-mile').innerText = mileage.toLocaleString();
+
+            // สลับแสดงพรีวิว
+            document.getElementById('form3-input-card').classList.add('hidden');
+            document.getElementById('form3-preview-card').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToForm3Input() {
+            document.getElementById('form3-preview-card').classList.add('hidden');
+            document.getElementById('form3-input-card').classList.remove('hidden');
+        }
+
+        function updateReturnMileageCalculation() {
+            let startMile = parseInt(document.getElementById('p4-start-mile').innerText.replace(/,/g, '')) || 0;
+            let returnMile = parseInt(document.getElementById('f4-return-mile').value) || (startMile + 75);
+            let dist = returnMile - startMile;
+            if (dist < 0) dist = 0;
+
+            document.getElementById('f4-trip-distance').innerText = dist + ' กิโลเมตร';
+            document.getElementById('p4-end-mile').innerText = returnMile.toLocaleString();
+            document.getElementById('p4-total-mile').innerText = dist;
+        }
+
+        // ดาวน์โหลดเอกสาร PDF (รองรับทั้งแนวตั้งและแนวนอน)
+        function downloadPDFDocument(elementId, filename, isLandscape) {
+            let element = document.getElementById(elementId);
+            let opt = {
+                margin: 8,
+                filename: filename || 'V-SMART-Document.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: isLandscape ? 'landscape' : 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        }
+
+        // จบทริป บันทึก Log ลง Firebase และคืนสภาพรถ
+        function completeTripAndSyncFirebase() {
+            let startMile = parseInt(document.getElementById('p4-start-mile').innerText.replace(/,/g, '')) || 0;
+            let returnMile = parseInt(document.getElementById('f4-return-mile').value) || (startMile + 75);
+            let dist = returnMile - startMile;
+
+            // คืนสถานะรถเป็น available และอัปเดตไมล์ล่าสุด
+            db.ref('vehicles/' + selectedCarKey).update({
+                mileage: returnMile,
+                status: "available",
+                current_user: "",
+                destination: "",
+                purpose: "",
+                reservation_date: ""
+            });
+
+            let logData = {
+                user: currentUser ? currentUser.name : "ไม่ระบุตัวตน",
+                position: currentUser ? currentUser.position : "-",
+                car: document.getElementById('p4-car-reg').innerText,
+                destination: document.getElementById('p3-destination').innerText,
+                purpose: document.getElementById('p3-purpose').innerText,
+                startMileage: startMile,
+                endMileage: returnMile,
+                totalDistance: dist,
+                timestamp: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+            };
+
+            db.ref('activity_logs').push(logData);
+            downloadPDFDocument('form4-preview-card', 'V-SMART-Form4-ControlBook.pdf', true);
+        }
+
+        // รายงานสรุปประจำวัน
+        function renderDailyReport() {
+            let filterDate = document.getElementById('report-date-filter').value;
+            let tbody = document.getElementById('report-table-tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = "";
+            let matched = [];
+            let totalDist = 0;
+
+            Object.keys(activityLogsMap).forEach(key => {
+                let log = activityLogsMap[key];
+                if (log.timestamp) {
+                    let logDatePart = log.timestamp.split(',')[0].trim();
+                    let parts = logDatePart.split('/');
+                    if (parts.length === 3) {
+                        let iso = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                        if (iso === filterDate) {
+                            matched.push(log);
+                            totalDist += Number(log.totalDistance) || 0;
+                        }
+                    }
+                }
+            });
+
+            let [y, m, d] = filterDate.split('-');
+            const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            document.getElementById('rep-doc-date').innerText = `${parseInt(d)} ${thaiMonths[parseInt(m)-1]} ${parseInt(y)+543}`;
+            document.getElementById('rep-trips-count').innerText = matched.length + ' เที่ยว';
+            document.getElementById('rep-total-dist').innerText = totalDist.toLocaleString() + ' กม.';
+            let cost = (totalDist / 10) * 35;
+            document.getElementById('rep-fuel-cost').innerText = Math.round(cost).toLocaleString() + ' บาท';
+
+            document.getElementById('rep-doc-total-dist').innerText = totalDist.toLocaleString() + ' กิโลเมตร';
+            document.getElementById('rep-doc-total-cost').innerText = Math.round(cost).toLocaleString() + ' บาท (เฉลี่ย 10 กม./ลิตร)';
+
+            if (matched.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="border border-slate-400 p-4 text-slate-500">ไม่มีประวัติการใช้งานในวันที่เลือก</td></tr>`;
+                return;
+            }
+
+            let idx = 1;
+            matched.forEach(log => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="border border-slate-400 p-2">${idx++}</td>
+                        <td class="border border-slate-400 p-2 font-bold">${log.car}</td>
+                        <td class="border border-slate-400 p-2">${log.user}</td>
+                        <td class="border border-slate-400 p-2">${log.destination}</td>
+                        <td class="border border-slate-400 p-2">${log.startMileage.toLocaleString()} - ${log.endMileage.toLocaleString()}</td>
+                        <td class="border border-slate-400 p-2 font-bold text-emerald-700">${log.totalDistance.toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

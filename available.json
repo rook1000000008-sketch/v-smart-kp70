@@ -372,6 +372,16 @@
       "registration": "ขว 53 เชียงใหม่",
       "status": "available",
       "type": "รถพยาบาล"
+    },
+    "car_23": {
+      "brand_model": "Subaru Forester",
+      "current_user": "",
+      "details": "เครื่องยนต์ Boxer-2000",
+      "id": 23,
+      "mileage": 160000,
+      "registration": "1กผ 5852 กรุงเทพมหานคร",
+      "status": "available",
+      "type": "Testing"
     }
   }
 }
