@@ -281,7 +281,7 @@
                     </div>
                 </div>
 
-                <!-- พรีวิว แบบ 3 (จัดตำแหน่งช่องลงชื่อให้อยู่กึ่งกลางหน้ากระดาษอย่างสวยงาม) -->
+                <!-- พรีวิว แบบ 3 -->
                 <div id="official-doc-preview" class="a4-container print-area hidden space-y-4">
                     <div class="flex justify-between items-center text-xs text-slate-500 border-b pb-2">
                         <span>ระบบ V-SMART Pro A4 Standard</span>
@@ -315,15 +315,15 @@
                         </p>
                     </div>
 
-                    <!-- ส่วนลงชื่อทั้งหมด: ขยับมาอยู่แถวกลางๆ (เยื้องขวา) และจัดแนวตั้งฉากคำว่า (ลงชื่อ) ตรงกัน -->
-                    <div class="pt-6 space-y-5 flex flex-col items-end pr-12">
-                        <div class="text-center" style="width: 320px;">
-                            <div>(ลงชื่อ)....................................................... ผู้ขออนุญาต</div>
+                    <!-- ส่วนลงชื่อทั้งหมด: ขยายความกว้างกล่องเป็น 380px เพื่อให้อยู่บรรทัดเดียวกัน และนำตำแหน่งรองนายกออกเหลือช่องว่าง -->
+                    <div class="pt-6 space-y-6 flex flex-col items-end pr-8">
+                        <div class="text-center" style="width: 380px; white-space: nowrap;">
+                            <div>(ลงชื่อ).................................................................... ผู้ขออนุญาต</div>
                             <div class="mt-1.5">( <span id="out-sign-requester">-</span> )</div>
                         </div>
-                        <div class="text-center" style="width: 320px;">
-                            <div>(ลงชื่อ)....................................................... ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน</div>
-                            <div class="mt-1.5">( ....................................................... )</div>
+                        <div class="text-center" style="width: 380px; white-space: nowrap;">
+                            <div>(ลงชื่อ).................................................................... ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน</div>
+                            <div class="mt-1.5">( .................................................................... )</div>
                         </div>
                     </div>
 
@@ -345,11 +345,10 @@
                                     <div>(ลงชื่อ)....................................................... ผู้ควบคุมการใช้รถ</div>
                                     <div class="mt-1">( ....................................................... )</div>
                                 </div>
-                                <div class="text-center" style="width: 320px;">
-                                    <div>(ลงชื่อ).......................................................</div>
-                                    <div class="mt-1">( ....................................................... )</div>
-                                    <div class="mt-1 font-semibold">รองนายกองค์การบริหารส่วนตำบลข่วงเปา</div>
-                                    <div class="mt-1">วันที่ ........ / ........ / ........</div>
+                                <div class="text-center" style="width: 340px; white-space: nowrap;">
+                                    <div>(ลงชื่อ).........................................................................</div>
+                                    <div class="mt-1.5">( ......................................................................... )</div>
+                                    <div class="mt-2">วันที่ ........ / ........ / ........</div>
                                 </div>
                             </div>
                         </div>
@@ -363,7 +362,7 @@
                 </div>
             </div>
 
-            <!-- STEP 3: สร้างแบบ 4 (ควบคุมรถและบันทึกไมล์ขากลับ) พร้อมปริ้น/save -->
+            <!-- STEP 3: สร้างแบบ 4 (ควบคุมรถและบันทึกไมล์ขากลับ) -->
             <div id="step-view-3" class="space-y-4 hidden">
                 <div class="glass-panel rounded-2xl p-5 text-center border-t-4 border-sky-500 space-y-3 no-print shadow-xl">
                     <span class="text-xs uppercase tracking-widest text-slate-300 font-semibold block"><i class="fa-solid fa-gauge text-sky-400"></i> แก้ไขเลขไมล์ขากลับได้ตามต้องการ - เมื่อกดดาวน์โหลด PDF ระบบจะบันทึกไมล์ คืนสภาพรถ และบันทึกประวัติลง Firebase ทันที</span>
@@ -1096,7 +1095,7 @@
 
             let index = 1;
             matchedLogs.forEach(log => {
-                let logDate = log.timestamp ? log.timestamp.split(' ')[0] : '-';
+                let logDate = log.timestamp ? log.timestamp.split(',')[0] : '-';
                 let row = `
                     <tr class="h-10">
                         <td class="border border-black p-1">${index++}</td>
