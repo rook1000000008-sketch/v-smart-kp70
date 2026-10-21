@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
-    <!-- นำเข้าฟอนต์ TH Saraban PSK / TH Saraban New สำหรับเอกสารทางการ -->
+    <!-- นำเข้าฟอนต์ TH Saraban New สำหรับเอกสารทางการ -->
     <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <!-- html2pdf.js สำหรับดาวน์โหลด PDF บนมือถือและ PC -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -317,15 +317,21 @@
                         </p>
                     </div>
 
-                    <!-- ส่วนลงชื่อทั้งหมด: ปรับจุดไข่ปลาให้มีความยาวพอดี "..................................................." -->
-                    <div class="pt-6 space-y-6 flex flex-col items-end pr-8">
-                        <div class="text-center" style="width: 380px; white-space: nowrap;">
-                            <div>(ลงชื่อ)................................................... ผู้ขออนุญาต</div>
-                            <div class="mt-1.5">( <span id="out-sign-requester">-</span> )</div>
+                    <!-- ส่วนลงชื่อทั้งหมด: จำลองการเคาะ Tab ระยะ 0.25 นิ้ว (Padding-Left 3.8cm) แบบใน Microsoft Word -->
+                    <div class="pt-6 space-y-6 flex flex-col items-start">
+                        <div style="padding-left: 3.8cm; width: 100%; text-align: left;">
+                            <div style="display: inline-block; text-align: center;">
+                                (ลงชื่อ)...................................................<br>
+                                ผู้ขออนุญาต<br>
+                                ( <span id="out-sign-requester">-</span> )
+                            </div>
                         </div>
-                        <div class="text-center" style="width: 380px; white-space: nowrap;">
-                            <div>(ลงชื่อ)................................................... ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน</div>
-                            <div class="mt-1.5">( ................................................... )</div>
+                        <div style="padding-left: 3.8cm; width: 100%; text-align: left;">
+                            <div style="display: inline-block; text-align: center;">
+                                (ลงชื่อ)...................................................<br>
+                                ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน<br>
+                                ( ................................................... )
+                            </div>
                         </div>
                     </div>
 
@@ -347,10 +353,12 @@
                                     <div>(ลงชื่อ)................................................... ผู้ควบคุมการใช้รถ</div>
                                     <div class="mt-1">( ................................................... )</div>
                                 </div>
-                                <div class="text-center" style="width: 340px; white-space: nowrap;">
-                                    <div>(ลงชื่อ)...................................................</div>
-                                    <div class="mt-1.5">( ................................................... )</div>
-                                    <div class="mt-2">วันที่ ........ / ........ / ........</div>
+                                <div style="padding-left: 1.5cm; width: 100%; text-align: left;">
+                                    <div style="display: inline-block; text-align: center;">
+                                        (ลงชื่อ)...................................................<br>
+                                        ( ................................................... )<br>
+                                        วันที่ ........ / ........ / ........
+                                    </div>
                                 </div>
                             </div>
                         </div>
