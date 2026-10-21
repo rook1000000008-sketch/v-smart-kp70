@@ -60,9 +60,9 @@
         .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6) !important; border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #475569, #334155) !important; border-radius: 8px; }
 
-        /* ขนาด A4 ทางการ พร้อมบังคับใช้ฟอนต์ TH Saraban New */
+        /* ขนาด A4 ทางการ พร้อมบังคับใช้ฟอนต์ TH Saraban New และขนาดตัวอักษรเนื้อหา 14pt */
         .a4-container {
-            width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 16pt; line-height: 1.7; font-family: 'TH Saraban New', 'Sarabun', sans-serif; box-sizing: border-box;
+            width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 14pt; line-height: 1.7; font-family: 'TH Saraban New', 'Sarabun', sans-serif; box-sizing: border-box;
         }
         .a4-landscape-container {
             width: 100%; max-width: 1120px; background: #ffffff; color: #000000; padding: 28px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 13pt; font-family: 'TH Saraban New', 'Sarabun', sans-serif; box-sizing: border-box;
@@ -71,9 +71,9 @@
         @media print {
             @page portrait-page { size: A4 portrait; margin: 15mm; }
             @page landscape-page { size: A4 landscape; margin: 10mm; }
-            body { background: #ffffff !important; padding: 0 !important; color: #000 !important; font-size: 16pt !important; font-family: 'TH Saraban New', 'Sarabun', sans-serif !important; }
+            body { background: #ffffff !important; padding: 0 !important; color: #000 !important; font-size: 14pt !important; font-family: 'TH Saraban New', 'Sarabun', sans-serif !important; }
             .no-print { display: none !important; }
-            .print-area { page: portrait-page; display: block !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; font-size: 16pt !important; line-height: 1.8 !important; }
+            .print-area { page: portrait-page; display: block !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; font-size: 14pt !important; line-height: 1.8 !important; }
             .print-book { page: landscape-page; display: block !important; width: 100% !important; max-width: 100% !important; background: #fff !important; color: #000 !important; border-radius: 0 !important; box-shadow: none !important; padding: 5px !important; font-size: 13pt !important; }
         }
     </style>
@@ -283,51 +283,51 @@
                     </div>
                 </div>
 
-                <!-- พรีวิว แบบ 3 -->
-                <div id="official-doc-preview" class="a4-container print-area hidden space-y-4">
-                    <div class="flex justify-between items-center text-xs text-slate-500 border-b pb-2">
+                <!-- พรีวิว แบบ 3 (ปรับขนาดตัวอักษรเนื้อหาทั้งหมดให้เป็น 14pt ยกเว้นหัวกระดาษ) -->
+                <div id="official-doc-preview" class="a4-container print-area hidden space-y-4" style="font-size: 14pt !important;">
+                    <div class="flex justify-between items-center text-xs text-slate-500 border-b pb-2" style="font-size: 14pt !important;">
                         <span>ระบบ V-SMART Pro A4 Standard</span>
-                        <span class="border border-black px-4 py-1 font-bold text-black text-sm">แบบ 3</span>
+                        <span class="border border-black px-4 py-1 font-bold text-black text-sm" style="font-size: 14pt !important;">แบบ 3</span>
                     </div>
                     
-                    <div class="text-center font-bold text-xl pt-3 tracking-wide">ใบขออนุญาตใช้รถส่วนกลาง</div>
+                    <div class="text-center font-bold text-xl pt-3 tracking-wide" style="font-size: 18pt !important;">ใบขออนุญาตใช้รถส่วนกลาง</div>
                     
-                    <div class="text-right text-base pt-3">
+                    <div class="text-right pt-3" style="font-size: 14pt !important;">
                         วันที่ <span id="out-doc-date" class="underline font-semibold"></span>
                     </div>
 
-                    <div class="space-y-4 pt-4 text-justify leading-loose text-base">
-                        <p>เรียน <span class="font-bold">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
-                        <p class="indent-16">
-                            ข้าพเจ้า <span id="out-name" class="font-bold underline"></span> 
-                            ตำแหน่ง <span id="out-position" class="underline"></span> 
-                            สังกัด <span id="out-org" class="underline"></span> 
-                            เบอร์โทรศัพท์ <span id="out-phone" class="underline">-</span> 
+                    <div class="space-y-4 pt-4 text-justify leading-loose" style="font-size: 14pt !important;">
+                        <p style="font-size: 14pt !important;">เรียน <span class="font-bold" style="font-size: 14pt !important;">นายกองค์การบริหารส่วนตำบลข่วงเปา</span></p>
+                        <p class="indent-16" style="font-size: 14pt !important;">
+                            ข้าพเจ้า <span id="out-name" class="font-bold underline" style="font-size: 14pt !important;"></span> 
+                            ตำแหน่ง <span id="out-position" class="underline" style="font-size: 14pt !important;"></span> 
+                            สังกัด <span id="out-org" class="underline" style="font-size: 14pt !important;"></span> 
+                            เบอร์โทรศัพท์ <span id="out-phone" class="underline" style="font-size: 14pt !important;">-</span> 
                         </p>
-                        <p>
-                            ขออนุญาตใช้รถ <span id="out-car-reg" class="font-bold underline"></span> (<span id="out-car-type" class="underline">รถยนต์ส่วนกลาง</span>) 
-                            เพื่อเดินทางไปปฏิบัติราชการ ณ <span id="out-destination" class="font-bold underline"></span> 
+                        <p style="font-size: 14pt !important;">
+                            ขออนุญาตใช้รถ <span id="out-car-reg" class="font-bold underline" style="font-size: 14pt !important;"></span> (<span id="out-car-type" class="underline" style="font-size: 14pt !important;">รถยนต์ส่วนกลาง</span>) 
+                            เพื่อเดินทางไปปฏิบัติราชการ ณ <span id="out-destination" class="font-bold underline" style="font-size: 14pt !important;"></span> 
                         </p>
-                        <p>
-                            เพื่อ <span id="out-purpose" class="underline"></span> มีผู้ร่วมเดินทางจำนวน <span id="out-passengers" class="font-bold underline"></span> คน 
+                        <p style="font-size: 14pt !important;">
+                            เพื่อ <span id="out-purpose" class="underline" style="font-size: 14pt !important;"></span> มีผู้ร่วมเดินทางจำนวน <span id="out-passengers" class="font-bold underline" style="font-size: 14pt !important;"></span> คน 
                         </p>
-                        <p>
-                            ในวันที่ <span id="out-date" class="underline font-semibold"></span> เวลา <span id="out-start-time" class="underline font-semibold"></span> น. 
-                            ถึงวันที่ <span id="out-date-end" class="underline font-semibold"></span> เวลา <span id="out-time" class="underline font-semibold"></span> น.
+                        <p style="font-size: 14pt !important;">
+                            ในวันที่ <span id="out-date" class="underline font-semibold" style="font-size: 14pt !important;"></span> เวลา <span id="out-start-time" class="underline font-semibold" style="font-size: 14pt !important;"></span> น. 
+                            ถึงวันที่ <span id="out-date-end" class="underline font-semibold" style="font-size: 14pt !important;"></span> เวลา <span id="out-time" class="underline font-semibold" style="font-size: 14pt !important;"></span> น.
                         </p>
                     </div>
 
-                    <!-- ส่วนลงชื่อทั้งหมด: จำลองการเคาะ Tab ระยะ 0.25 นิ้ว (Padding-Left 3.8cm) แบบใน Microsoft Word -->
-                    <div class="pt-6 space-y-6 flex flex-col items-start">
-                        <div style="padding-left: 3.8cm; width: 100%; text-align: left;">
-                            <div style="display: inline-block; text-align: center;">
+                    <!-- ส่วนลงชื่อทั้งหมด: จำลองการเคาะ Tab ระยะ 0.25 นิ้ว (Padding-Left 3.8cm) ขนาด 14pt -->
+                    <div class="pt-6 space-y-6 flex flex-col items-start" style="font-size: 14pt !important;">
+                        <div style="padding-left: 3.8cm; width: 100%; text-align: left; font-size: 14pt !important;">
+                            <div style="display: inline-block; text-align: center; font-size: 14pt !important;">
                                 (ลงชื่อ)...................................................<br>
                                 ผู้ขออนุญาต<br>
                                 ( <span id="out-sign-requester">-</span> )
                             </div>
                         </div>
-                        <div style="padding-left: 3.8cm; width: 100%; text-align: left;">
-                            <div style="display: inline-block; text-align: center;">
+                        <div style="padding-left: 3.8cm; width: 100%; text-align: left; font-size: 14pt !important;">
+                            <div style="display: inline-block; text-align: center; font-size: 14pt !important;">
                                 (ลงชื่อ)...................................................<br>
                                 ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน<br>
                                 ( ................................................... )
@@ -335,26 +335,26 @@
                         </div>
                     </div>
 
-                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น -->
-                    <div class="pt-6 border-t-2 border-black space-y-4 text-sm">
-                        <div class="space-y-1.5 font-medium">
-                            <p>เห็นควรอนุญาตให้ใช้รถ <span id="out-preview-car" class="font-bold underline"></span> เลขไมล์ปัจจุบัน <span id="out-preview-mile" class="font-bold underline"></span> กม.</p>
-                            <p>โดยมอบหมายให้ <span id="out-preview-driver" class="font-bold underline"></span> เป็นพนักงานขับรถยนต์</p>
+                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น ขนาด 14pt -->
+                    <div class="pt-6 border-t-2 border-black space-y-4" style="font-size: 14pt !important;">
+                        <div class="space-y-1.5 font-medium" style="font-size: 14pt !important;">
+                            <p style="font-size: 14pt !important;">เห็นควรอนุญาตให้ใช้รถ <span id="out-preview-car" class="font-bold underline" style="font-size: 14pt !important;"></span> เลขไมล์ปัจจุบัน <span id="out-preview-mile" class="font-bold underline" style="font-size: 14pt !important;"></span> กม.</p>
+                            <p style="font-size: 14pt !important;">โดยมอบหมายให้ <span id="out-preview-driver" class="font-bold underline" style="font-size: 14pt !important;"></span> เป็นพนักงานขับรถยนต์</p>
                         </div>
 
-                        <div class="flex justify-between items-start pt-2">
-                            <div class="space-y-2 font-bold pt-1">
-                                <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-4 h-4"> อนุญาต</label>
-                                <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="w-4 h-4"> ไม่อนุญาต</label>
+                        <div class="flex justify-between items-start pt-2" style="font-size: 14pt !important;">
+                            <div class="space-y-2 font-bold pt-1" style="font-size: 14pt !important;">
+                                <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14pt !important;"><input type="checkbox" class="w-4 h-4"> อนุญาต</label>
+                                <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14pt !important;"><input type="checkbox" class="w-4 h-4"> ไม่อนุญาต</label>
                             </div>
 
-                            <div class="space-y-4">
-                                <div class="text-center" style="width: 280px;">
-                                    <div>(ลงชื่อ)................................................... ผู้ควบคุมการใช้รถ</div>
-                                    <div class="mt-1">( ................................................... )</div>
+                            <div class="space-y-4" style="font-size: 14pt !important;">
+                                <div class="text-center" style="width: 280px; font-size: 14pt !important;">
+                                    <div style="font-size: 14pt !important;">(ลงชื่อ)................................................... ผู้ควบคุมการใช้รถ</div>
+                                    <div class="mt-1" style="font-size: 14pt !important;">( ................................................... )</div>
                                 </div>
-                                <div style="padding-left: 1.5cm; width: 100%; text-align: left;">
-                                    <div style="display: inline-block; text-align: center;">
+                                <div style="padding-left: 1.5cm; width: 100%; text-align: left; font-size: 14pt !important;">
+                                    <div style="display: inline-block; text-align: center; font-size: 14pt !important;">
                                         (ลงชื่อ)...................................................<br>
                                         ( ................................................... )<br>
                                         วันที่ ........ / ........ / ........
