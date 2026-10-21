@@ -58,7 +58,7 @@
         .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6) !important; border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #475569, #334155) !important; border-radius: 8px; }
 
-        /* ขนาด A4 ทางการ: 210mm x 297mm */
+        /* ขนาด A4 ทางการ */
         .a4-container {
             width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 15px; line-height: 1.7; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
         }
@@ -281,7 +281,7 @@
                     </div>
                 </div>
 
-                <!-- พรีวิว แบบ 3 (จัดตำแหน่งช่องลงชื่อชิดซ้ายและแนวตั้งฉากคำว่า (ลงชื่อ) ตรงกัน) -->
+                <!-- พรีวิว แบบ 3 (จัดตำแหน่งช่องลงชื่อให้อยู่กึ่งกลางหน้ากระดาษอย่างสวยงาม) -->
                 <div id="official-doc-preview" class="a4-container print-area hidden space-y-4">
                     <div class="flex justify-between items-center text-xs text-slate-500 border-b pb-2">
                         <span>ระบบ V-SMART Pro A4 Standard</span>
@@ -315,8 +315,8 @@
                         </p>
                     </div>
 
-                    <!-- ส่วนลงชื่อทั้งหมด: ขยับมาทางซ้ายและจัดแนวตั้งฉากคำว่า (ลงชื่อ) ตรงกัน -->
-                    <div class="pt-6 space-y-5 flex flex-col items-start pl-8">
+                    <!-- ส่วนลงชื่อทั้งหมด: ขยับมาอยู่แถวกลางๆ (เยื้องขวา) และจัดแนวตั้งฉากคำว่า (ลงชื่อ) ตรงกัน -->
+                    <div class="pt-6 space-y-5 flex flex-col items-end pr-12">
                         <div class="text-center" style="width: 320px;">
                             <div>(ลงชื่อ)....................................................... ผู้ขออนุญาต</div>
                             <div class="mt-1.5">( <span id="out-sign-requester">-</span> )</div>
@@ -327,7 +327,7 @@
                         </div>
                     </div>
 
-                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น (ผู้ลงนามอนุญาตคนสุดท้าย คงตำแหน่งเดิมด้านขวา และเหลือช่องว่าง) -->
+                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น -->
                     <div class="pt-6 border-t-2 border-black space-y-4 text-sm">
                         <div class="space-y-1.5 font-medium">
                             <p>เห็นควรอนุญาตให้ใช้รถ <span id="out-preview-car" class="font-bold underline"></span> เลขไมล์ปัจจุบัน <span id="out-preview-mile" class="font-bold underline"></span> กม.</p>
