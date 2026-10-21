@@ -58,6 +58,7 @@
         .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6) !important; border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #475569, #334155) !important; border-radius: 8px; }
 
+        /* ขนาด A4 ทางการ: 210mm x 297mm */
         .a4-container {
             width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 15px; line-height: 1.7; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
         }
@@ -280,7 +281,7 @@
                     </div>
                 </div>
 
-                <!-- พรีวิว แบบ 3 -->
+                <!-- พรีวิว แบบ 3 (จัดตำแหน่งช่องลงชื่อชิดซ้ายและแนวตั้งฉากคำว่า (ลงชื่อ) ตรงกัน) -->
                 <div id="official-doc-preview" class="a4-container print-area hidden space-y-4">
                     <div class="flex justify-between items-center text-xs text-slate-500 border-b pb-2">
                         <span>ระบบ V-SMART Pro A4 Standard</span>
@@ -314,6 +315,7 @@
                         </p>
                     </div>
 
+                    <!-- ส่วนลงชื่อทั้งหมด: ขยับมาทางซ้ายและจัดแนวตั้งฉากคำว่า (ลงชื่อ) ตรงกัน -->
                     <div class="pt-6 space-y-5 flex flex-col items-start pl-8">
                         <div class="text-center" style="width: 320px;">
                             <div>(ลงชื่อ)....................................................... ผู้ขออนุญาต</div>
@@ -325,6 +327,7 @@
                         </div>
                     </div>
 
+                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น (ผู้ลงนามอนุญาตคนสุดท้าย คงตำแหน่งเดิมด้านขวา และเหลือช่องว่าง) -->
                     <div class="pt-6 border-t-2 border-black space-y-4 text-sm">
                         <div class="space-y-1.5 font-medium">
                             <p>เห็นควรอนุญาตให้ใช้รถ <span id="out-preview-car" class="font-bold underline"></span> เลขไมล์ปัจจุบัน <span id="out-preview-mile" class="font-bold underline"></span> กม.</p>
@@ -360,7 +363,7 @@
                 </div>
             </div>
 
-            <!-- STEP 3: สร้างแบบ 4 (ควบคุมรถและบันทึกไมล์ขากลับ) -->
+            <!-- STEP 3: สร้างแบบ 4 (ควบคุมรถและบันทึกไมล์ขากลับ) พร้อมปริ้น/save -->
             <div id="step-view-3" class="space-y-4 hidden">
                 <div class="glass-panel rounded-2xl p-5 text-center border-t-4 border-sky-500 space-y-3 no-print shadow-xl">
                     <span class="text-xs uppercase tracking-widest text-slate-300 font-semibold block"><i class="fa-solid fa-gauge text-sky-400"></i> แก้ไขเลขไมล์ขากลับได้ตามต้องการ - เมื่อกดดาวน์โหลด PDF ระบบจะบันทึกไมล์ คืนสภาพรถ และบันทึกประวัติลง Firebase ทันที</span>
@@ -413,7 +416,7 @@
                 </div>
             </div>
 
-            <!-- STEP 4: รายงานสรุปการใช้รถยนต์ทุกคันและเลือกวันที่ได้ -->
+            <!-- STEP 4: รายงานสรุปการใช้รถยนต์ทุกคัน พร้อม Dropdown เลือกวันที่ -->
             <div id="step-view-4" class="space-y-4 hidden">
                 <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 no-print">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -425,7 +428,9 @@
                         </h2>
                         <div class="flex items-center gap-2">
                             <label class="text-xs text-slate-300 font-semibold">เลือกวันที่:</label>
-                            <input type="date" id="report-filter-date" onchange="renderDailyReport()" class="bg-slate-900 border border-slate-700 text-xs text-sky-300 font-semibold p-2 rounded-xl outline-none shadow-inner">
+                            <select id="report-filter-date" onchange="renderDailyReport()" class="bg-slate-900 border border-slate-700 text-xs text-sky-300 font-semibold p-2.5 rounded-xl outline-none shadow-inner">
+                                <!-- ตัวเลือกวันที่สร้างอัตโนมัติจาก Firebase -->
+                            </select>
                         </div>
                     </div>
 
@@ -570,13 +575,7 @@
                 }
             }
 
-            let repDateInput = document.getElementById('report-filter-date');
-            if (repDateInput && !repDateInput.value) {
-                let currentDate = new Date();
-                let tzOffset = currentDate.getTimezoneOffset() * 60000;
-                let localISOTime = (new Date(currentDate - tzOffset)).toISOString().split('T')[0];
-                repDateInput.value = localISOTime;
-            }
+            updateReportDateDropdown();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -1195,7 +1194,53 @@
             downloadPDFMobile('book-preview', 'V-SMART-Form4-ControlBook.pdf');
         }
 
+        function updateReportDateDropdown() {
+            let selectEl = document.getElementById('report-filter-date');
+            if (!selectEl) return;
+            
+            let currentSelectedVal = selectEl.value;
+            let availableDates = new Set();
+            
+            if (globalLogsMap) {
+                Object.keys(globalLogsMap).forEach(key => {
+                    let log = globalLogsMap[key];
+                    if (log.timestamp) {
+                        let logDatePart = log.timestamp.split(',')[0].trim();
+                        let parts = logDatePart.split('/');
+                        if (parts.length === 3) {
+                            let formattedLogDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                            availableDates.add(formattedLogDate);
+                        }
+                    }
+                });
+            }
+
+            let currentDate = new Date();
+            let tzOffset = currentDate.getTimezoneOffset() * 60000;
+            let localISOTime = (new Date(currentDate - tzOffset)).toISOString().split('T')[0];
+            availableDates.add(localISOTime);
+
+            let sortedDates = Array.from(availableDates).sort().reverse();
+
+            selectEl.innerHTML = "";
+            sortedDates.forEach(dateStr => {
+                let [y, m, d] = dateStr.split('-');
+                const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+                let thaiLabel = `${parseInt(d)} ${thaiMonths[parseInt(m)-1]} ${parseInt(y)+543}`;
+                
+                let opt = document.createElement('option');
+                opt.value = dateStr;
+                opt.text = thaiLabel;
+                if (dateStr === (currentSelectedVal || localISOTime)) {
+                    opt.selected = true;
+                }
+                selectEl.appendChild(opt);
+            });
+        }
+
         function renderDailyReport() {
+            updateReportDateDropdown();
+            
             let filterDateInputEl = document.getElementById('report-filter-date');
             if(!filterDateInputEl || !filterDateInputEl.value) return;
             let filterDateInput = filterDateInputEl.value;
