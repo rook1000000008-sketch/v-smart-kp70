@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+    <!-- นำเข้าฟอนต์ TH Saraban PSK / TH Saraban New สำหรับเอกสารทางการ -->
+    <link href="https://fonts.googleapis.com/css2?family=TH+Sarabun+New:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <!-- html2pdf.js สำหรับดาวน์โหลด PDF บนมือถือและ PC -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -58,21 +60,21 @@
         .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6) !important; border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #475569, #334155) !important; border-radius: 8px; }
 
-        /* ขนาด A4 ทางการ */
+        /* ขนาด A4 ทางการ พร้อมบังคับใช้ฟอนต์ TH Saraban New */
         .a4-container {
-            width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 15px; line-height: 1.7; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
+            width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 16pt; line-height: 1.7; font-family: 'TH Saraban New', 'Sarabun', sans-serif; box-sizing: border-box;
         }
         .a4-landscape-container {
-            width: 100%; max-width: 1120px; background: #ffffff; color: #000000; padding: 28px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 11pt; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
+            width: 100%; max-width: 1120px; background: #ffffff; color: #000000; padding: 28px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 13pt; font-family: 'TH Saraban New', 'Sarabun', sans-serif; box-sizing: border-box;
         }
 
         @media print {
             @page portrait-page { size: A4 portrait; margin: 15mm; }
             @page landscape-page { size: A4 landscape; margin: 10mm; }
-            body { background: #ffffff !important; padding: 0 !important; color: #000 !important; font-size: 14pt !important; }
+            body { background: #ffffff !important; padding: 0 !important; color: #000 !important; font-size: 16pt !important; font-family: 'TH Saraban New', 'Sarabun', sans-serif !important; }
             .no-print { display: none !important; }
-            .print-area { page: portrait-page; display: block !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; font-size: 15pt !important; line-height: 1.8 !important; }
-            .print-book { page: landscape-page; display: block !important; width: 100% !important; max-width: 100% !important; background: #fff !important; color: #000 !important; border-radius: 0 !important; box-shadow: none !important; padding: 5px !important; font-size: 10pt !important; }
+            .print-area { page: portrait-page; display: block !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; font-size: 16pt !important; line-height: 1.8 !important; }
+            .print-book { page: landscape-page; display: block !important; width: 100% !important; max-width: 100% !important; background: #fff !important; color: #000 !important; border-radius: 0 !important; box-shadow: none !important; padding: 5px !important; font-size: 13pt !important; }
         }
     </style>
     <!-- Firebase SDK Compat -->
@@ -315,15 +317,15 @@
                         </p>
                     </div>
 
-                    <!-- ส่วนลงชื่อทั้งหมด: ขยายความกว้างกล่องเป็น 380px เพื่อให้อยู่บรรทัดเดียวกัน และนำตำแหน่งรองนายกออกเหลือช่องว่าง -->
+                    <!-- ส่วนลงชื่อทั้งหมด: ปรับจุดไข่ปลาให้มีความยาวพอดี "..................................................." -->
                     <div class="pt-6 space-y-6 flex flex-col items-end pr-8">
                         <div class="text-center" style="width: 380px; white-space: nowrap;">
-                            <div>(ลงชื่อ).................................................................... ผู้ขออนุญาต</div>
+                            <div>(ลงชื่อ)................................................... ผู้ขออนุญาต</div>
                             <div class="mt-1.5">( <span id="out-sign-requester">-</span> )</div>
                         </div>
                         <div class="text-center" style="width: 380px; white-space: nowrap;">
-                            <div>(ลงชื่อ).................................................................... ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน</div>
-                            <div class="mt-1.5">( .................................................................... )</div>
+                            <div>(ลงชื่อ)................................................... ผู้อำนวยการกอง/หัวหน้าหรือผู้แทน</div>
+                            <div class="mt-1.5">( ................................................... )</div>
                         </div>
                     </div>
 
@@ -342,12 +344,12 @@
 
                             <div class="space-y-4">
                                 <div class="text-center" style="width: 280px;">
-                                    <div>(ลงชื่อ)....................................................... ผู้ควบคุมการใช้รถ</div>
-                                    <div class="mt-1">( ....................................................... )</div>
+                                    <div>(ลงชื่อ)................................................... ผู้ควบคุมการใช้รถ</div>
+                                    <div class="mt-1">( ................................................... )</div>
                                 </div>
                                 <div class="text-center" style="width: 340px; white-space: nowrap;">
-                                    <div>(ลงชื่อ).........................................................................</div>
-                                    <div class="mt-1.5">( ......................................................................... )</div>
+                                    <div>(ลงชื่อ)...................................................</div>
+                                    <div class="mt-1.5">( ................................................... )</div>
                                     <div class="mt-2">วันที่ ........ / ........ / ........</div>
                                 </div>
                             </div>
