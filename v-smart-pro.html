@@ -58,12 +58,12 @@
         .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6) !important; border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #475569, #334155) !important; border-radius: 8px; }
 
-        /* ขนาด A4 ทางการ: 210mm x 297mm */
+        /* ขนาด A4 ทางการแบบพอดีเนื้อหา ไม่กำหนด min-height เกินจริงบนมือถือ */
         .a4-container {
-            width: 100%; max-width: 794px; min-height: 1123px; background: #ffffff; color: #000000; padding: 48px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 16px; line-height: 1.8; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
+            width: 100%; max-width: 794px; background: #ffffff; color: #000000; padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 15px; line-height: 1.7; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
         }
         .a4-landscape-container {
-            width: 100%; max-width: 1120px; background: #ffffff; color: #000000; padding: 28px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 11pt; font-family: 'Sarabun', sans-serif;
+            width: 100%; max-width: 1120px; background: #ffffff; color: #000000; padding: 28px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); margin: 0 auto; font-size: 11pt; font-family: 'Sarabun', sans-serif; box-sizing: border-box;
         }
 
         @media print {
@@ -327,7 +327,7 @@
                         </div>
                     </div>
 
-                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น (ตามคำสั่ง: ผู้ลงนามอนุญาตคนสุดท้าย คงตำแหน่งเดิมด้านขวา และเหลือช่องว่าง) -->
+                    <!-- ส่วนคำสั่งของผู้บริหารและความเห็น -->
                     <div class="pt-6 border-t-2 border-black space-y-4 text-sm">
                         <div class="space-y-1.5 font-medium">
                             <p>เห็นควรอนุญาตให้ใช้รถ <span id="out-preview-car" class="font-bold underline"></span> เลขไมล์ปัจจุบัน <span id="out-preview-mile" class="font-bold underline"></span> กม.</p>
@@ -1141,10 +1141,10 @@
             let isLandscape = (elementId === 'book-preview');
 
             const opt = {
-                margin:       isLandscape ? 8 : 10,
+                margin:       isLandscape ? 5 : 10,
                 filename:     filename || 'V-SMART-Document.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
                 jsPDF:        { 
                     unit: 'mm', 
                     format: 'a4', 
