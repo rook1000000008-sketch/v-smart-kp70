@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V-SMART POP - ระบบขออนุญาตใช้รถยนต์ส่วนกลาง อบต.ข่วงเปา</title>
+    
+    <!-- Favicon และ Apple Touch Icon สำหรับไอคอนแอปประจำเว็บ -->
+    <link rel="icon" type="image/jpeg" href="app-icon.jpg">
+    <link rel="apple-touch-icon" href="app-icon.jpg">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
@@ -352,7 +357,6 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('main-app-content').classList.remove('hidden');
                 
-                // แสดงชื่อและตำแหน่งผู้ใช้งานแยกบรรทัด
                 document.getElementById('logged-user-display').innerText = `${matched.name} (${matched.position} - ${matched.org})`;
 
                 document.getElementById('pop-user-name').value = matched.name;
@@ -436,7 +440,7 @@
                     let destText = car.destination || "กำลังปฏิบัติภารกิจ";
                     destinationInfo = `<p class="text-[11px] text-amber-300 mt-1 flex items-center gap-1 font-medium"><i class="fa-solid fa-location-dot"></i> จุดหมาย: ${destText}</p>`;
                 } else {
-                    statusBadge = `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
+                    statusBadge = `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
                     destinationInfo = `<p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-400"></i> พร้อมให้บริการ</p>`;
                 }
 
