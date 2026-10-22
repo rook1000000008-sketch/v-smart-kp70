@@ -39,6 +39,14 @@
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 8px; }
         .pop-container { max-width: 900px; margin: 0 auto; background: #ffffff; color: #000000; padding: 35px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); }
+        
+        #header-logo-img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            border-radius: 9999px !important;
+        }
     </style>
     <!-- Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -71,8 +79,8 @@
         <div id="main-app-content" class="space-y-4 hidden">
             <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center no-print gap-4 shadow-2xl">
                 <div class="flex items-center gap-4">
-                    <div class="relative w-14 h-14 rounded-full p-0.5 bg-slate-900 flex items-center justify-center overflow-hidden">
-                        <img src="KPLOGO.jpg" alt="โลโก้ อบต." class="w-full h-full object-cover rounded-full">
+                    <div class="relative w-16 h-16 rounded-full p-0.5 bg-slate-900 flex items-center justify-center overflow-hidden border-2 border-sky-500/30 shadow-inner">
+                        <img src="KPLOGO.jpg" alt="โลโก้ อบต." id="header-logo-img">
                     </div>
                     <div>
                         <h1 class="text-base md:text-lg font-bold text-white tracking-wider flex items-center gap-2">
@@ -116,7 +124,7 @@
                     </div>
 
                     <div class="custom-scroll space-y-2.5" id="fleet-container">
-                        <!-- รายการรถดึงจาก Firebase พร้อมสถานะและจุดหมายปลายทางย่อๆ -->
+                        <!-- รายการรถดึงจาก Firebase -->
                     </div>
                 </div>
 
@@ -142,12 +150,12 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง (ที่ไหน):</label>
-                            <input type="text" id="pop-destination" value="โปรดระบุ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
+                            <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง (ไปที่ไหน):</label>
+                            <input type="text" id="pop-destination" value="พื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
                         </div>
                         <div>
                             <label class="block text-slate-300 mb-1 font-medium">วัตถุประสงค์ (เพื่อ):</label>
-                            <input type="text" id="pop-purpose" value="โปรดระบุ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
+                            <input type="text" id="pop-purpose" value="ปฏิบัติภารกิจตรวจสอบและบริการประชาชนในพื้นที่" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
                         </div>
                     </div>
 
@@ -168,7 +176,7 @@
 
                     <div class="pt-2 text-center">
                         <button onclick="_0xsubmitPOPBooking()" class="w-full industrial-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
+                            <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลส่งรายงานประจำวันทันที
                         </button>
                     </div>
                 </div>
@@ -419,7 +427,6 @@
                     let label = car.status === "in-use" ? "กำลังใช้งาน" : "จองแล้ว";
                     statusBadge = `<span class="text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full font-bold">${label} (${car.current_user || ''})</span>`;
                     
-                    // แสดงจุดหมายปลายทางย่อๆ บน Card ถ้ามีข้อมูล
                     let destText = car.destination || "กำลังปฏิบัติภารกิจ";
                     destinationInfo = `<p class="text-[11px] text-amber-300 mt-1 flex items-center gap-1 font-medium"><i class="fa-solid fa-location-dot"></i> จุดหมาย: ${destText}</p>`;
                 } else {
@@ -494,7 +501,6 @@
             let purpose = document.getElementById('pop-purpose').value;
             let dateStr = document.getElementById('pop-date').value;
 
-            // บันทึกสถานะรถกลับเป็น available พร้อมล้างข้อมูลการใช้งานชั่วคราว
             db.ref('vehicles/' + selectedCarKey).update({
                 mileage: endMile,
                 status: "available",
