@@ -35,8 +35,8 @@
 <body class="min-h-screen p-6 flex flex-col items-center justify-center">
 
     <div class="max-w-md w-full space-y-6">
-        <div class="glass-panel rounded-3xl p-8 text-center space-y-4 shadow-2xl">
-            <div class="relative w-20 h-20 rounded-full p-0.5 bg-gradient-to-tr from-sky-500 to-indigo-500 mx-auto shadow-xl">
+        <div class="glass-panel rounded-3xl p-8 text-center space-y-5 shadow-2xl">
+            <div class="relative w-20 h-20 rounded-full p-0.5 bg-gradient-to-tr from-emerald-500 to-sky-500 mx-auto shadow-xl">
                 <img src="KPLOGO.jpg" alt="ตราสัญลักษณ์ อบต.ข่วงเปา" class="w-full h-full object-cover rounded-full bg-slate-900">
             </div>
             <div>
@@ -44,37 +44,20 @@
                 <p class="text-xs text-slate-400 mt-1">ระบบบริหารจัดการยานพาหนะ องค์การบริหารส่วนตำบลข่วงเปา</p>
             </div>
 
-            <div class="space-y-3 pt-4">
-                <!-- ลิงก์ไปยัง Pro Edition (ใช้งานปกติ) -->
-                <a href="v-smart-pro.html" class="w-full industrial-btn text-white font-bold p-4 rounded-2xl text-sm flex items-center justify-between shadow-xl block group">
+            <div class="space-y-3 pt-2">
+                <!-- ลิงก์ไปยัง POP Edition (รุ่น Popular) เพียงรุ่นเดียว -->
+                <a href="v-smart-pop.html" class="w-full industrial-btn text-white font-bold p-4 rounded-2xl text-sm flex items-center justify-between shadow-xl block group">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400">
-                            <i class="fa-solid fa-shield-halved"></i>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-car-side text-lg"></i>
                         </div>
                         <div class="text-left">
-                            <div class="text-sm font-bold text-slate-100">V-SMART Pro Edition</div>
-                            <div class="text-[10px] text-slate-400">ระบบเต็มรูปแบบ / พิมพ์แบบ 3 สมบูรณ์</div>
+                            <div class="text-sm font-bold text-slate-100">V-SMART POP Edition</div>
+                            <div class="text-[10px] text-slate-400">ระบบขอใช้รถและรายงานประจำวัน (รุ่น Popular)</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-arrow-right text-sky-400 group-hover:translate-x-1 transition"></i>
+                    <i class="fa-solid fa-arrow-right text-emerald-400 group-hover:translate-x-1 transition"></i>
                 </a>
-
-                <!-- V-SMART Lite Edition (ถูกปิดการใช้งาน / สถานะ Offline) -->
-                <div class="w-full bg-slate-950/60 border border-slate-800/80 p-4 rounded-2xl text-sm flex items-center justify-between opacity-60 cursor-not-allowed">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400">
-                            <i class="fa-solid fa-power-off"></i>
-                        </div>
-                        <div class="text-left">
-                            <div class="text-sm font-bold text-slate-400 flex items-center gap-2">
-                                V-SMART Lite Edition 
-                                <span class="text-[9px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded-full font-semibold">Offline</span>
-                            </div>
-                            <div class="text-[10px] text-rose-400/80">ปิดให้บริการชั่วคราว / ไม่อนุญาตให้ใช้งาน</div>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-ban text-rose-500/60"></i>
-                </div>
             </div>
         </div>
 
@@ -83,10 +66,5 @@
         </div>
     </div>
 
-    <script>
-        window.addEventListener('afterprint', () => {
-            window.location.href = 'index.html';
-        });
-    </script>
 </body>
 </html>
