@@ -98,7 +98,7 @@
                 </button>
             </div>
 
-            <!-- TAB 1: เลือกรถและกรอกข้อมูลเบื้องต้น พร้อมสถานะรถแบบ Real-time -->
+            <!-- TAB 1: เลือกรถและกรอกข้อมูลเบื้องต้น พร้อมแสดงจุดหมายบน Card -->
             <div id="tab-content-booking" class="space-y-4 no-print">
                 <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4">
                     <div class="flex justify-between items-center">
@@ -116,7 +116,7 @@
                     </div>
 
                     <div class="custom-scroll space-y-2.5" id="fleet-container">
-                        <!-- รายการรถดึงจาก Firebase พร้อมสถานะ -->
+                        <!-- รายการรถดึงจาก Firebase พร้อมสถานะและจุดหมายปลายทางย่อๆ -->
                     </div>
                 </div>
 
@@ -142,12 +142,12 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง (ไปที่ไหน):</label>
-                            <input type="text" id="pop-destination" value="พื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
+                            <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง (ที่ไหน):</label>
+                            <input type="text" id="pop-destination" value="โปรดระบุ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
                         </div>
                         <div>
                             <label class="block text-slate-300 mb-1 font-medium">วัตถุประสงค์ (เพื่อ):</label>
-                            <input type="text" id="pop-purpose" value="ปฏิบัติภารกิจตรวจสอบและบริการประชาชนในพื้นที่" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
+                            <input type="text" id="pop-purpose" value="โปรดระบุ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
                         </div>
                     </div>
 
@@ -168,7 +168,7 @@
 
                     <div class="pt-2 text-center">
                         <button onclick="_0xsubmitPOPBooking()" class="w-full industrial-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลส่งรายงานประจำวันทันที
+                            <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
                         </button>
                     </div>
                 </div>
@@ -377,7 +377,6 @@
                     }
                 });
             }
-            // เพิ่มเติมจาก activity_logs เผื่อกรณีรถเก่า
             if (globalLogsMap) {
                 Object.keys(globalLogsMap).forEach(k => {
                     let l = globalLogsMap[k];
@@ -412,16 +411,20 @@
                 let mile = Number(car.mileage) || 0;
 
                 let statusBadge = "";
-                let cardClickAction = "";
+                let destinationInfo = "";
+                let cardClickAction = `_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${mile})`;
                 let cardStyle = "cursor-pointer hover:border-sky-500/50";
 
                 if (car.status === "in-use" || car.status === "reserved") {
-                    let label = car.status === "in-use" ? "กำลังใช้งานอยู่" : "จองแล้ว";
-                    statusBadge = `<span class="text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-0.5 rounded-full font-bold">${label} (${car.current_user || ''})</span>`;
-                    cardClickAction = `_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${mile})`;
+                    let label = car.status === "in-use" ? "กำลังใช้งาน" : "จองแล้ว";
+                    statusBadge = `<span class="text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full font-bold">${label} (${car.current_user || ''})</span>`;
+                    
+                    // แสดงจุดหมายปลายทางย่อๆ บน Card ถ้ามีข้อมูล
+                    let destText = car.destination || "กำลังปฏิบัติภารกิจ";
+                    destinationInfo = `<p class="text-[11px] text-amber-300 mt-1 flex items-center gap-1 font-medium"><i class="fa-solid fa-location-dot"></i> จุดหมาย: ${destText}</p>`;
                 } else {
-                    statusBadge = `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
-                    cardClickAction = `_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${mile})`;
+                    statusBadge = `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
+                    destinationInfo = `<p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-400"></i> พร้อมให้บริการ</p>`;
                 }
 
                 let html = `
@@ -430,11 +433,12 @@
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 px-2 py-0.5 rounded font-semibold">${car.type || 'รถยนต์'}</span>
                                 <p class="text-sm font-bold text-white mt-1">${car.registration} - ${car.brand_model}</p>
-                                <p class="text-xs text-slate-400 mt-0.5">เลขไมล์ปัจจุบัน: ${mile.toLocaleString()} กม. | เครื่องยนต์: ${car.details || '-'}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">เลขไมล์: ${mile.toLocaleString()} กม. | เครื่องยนต์: ${car.details || '-'}</p>
+                                ${destinationInfo}
                             </div>
                             <div class="text-right space-y-1">
                                 <div>${statusBadge}</div>
-                                <span class="text-xs text-sky-400 font-semibold block mt-2">คลิกเพื่อเลือกใช้รถ <i class="fa-solid fa-arrow-right"></i></span>
+                                <span class="text-xs text-sky-400 font-semibold block mt-3">เลือกใช้รถ <i class="fa-solid fa-arrow-right"></i></span>
                             </div>
                         </div>
                     </div>
@@ -490,10 +494,12 @@
             let purpose = document.getElementById('pop-purpose').value;
             let dateStr = document.getElementById('pop-date').value;
 
+            // บันทึกสถานะรถกลับเป็น available พร้อมล้างข้อมูลการใช้งานชั่วคราว
             db.ref('vehicles/' + selectedCarKey).update({
                 mileage: endMile,
                 status: "available",
-                current_user: ""
+                current_user: "",
+                destination: ""
             });
 
             let logData = {
