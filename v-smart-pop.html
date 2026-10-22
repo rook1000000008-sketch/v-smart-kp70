@@ -43,9 +43,9 @@
         #header-logo-img {
             width: 100% !important;
             height: 100% !important;
-            object-fit: contain !important;
-            object-position: center !important;
+            object-fit: cover !important;
             border-radius: 9999px !important;
+            background: transparent !important;
         }
     </style>
     <!-- Firebase SDK Compat -->
@@ -79,14 +79,18 @@
         <div id="main-app-content" class="space-y-4 hidden">
             <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center no-print gap-4 shadow-2xl">
                 <div class="flex items-center gap-4">
-                    <div class="relative w-16 h-16 rounded-full p-0.5 bg-slate-900 flex items-center justify-center overflow-hidden border-2 border-sky-500/30 shadow-inner">
+                    <div class="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-sky-500/40 to-emerald-500/40 flex items-center justify-center overflow-hidden shadow-xl shrink-0">
                         <img src="KPLOGO.jpg" alt="โลโก้ อบต." id="header-logo-img">
                     </div>
                     <div>
                         <h1 class="text-base md:text-lg font-bold text-white tracking-wider flex items-center gap-2">
                             V-SMART <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">POP Edition</span>
                         </h1>
-                        <p class="text-xs text-slate-400">องค์การบริหารส่วนตำบลข่วงเปา • จ.เชียงใหม่ <span id="logged-user-display" class="text-emerald-400 font-semibold ml-2"></span></p>
+                        <p class="text-xs text-slate-400 mt-0.5">องค์การบริหารส่วนตำบลข่วงเปา • จ.เชียงใหม่</p>
+                        <!-- แยกชื่อผู้ใช้งานมาอยู่คนละบรรทัดชัดเจน -->
+                        <p class="text-xs text-emerald-400 font-semibold mt-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-check"></i> ผู้ใช้งาน: <span id="logged-user-display"></span>
+                        </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -347,7 +351,9 @@
                 currentUser = matched;
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('main-app-content').classList.remove('hidden');
-                document.getElementById('logged-user-display').innerText = `(${matched.name} - ${matched.position})`;
+                
+                // แสดงชื่อและตำแหน่งผู้ใช้งานแยกบรรทัด
+                document.getElementById('logged-user-display').innerText = `${matched.name} (${matched.position} - ${matched.org})`;
 
                 document.getElementById('pop-user-name').value = matched.name;
                 document.getElementById('pop-user-pos').value = `${matched.position} (${matched.org})`;
