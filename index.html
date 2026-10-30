@@ -93,9 +93,10 @@
                         </p>
                     </div>
                 </div>
+                <!-- ปุ่มกลับหน้าแรก -->
                 <div class="flex items-center gap-2">
-                    <a href="v-smart-pop.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
-                        <i class="fa-solid fa-arrows-rotate text-sky-400"></i> รีเฟรช
+                    <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-house text-sky-400"></i> กลับหน้าแรก
                     </a>
                 </div>
             </div>
@@ -439,6 +440,20 @@
 
             Object.keys(vehiclesDataMap).forEach(key => {
                 let car = vehiclesDataMap[key];
+                
+                // สำรองเลขไมล์เดิม และตั้งไมล์ปัจจุบันสำหรับ 90 วันเป็น 0 (กรณีไมล์เดิมยังสูงอยู่)
+                if (car.original_mileage === undefined) {
+                    let rawMile = Number(car.mileage) || 0;
+                    if (rawMile > 0) {
+                        db.ref('vehicles/' + key).update({
+                            original_mileage: rawMile,
+                            mileage: 0
+                        });
+                        car.original_mileage = rawMile;
+                        car.mileage = 0;
+                    }
+                }
+
                 let isMoto = car.type && car.type.includes("รถจักรยานยนต์");
                 let isSpecial = specializedRegs.includes(car.registration) || car.category === 'specialized';
                 
@@ -448,11 +463,12 @@
 
                 catClass += " fleet-item hidden";
 
-                let mile = Number(car.mileage) || 0;
+                let currentMile = Number(car.mileage) || 0;
+                let origMile = car.original_mileage !== undefined ? Number(car.original_mileage) : currentMile;
 
                 let statusBadge = "";
                 let destinationInfo = "";
-                let cardClickAction = `_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${mile})`;
+                let cardClickAction = `_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${currentMile})`;
                 let cardStyle = "cursor-pointer hover:border-sky-500/50";
 
                 let specialNotice = isSpecial ? 
@@ -475,7 +491,7 @@
                             <div>
                                 <span class="text-[10px] bg-sky-500/10 text-sky-400 px-2 py-0.5 rounded font-semibold">${car.type || 'รถยนต์'}</span>
                                 <p class="text-sm font-bold text-white mt-1">${car.registration} - ${car.brand_model}</p>
-                                <p class="text-xs text-slate-400 mt-0.5">เลขไมล์: ${mile.toLocaleString()} กม. | เครื่องยนต์: ${car.details || '-'}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์ควบคุม (90 วัน): <span class="text-emerald-400 font-bold">${currentMile.toLocaleString()} กม.</span> <span class="text-slate-500 text-[11px]">(ไมล์เดิม: ${origMile.toLocaleString()} กม.)</span></p>
                                 ${specialNotice}
                                 ${destinationInfo}
                             </div>
@@ -519,7 +535,7 @@
 
             document.getElementById('selected-car-title').innerText = name;
             document.getElementById('pop-start-mile').value = mile;
-            document.getElementById('pop-end-mile').value = mile + 75;
+            document.getElementById('pop-end-mile').value = mile + 25;
             document.getElementById('booking-form-box').classList.remove('hidden');
             window.scrollTo({ top: 300, behavior: 'smooth' });
         }
@@ -531,7 +547,7 @@
 
         function _0xsubmitPOPBooking() {
             if (!selectedCarKey) return;
-            let endMile = parseInt(document.getElementById('pop-end-mile').value) || (selectedCarStartMile + 75);
+            let endMile = parseInt(document.getElementById('pop-end-mile').value) || (selectedCarStartMile + 25);
             let totalDist = endMile - selectedCarStartMile;
             if (totalDist < 0) totalDist = 0;
 
