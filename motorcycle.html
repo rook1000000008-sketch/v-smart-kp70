@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-SMART POP - รถจักรยานยนต์ อบต.ข่วงเปา</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; 
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f17 60%, #05070a 100%);
+            color: #f8fafc; 
+            min-height: 100vh;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .odometer-font { font-family: 'Chakra Petch', sans-serif; letter-spacing: 2px; }
+        .glass-panel { 
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7); 
+        }
+        .industrial-btn { 
+            background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease; 
+        }
+        .industrial-btn:hover { 
+            background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%);
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+        }
+        .custom-scroll { max-height: 460px; overflow-y: auto !important; padding-right: 6px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 8px; }
+        .pop-container { max-width: 900px; margin: 0 auto; background: #ffffff; color: #000000; padding: 35px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); }
+
+        /* Time Grid Table Styling - พอดีกับขนาดแอป */
+        .grid-container-box {
+            background-color: #334155;
+            padding: 8px;
+            border-radius: 12px;
+            border: 2px solid #475569;
+            width: 100%;
+        }
+        .schedule-table {
+            border-collapse: separate;
+            border-spacing: 1.5px 4px;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .schedule-table th {
+            background-color: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 4px 1px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+        .schedule-table td {
+            text-align: center;
+            font-size: 9px;
+            border-radius: 4px;
+            height: 28px;
+        }
+        .slot-available { 
+            background-color: #84cc16; 
+            color: #000; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            border: 1px solid #65a30d;
+        }
+        .slot-available:hover { 
+            background-color: #a3e635; 
+            transform: scale(1.05);
+            box-shadow: 0 0 6px rgba(132, 204, 22, 0.8);
+        }
+        .slot-busy { 
+            background-color: #ea580c; 
+            color: #fff; 
+            cursor: not-allowed;
+            border: 1px solid #c2410c;
+        }
+
+        /* ป้ายทะเบียนรถทรงเทาดำตามภาพตัวอย่าง */
+        .car-plate-style {
+            background-color: #3f3f46;
+            color: #ffffff;
+            border: 1px solid #18181b;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-5xl mx-auto">
+
+    <div class="w-full space-y-4">
+        <!-- Header Bar -->
+        <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 shadow-2xl">
+            <div class="flex items-center gap-4">
+                <div class="relative w-16 h-16 rounded-full p-1 bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl shadow-xl shrink-0">
+                    <i class="fa-solid fa-motorcycle"></i>
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold text-white tracking-wider flex items-center gap-2">
+                        V-SMART <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">หมวดรถจักรยานยนต์</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">องค์การบริหารส่วนตำบลข่วงเปา • จ.เชียงใหม่ (6 คัน)</p>
+                    <p class="text-xs text-emerald-400 font-semibold mt-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-check"></i> ผู้ใช้งาน: <span id="logged-user-display"></span>
+                    </p>
+                </div>
+            </div>
+            <!-- ปุ่มกลับหน้าแรก -->
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-house text-sky-400"></i> หน้าแรก
+                </a>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="grid grid-cols-2 gap-3 text-xs font-semibold no-print">
+            <button onclick="_0xswitchTab('booking')" id="tab-btn-booking" class="py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow">
+                <i class="fa-solid fa-motorcycle text-emerald-400"></i> 1. เลือกรถจักรยานยนต์และบันทึกการใช้
+            </button>
+            <button onclick="_0xswitchTab('report')" id="tab-btn-report" class="py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2.5">
+                <i class="fa-solid fa-chart-pie text-emerald-400"></i> 2. รายงานสรุปประจำวัน (ตรวจสอบภายใน)
+            </button>
+        </div>
+
+        <!-- TAB 1: FLEET LISTING & SCHEDULE GRID -->
+        <div id="tab-content-booking" class="space-y-4 no-print">
+            
+            <!-- Time Schedule Grid พอดีกับขนาดแอป (6 คัน) -->
+            <div class="glass-panel rounded-2xl p-4 md:p-5 space-y-3">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-2 gap-2">
+                    <div>
+                        <h2 class="text-xs md:text-sm font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-week text-emerald-400"></i> ผังตารางเดินรถจักรยานยนต์ประจำวัน (6 คัน)
+                        </h2>
+                        <p class="text-[11px] text-emerald-400 mt-0.5"><i class="fa-solid fa-hand-pointer"></i> คลิกช่องสีเขียวเพื่อจองช่วงเวลา หรือคลิกที่ทะเบียนรถเพื่อไปยังฟอร์มได้ทันที</p>
+                    </div>
+                    <span class="text-[11px] text-slate-400 font-medium">เวลาปฏิบัติราชการ 08.30 - 16.30 น.</span>
+                </div>
+
+                <div class="grid-container-box">
+                    <table class="w-full schedule-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;" class="text-center">ทะเบียนรถ</th>
+                                <th>08.30</th><th>09.00</th><th>09.30</th><th>10.00</th><th>10.30</th>
+                                <th>11.00</th><th>11.30</th><th>12.00</th><th>12.30</th><th>13.00</th>
+                                <th>13.30</th><th>14.00</th><th>14.30</th><th>15.00</th><th>15.30</th>
+                                <th>16.00</th><th>16.30</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-grid-tbody">
+                            <!-- Dynamic slots generated from Firebase -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex items-center gap-4 pt-1 text-xs font-semibold">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-4 h-4 rounded bg-[#84cc16] border border-[#65a30d]"></div> <span class="text-slate-300">ว่าง (คลิกเลือกจอง)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-4 h-4 rounded bg-[#ea580c] border border-[#c2410c]"></div> <span class="text-slate-300">ไม่ว่าง</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การเลือกรายการรถสำหรับขอใช้ -->
+            <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-motorcycle"></i>
+                        </div>
+                        รายการรถจักรยานยนต์ปฏิบัติภารกิจประจำ (6 คัน)
+                    </h2>
+                    <span class="text-[11px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full font-semibold">
+                        <i class="fa-solid fa-circle-check"></i> พร้อมให้บริการปฏิบัติภารกิจ
+                    </span>
+                </div>
+
+                <div class="custom-scroll space-y-2.5" id="moto-fleet-container">
+                    <!-- Loaded dynamically from Firebase -->
+                </div>
+            </div>
+
+            <!-- Booking Form Box -->
+            <div id="booking-form-box" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs hidden border-2 border-emerald-500/40">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-emerald-400"></i> บันทึกรายละเอียดการใช้รถจักรยานยนต์: <span id="selected-car-title" class="text-emerald-300"></span>
+                    </h2>
+                    <button onclick="_0xcancelBooking()" class="text-rose-400 hover:text-rose-300 text-xs font-semibold"><i class="fa-solid fa-xmark"></i> ยกเลิก</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-medium">ผู้ขอใช้รถ:</label>
+                        <input type="text" id="pop-user-name" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-200 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-medium">ตำแหน่ง / สังกัด:</label>
+                        <input type="text" id="pop-user-pos" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-200 font-semibold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-medium">ช่วงเวลาเดินทางขาออก:</label>
+                        <select id="pop-start-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sky-300 font-bold outline-none focus:border-sky-500">
+                            <!-- Time slots generated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-medium">ช่วงเวลาเดินทางขากลับ:</label>
+                        <select id="pop-end-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-emerald-300 font-bold outline-none focus:border-emerald-500">
+                            <!-- Time slots generated dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง (ไปที่ไหน):</label>
+                        <input type="text" id="pop-destination" value="พื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-medium">วัตถุประสงค์ (เพื่อ):</label>
+                        <input type="text" id="pop-purpose" value="ปฏิบัติภารกิจรับ-ส่งหนังสือ/จัดเก็บรายได้/สำรวจพื้นที่" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <label class="block text-emerald-400 mb-1 font-bold">วันที่เดินทาง:</label>
+                        <select id="pop-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-emerald-300 font-semibold"></select>
+                    </div>
+                    <div>
+                        <label class="block text-sky-400 mb-1 font-bold">เลขไมล์ขาออก (ตั้งต้น):</label>
+                        <input type="number" id="pop-start-mile" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sky-300 font-bold odometer-font">
+                    </div>
+                    <div>
+                        <label class="block text-emerald-400 mb-1 font-bold">เลขไมล์ขากลับ (จริง):</label>
+                        <input type="number" id="pop-end-mile" class="w-full bg-slate-950 border border-emerald-500 rounded-xl p-2.5 text-emerald-300 font-black odometer-font" placeholder="ระบุไมล์ขากลับ">
+                    </div>
+                </div>
+
+                <div class="pt-2 text-center">
+                    <button onclick="_0xsubmitPOPBooking()" class="w-full industrial-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลส่งรายงานประจำวันทันที
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: DAILY SUMMARY REPORT -->
+        <div id="tab-content-report" class="space-y-4 hidden">
+            <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 no-print">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+                    <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        รายงานสรุปการใช้รถจักรยานยนต์ประจำวัน (สำหรับตรวจสอบภายใน)
+                    </h2>
+                    
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="_0xclearReportLogs()" class="bg-rose-600/80 hover:bg-rose-700 text-white text-xs font-semibold px-3 py-2 rounded-xl transition shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> เคลียร์รายงาน
+                        </button>
+
+                        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700 px-2.5 py-1.5 rounded-xl">
+                            <label class="text-[11px] text-slate-300 font-semibold"><i class="fa-solid fa-motorcycle text-emerald-400"></i> รถ:</label>
+                            <select id="report-filter-car" onchange="renderDailyReport()" class="bg-transparent text-xs text-emerald-300 font-semibold outline-none cursor-pointer max-w-[150px]">
+                                <option value="ALL">--- รถจักรยานยนต์ทุกคัน ---</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700 px-2.5 py-1.5 rounded-xl">
+                            <label class="text-[11px] text-slate-300 font-semibold"><i class="fa-solid fa-calendar-days text-sky-400"></i> วันที่:</label>
+                            <select id="report-filter-date" onchange="renderDailyReport()" class="bg-transparent text-xs text-sky-300 font-semibold outline-none cursor-pointer">
+                                <option value="ALL">--- ทุกวัน (All) ---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-slate-900/80 border border-slate-700 p-4 rounded-xl text-center">
+                        <span class="text-xs text-slate-400 block">จำนวนเที่ยววิ่งทั้งหมด</span>
+                        <span id="rep-total-trips" class="text-2xl font-black text-sky-400 odometer-font">0 เที่ยว</span>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-700 p-4 rounded-xl text-center">
+                        <span class="text-xs text-slate-400 block">ระยะทางรวมทั้งหมด</span>
+                        <span id="rep-total-distance" class="text-2xl font-black text-emerald-400 odometer-font">0 กม.</span>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-700 p-4 rounded-xl text-center">
+                        <span class="text-xs text-slate-400 block">ประเมินค่าน้ำมัน (35 กม./ลิตร | 38บ.)</span>
+                        <span id="rep-estimated-fuel" class="text-2xl font-black text-amber-400 odometer-font">0 บาท</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Printable A4 Preview Container -->
+            <div id="daily-report-preview" class="pop-container space-y-4">
+                <div class="text-center space-y-1">
+                    <p class="font-bold text-sm text-black">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</p>
+                    <h3 class="font-bold text-base text-black">รายงานสรุปการใช้รถจักรยานยนต์และประเมินค่าน้ำมันเชื้อเพลิงประจำวัน</h3>
+                    <p class="text-xs text-slate-600">
+                        เงื่อนไข: <span id="rep-doc-car" class="font-bold text-black">รถจักรยานยนต์ทุกคัน</span> | ประจำวันที่: <span id="rep-doc-date" class="font-bold underline text-black">ทุกช่วงเวลา</span>
+                    </p>
+                </div>
+
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full border-collapse border border-slate-400 text-center text-xs text-black">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="border border-slate-400 p-2">ลำดับ</th>
+                                <th class="border border-slate-400 p-2">หมายเลขทะเบียน / รถจักรยานยนต์</th>
+                                <th class="border border-slate-400 p-2">ผู้ขอใช้รถ</th>
+                                <th class="border border-slate-400 p-2">จุดหมายปลายทาง</th>
+                                <th class="border border-slate-400 p-2">ไมล์ออก - กลับ</th>
+                                <th class="border border-slate-400 p-2">รวมระยะทาง (กม.)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="daily-report-tbody">
+                            <tr><td colspan="6" class="border border-slate-400 p-4 text-slate-500">ไม่มีประวัติการใช้งานตามเงื่อนไขที่เลือก</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-300 p-3 rounded-lg text-xs space-y-1 text-black">
+                    <div class="flex justify-between font-bold">
+                        <span>ระยะทางรวมทั้งสิ้น:</span>
+                        <span id="doc-total-dist">0 กิโลเมตร</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-amber-800">
+                        <span>ประมาณการใช้น้ำมันเชื้อเพลิง:</span>
+                        <span id="doc-total-cost">0 บาท</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-center gap-3 no-print border-t">
+                    <button onclick="downloadPDFMobile('daily-report-preview', 'V-SMART-POP-MotorcycleReport.pdf')" class="industrial-btn bg-slate-800 text-white font-bold px-6 py-3 rounded-xl text-xs flex items-center gap-2 shadow-xl">
+                        <i class="fa-solid fa-download text-emerald-400"></i> ดาวน์โหลดรายงานรถจักรยานยนต์ PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-6 text-center no-print">
+        <p class="text-xs text-slate-500 font-medium">V-SMART POP Edition • อบต.ข่วงเปา จ.เชียงใหม่</p>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyABcM4oDg7Go9JO8SlZHq-MSkvgv9oIMeA",
+            authDomain: "v-smart-kp70.firebaseapp.com",
+            databaseURL: "https://v-smart-kp70-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "v-smart-kp70",
+            storageBucket: "v-smart-kp70.firebasestorage.app",
+            messagingSenderId: "952805921944",
+            appId: "1:952805921944:web:d6050895b96aaf507a2ced",
+            measurementId: "G-0NWF05EL7S"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = JSON.parse(localStorage.getItem('vsmart_pop_user') || '{}');
+        let selectedCarKey = null;
+        let selectedCarName = "";
+        let selectedCarStartMile = 0;
+        let vehiclesDataMap = {};
+        let globalLogsMap = {};
+
+        const timeSlots = [
+            "08.30", "09.00", "09.30", "10.00", "10.30", "11.00", "11.30", "12.00", 
+            "12.30", "13.00", "13.30", "14.00", "14.30", "15.00", "15.30", "16.00", "16.30"
+        ];
+
+        let selectedStartTime = null;
+        let selectedEndTime = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!currentUser.name) {
+                window.location.href = "index.html";
+                return;
+            }
+            document.getElementById('logged-user-display').innerText = `${currentUser.name} (${currentUser.position})`;
+            document.getElementById('pop-user-name').value = currentUser.name;
+            document.getElementById('pop-user-pos').value = `${currentUser.position} (${currentUser.org})`;
+
+            initDateDropdown();
+            initTimeDropdowns();
+            loadFirebaseRealtimeData();
+        });
+
+        function initDateDropdown() {
+            let daySelect = document.getElementById('pop-date');
+            if(!daySelect) return;
+            daySelect.innerHTML = "";
+            const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            let now = new Date();
+            let d = now.getDate();
+            let m = monthNames[now.getMonth()];
+            let y = now.getFullYear() + 543;
+
+            for (let i = 1; i <= 31; i++) {
+                let opt = document.createElement('option');
+                let str = `${i} ${m} ${y}`;
+                opt.value = str;
+                opt.text = str;
+                if (i === d) opt.selected = true;
+                daySelect.appendChild(opt);
+            }
+        }
+
+        function initTimeDropdowns() {
+            let startSelect = document.getElementById('pop-start-time');
+            let endSelect = document.getElementById('pop-end-time');
+            if (!startSelect || !endSelect) return;
+
+            startSelect.innerHTML = "";
+            endSelect.innerHTML = "";
+
+            timeSlots.forEach(t => {
+                let sOpt = document.createElement('option');
+                sOpt.value = t; sOpt.text = `${t} น.`;
+                startSelect.appendChild(sOpt);
+
+                let eOpt = document.createElement('option');
+                eOpt.value = t; eOpt.text = `${t} น.`;
+                endSelect.appendChild(eOpt);
+            });
+
+            startSelect.value = "08.30";
+            endSelect.value = "16.30";
+        }
+
+        function loadFirebaseRealtimeData() {
+            db.ref('/').on('value', (snapshot) => {
+                let root = snapshot.val() || {};
+                vehiclesDataMap = root.vehicles || {};
+                globalLogsMap = root.activity_logs || {};
+                renderScheduleGrid();
+                renderMotoFleetList();
+                renderCarFilterDropdown();
+                renderDailyReport();
+            });
+        }
+
+        // กรองแสดงเฉพาะรถจักรยานยนต์ 6 คัน
+        function renderScheduleGrid() {
+            let gridTbody = document.getElementById('schedule-grid-tbody');
+            if (!gridTbody) return;
+            gridTbody.innerHTML = "";
+
+            if (!vehiclesDataMap) return;
+
+            let motoCars = [];
+            Object.keys(vehiclesDataMap).forEach(key => {
+                let car = vehiclesDataMap[key];
+                car.firebaseKey = key;
+                let isMoto = car.type && car.type.includes("รถจักรยานยนต์");
+                if (isMoto) {
+                    motoCars.push(car);
+                }
+            });
+
+            motoCars.forEach((car) => {
+                let isBusy = (car.status === "in-use" || car.status === "reserved");
+
+                let tr = document.createElement('tr');
+
+                let tdName = document.createElement('td');
+                tdName.className = "car-plate-style cursor-pointer hover:bg-zinc-600 transition truncate px-1";
+                tdName.innerText = car.registration;
+                tdName.title = `คลิกเพื่อเลือกใช้: ${car.registration} - ${car.brand_model}`;
+                tdName.onclick = () => _0xselectCar(car.firebaseKey, `${car.registration} - ${car.brand_model}`, Number(car.mileage) || 0);
+                tr.appendChild(tdName);
+
+                timeSlots.forEach((slotTime, slotIdx) => {
+                    let tdSlot = document.createElement('td');
+                    
+                    if (isBusy && (slotIdx >= 2 && slotIdx <= 6)) {
+                        tdSlot.className = "slot-busy";
+                        tdSlot.title = `รถคันนี้ไม่ว่างช่วง ${slotTime} น.`;
+                    } else {
+                        tdSlot.className = "slot-available";
+                        tdSlot.onclick = () => _0xclickTimeSlot(car, slotTime);
+                    }
+                    tr.appendChild(tdSlot);
+                });
+
+                gridTbody.appendChild(tr);
+            });
+        }
+
+        function renderMotoFleetList() {
+            let container = document.getElementById('moto-fleet-container');
+            if (!container) return;
+            container.innerHTML = "";
+
+            Object.keys(vehiclesDataMap).forEach(key => {
+                let car = vehiclesDataMap[key];
+                let isMoto = car.type && car.type.includes("รถจักรยานยนต์");
+                
+                if (isMoto) {
+                    let currentMile = Number(car.mileage) || 0;
+                    let origMile = car.original_mileage !== undefined ? Number(car.original_mileage) : currentMile;
+
+                    let statusBadge = (car.status === "in-use" || car.status === "reserved") ?
+                        `<span class="text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full font-bold">กำลังใช้งาน</span>` :
+                        `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
+
+                    let html = `
+                        <div onclick="_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${currentMile})" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-emerald-500/50 transition flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-semibold">${car.type || 'รถจักรยานยนต์'}</span>
+                                <p class="text-sm font-bold text-white mt-1">${car.registration} - ${car.brand_model}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์ควบคุม: <span class="text-emerald-400 font-bold">${currentMile.toLocaleString()} กม.</span></p>
+                            </div>
+                            <div class="text-right space-y-1">
+                                <div>${statusBadge}</div>
+                                <span class="text-xs text-emerald-400 font-semibold block mt-3">เลือกใช้รถ <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += html;
+                }
+            });
+        }
+
+        function _0xclickTimeSlot(car, clickedTime) {
+            let carName = `${car.registration} - ${car.brand_model}`;
+
+            if (!selectedStartTime || selectedCarKey !== car.firebaseKey) {
+                if (confirm(`คุณต้องการขอใช้รถจักรยานยนต์: ${carName}\nตั้งแต่เวลา: ${clickedTime} น. ใช่หรือไม่?`)) {
+                    selectedCarKey = car.firebaseKey;
+                    selectedCarName = carName;
+                    selectedCarStartMile = Number(car.mileage) || 0;
+                    selectedStartTime = clickedTime;
+                    selectedEndTime = null;
+
+                    document.getElementById('pop-start-time').value = clickedTime;
+
+                    if (confirm(`บันทึกเวลาออก ${clickedTime} น. เรียบร้อย!\n\nคุณต้องการระบุ "เวลาขากลับ" ต่อเลยหรือไม่?`)) {
+                        alert(`กรุณาคลิกเลือกช่อง "เวลาขากลับ" บนตารางอีกครั้งครับ`);
+                    } else {
+                        _0xopenBookingFormWithGridData();
+                    }
+                }
+            } else {
+                if (confirm(`คุณต้องการคืนรถ: ${carName}\nเวลาขากลับ: ${clickedTime} น. ใช่หรือไม่?`)) {
+                    selectedEndTime = clickedTime;
+                    document.getElementById('pop-end-time').value = clickedTime;
+                    _0xopenBookingFormWithGridData();
+                }
+            }
+        }
+
+        function _0xopenBookingFormWithGridData() {
+            let formBox = document.getElementById('booking-form-box');
+            document.getElementById('selected-car-title').innerText = selectedCarName;
+            document.getElementById('pop-start-mile').value = selectedCarStartMile;
+            document.getElementById('pop-end-mile').value = selectedCarStartMile + 15;
+            
+            formBox.classList.remove('hidden');
+            
+            setTimeout(() => {
+                formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }
+
+        function _0xselectCar(key, name, mile) {
+            selectedCarKey = key;
+            selectedCarName = name;
+            selectedCarStartMile = mile;
+            selectedStartTime = null;
+            selectedEndTime = null;
+
+            _0xopenBookingFormWithGridData();
+        }
+
+        function _0xcancelBooking() {
+            document.getElementById('booking-form-box').classList.add('hidden');
+            selectedCarKey = null;
+            selectedStartTime = null;
+            selectedEndTime = null;
+        }
+
+        function _0xsubmitPOPBooking() {
+            if (!selectedCarKey) return;
+            let endMile = parseInt(document.getElementById('pop-end-mile').value) || (selectedCarStartMile + 15);
+            let totalDist = endMile - selectedCarStartMile;
+            if (totalDist < 0) totalDist = 0;
+
+            let dest = document.getElementById('pop-destination').value;
+            let purpose = document.getElementById('pop-purpose').value;
+            let dateStr = document.getElementById('pop-date').value;
+            let sTime = document.getElementById('pop-start-time').value;
+            let eTime = document.getElementById('pop-end-time').value;
+
+            db.ref('vehicles/' + selectedCarKey).update({
+                mileage: endMile,
+                status: "available"
+            });
+
+            let logData = {
+                user: currentUser.name,
+                position: currentUser.position,
+                org: currentUser.org,
+                action: "บันทึกการใช้รถจักรยานยนต์",
+                car: selectedCarName,
+                destination: dest,
+                purpose: purpose,
+                startMileage: selectedCarStartMile,
+                endMileage: endMile,
+                totalDistance: totalDist,
+                timestamp: `${dateStr}, ${sTime} - ${eTime} น.`
+            };
+
+            db.ref('activity_logs').push(logData).then(() => {
+                alert("บันทึกข้อมูลรถจักรยานยนต์และส่ง เข้าระบบรายงานประจำวันเรียบร้อยแล้ว!");
+                _0xcancelBooking();
+                _0xswitchTab('report');
+            });
+        }
+
+        function renderCarFilterDropdown() {
+            let carSelect = document.getElementById('report-filter-car');
+            if (!carSelect) return;
+            let currentCarVal = carSelect.value;
+            
+            carSelect.innerHTML = `<option value="ALL">--- รถจักรยานยนต์ทุกคัน ---</option>`;
+            
+            let carNamesSet = new Set();
+            if (vehiclesDataMap) {
+                Object.keys(vehiclesDataMap).forEach(k => {
+                    let car = vehiclesDataMap[k];
+                    if (car.type && car.type.includes("รถจักรยานยนต์") && car.registration) {
+                        carNamesSet.add(`${car.registration} - ${car.brand_model}`);
+                    }
+                });
+            }
+
+            Array.from(carNamesSet).sort().forEach(cName => {
+                let opt = document.createElement('option');
+                opt.value = cName;
+                opt.text = cName;
+                carSelect.appendChild(opt);
+            });
+
+            if (currentCarVal) carSelect.value = currentCarVal;
+        }
+
+        function _0xswitchTab(tab) {
+            let bTab = document.getElementById('tab-content-booking');
+            let rTab = document.getElementById('tab-content-report');
+            let bBtn = document.getElementById('tab-btn-booking');
+            let rBtn = document.getElementById('tab-btn-report');
+
+            if (tab === 'booking') {
+                bTab.classList.remove('hidden');
+                rTab.classList.add('hidden');
+                bBtn.className = "py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
+                rBtn.className = "py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800";
+            } else {
+                bTab.classList.add('hidden');
+                rTab.classList.remove('hidden');
+                rBtn.className = "py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2.5 shadow";
+                bBtn.className = "py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800";
+                renderDailyReport();
+            }
+        }
+
+        function renderDailyReport() {
+            let selectDateEl = document.getElementById('report-filter-date');
+            let selectCarEl = document.getElementById('report-filter-car');
+            if (!selectDateEl || !selectCarEl) return;
+            
+            let datesSet = new Set();
+            Object.keys(globalLogsMap).forEach(k => {
+                let l = globalLogsMap[k];
+                if (l.timestamp && l.action && l.action.includes("จักรยานยนต์")) datesSet.add(l.timestamp.split(',')[0].trim());
+            });
+
+            let sortedDates = Array.from(datesSet).sort().reverse();
+            let currentSelectedDate = selectDateEl.value;
+
+            selectDateEl.innerHTML = `<option value="ALL">--- ทุกช่วงเวลา (All) ---</option>`;
+            sortedDates.forEach(d => {
+                let opt = document.createElement('option');
+                opt.value = d;
+                opt.text = d;
+                selectDateEl.appendChild(opt);
+            });
+            if (currentSelectedDate && (currentSelectedDate === "ALL" || sortedDates.includes(currentSelectedDate))) {
+                selectDateEl.value = currentSelectedDate;
+            } else {
+                selectDateEl.value = "ALL";
+            }
+
+            let filterDate = selectDateEl.value;
+            let filterCar = selectCarEl.value;
+            let tbody = document.getElementById('daily-report-tbody');
+            tbody.innerHTML = "";
+
+            let matched = [];
+            let totalDist = 0;
+
+            Object.keys(globalLogsMap).forEach(k => {
+                let l = globalLogsMap[k];
+                let isMotoLog = (l.action && l.action.includes("จักรยานยนต์")) || (l.car && l.car.includes("HONDA"));
+                let matchDate = (filterDate === "ALL" || (l.timestamp && l.timestamp.includes(filterDate)));
+                let matchCar = (filterCar === "ALL" || l.car === filterCar);
+
+                if (isMotoLog && matchDate && matchCar) {
+                    matched.push(l);
+                    totalDist += Number(l.totalDistance) || 0;
+                }
+            });
+
+            document.getElementById('rep-doc-car').innerText = filterCar === "ALL" ? "รถจักรยานยนต์ทุกคัน" : filterCar;
+            document.getElementById('rep-doc-date').innerText = filterDate === "ALL" ? "ทุกช่วงเวลา (All Data)" : filterDate;
+            document.getElementById('rep-total-trips').innerText = matched.length + " เที่ยว";
+            document.getElementById('rep-total-distance').innerText = totalDist.toLocaleString() + " กม.";
+            document.getElementById('rep-estimated-fuel').innerText = Math.round((totalDist / 35) * 38).toLocaleString() + " บาท";
+
+            document.getElementById('doc-total-dist').innerText = totalDist.toLocaleString() + " กิโลเมตร";
+            document.getElementById('doc-total-cost').innerText = Math.round((totalDist / 35) * 38).toLocaleString() + " บาท";
+
+            if (matched.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="border border-slate-400 p-4 text-slate-500">ไม่มีประวัติการใช้งานตามเงื่อนไขที่เลือก</td></tr>`;
+                return;
+            }
+
+            let idx = 1;
+            matched.forEach(l => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="border border-slate-400 p-2">${idx++}</td>
+                        <td class="border border-slate-400 p-2">${l.car || '-'}</td>
+                        <td class="border border-slate-400 p-2">${l.user || '-'}</td>
+                        <td class="border border-slate-400 p-2">${l.destination || '-'}</td>
+                        <td class="border border-slate-400 p-2">${l.startMileage} - ${l.endMileage}</td>
+                        <td class="border border-slate-400 p-2">${l.totalDistance}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function downloadPDFMobile(elementId, filename) {
+            const el = document.getElementById(elementId);
+            html2pdf().from(el).set({
+                margin: 10,
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function _0xclearReportLogs() {
+            if (confirm("คุณต้องการลบประวัติการใช้งานในรายงานสรุปประจำวันใช่หรือไม่?")) {
+                db.ref('activity_logs').remove().then(() => {
+                    alert("✅ เคลียร์ประวัติรายงานเรียบร้อยแล้ว!");
+                });
+            }
+        }
+    </script>
+        <!-- Footer แสดงเครดิตลิขสิทธิ์และผู้พัฒนา -->
+    <footer class="pt-8 pb-4 text-center no-print space-y-1">
+    <p class="text-xs text-slate-400 font-medium">
+        © 2026 <span class="font-bold text-slate-200">V-SMART POP Edition</span>. All Rights Reserved.
+    </p>
+    <p class="text-[11px] text-slate-500">
+        ออกแบบและพัฒนาโดย <span class="text-sky-400 font-semibold">นายมิ่งภพ ศรีชะบา</span> | ศูนย์สารสนเทศ อบต.ข่วงเปา
+    </p>
+    </footer>
+</body>
+</html>

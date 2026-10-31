@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-SMART POP - รถเฉพาะกิจและเครื่องจักร</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f17 60%, #05070a 100%); color: #f8fafc; min-height: 100vh; }
+        .odometer-font { font-family: 'Chakra Petch', sans-serif; letter-spacing: 2px; }
+        .glass-panel { background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7); }
+        .industrial-btn { background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%); border: 1px solid rgba(255, 255, 255, 0.15); transition: all 0.3s ease; }
+        .custom-scroll { max-height: 460px; overflow-y: auto !important; padding-right: 6px; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-5xl mx-auto">
+
+    <div class="w-full space-y-4">
+        <!-- Header Bar -->
+        <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="relative w-16 h-16 rounded-full p-1 bg-amber-500/20 flex items-center justify-center text-amber-400 text-2xl">
+                    <i class="fa-solid fa-truck-monster"></i>
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold text-white tracking-wider flex items-center gap-2">
+                        V-SMART <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">รถเฉพาะกิจ / เครื่องจักร</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">องค์การบริหารส่วนตำบลข่วงเปา • จ.เชียงใหม่ (8 คัน)</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+                <i class="fa-solid fa-house text-sky-400"></i> หน้าแรก
+            </a>
+        </div>
+
+        <!-- List Section -->
+        <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4">
+            <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-truck-fire text-amber-400"></i> รายการรถเฉพาะกิจ / รถดับเพลิง / กู้ชีพ / เครื่องจักร
+            </h2>
+            <div class="custom-scroll space-y-2.5" id="specialized-fleet-container">
+                <!-- Loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- Booking Form Box -->
+        <div id="booking-form-box" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs hidden border-2 border-amber-500/40">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-file-lines text-amber-400"></i> บันทึกการใช้รถเฉพาะกิจ: <span id="selected-car-title" class="text-amber-300"></span>
+                </h2>
+                <button onclick="_0xcancelBooking()" class="text-rose-400 text-xs font-semibold"><i class="fa-solid fa-xmark"></i> ยกเลิก</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง / ภารกิจ:</label>
+                    <input type="text" id="pop-destination" value="ปฏิบัติภารกิจในพื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold">
+                </div>
+                <div>
+                    <label class="block text-slate-300 mb-1 font-medium">วัตถุประสงค์:</label>
+                    <input type="text" id="pop-purpose" value="ปฏิบัติภารกิจเฉพาะกิจกู้ชีพ/ดับเพลิง/งานช่าง" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                <div>
+                    <label class="block text-amber-400 mb-1 font-bold">เลขไมล์ขาออก:</label>
+                    <input type="number" id="pop-start-mile" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-amber-300 font-bold odometer-font">
+                </div>
+                <div>
+                    <label class="block text-emerald-400 mb-1 font-bold">เลขไมล์ขากลับ (จริง):</label>
+                    <input type="number" id="pop-end-mile" class="w-full bg-slate-950 border border-emerald-500 rounded-xl p-2.5 text-emerald-300 font-black odometer-font" placeholder="ระบุไมล์ขากลับ">
+                </div>
+            </div>
+
+            <button onclick="_0xsubmitSpecializedBooking()" class="w-full industrial-btn bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลส่งรายงานประจำวันทันที
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyABcM4oDg7Go9JO8SlZHq-MSkvgv9oIMeA",
+            authDomain: "v-smart-kp70.firebaseapp.com",
+            databaseURL: "https://v-smart-kp70-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "v-smart-kp70",
+            storageBucket: "v-smart-kp70.firebasestorage.app",
+            messagingSenderId: "952805921944",
+            appId: "1:952805921944:web:d6050895b96aaf507a2ced",
+            measurementId: "G-0NWF05EL7S"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = JSON.parse(localStorage.getItem('vsmart_pop_user') || '{}');
+        let selectedCarKey = null;
+        let selectedCarName = "";
+        let selectedCarStartMile = 0;
+
+        const specializedRegs = ["ขว 53 เชียงใหม่", "84-2021 เชียงใหม่", "ผด 593 เชียงใหม่", "ยม 5205 เชียงใหม่", "ยพ 4470 เชียงใหม่", "ฆข 29 เชียงใหม่", "ตค 3745 เชียงใหม่", "ตค 8841 เชียงใหม่"];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!currentUser.name) {
+                window.location.href = "index.html";
+                return;
+            }
+            db.ref('vehicles').on('value', (snapshot) => {
+                renderSpecializedFleet(snapshot.val() || {});
+            });
+        });
+
+        function renderSpecializedFleet(vehicles) {
+            let container = document.getElementById('specialized-fleet-container');
+            container.innerHTML = "";
+
+            Object.keys(vehicles).forEach(key => {
+                let car = vehicles[key];
+                let isSpecial = specializedRegs.includes(car.registration) || car.category === 'specialized';
+                
+                if (isSpecial) {
+                    let mile = Number(car.mileage) || 0;
+                    let html = `
+                        <div onclick="_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${mile})" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-amber-500/50 transition flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-semibold">${car.type}</span>
+                                <p class="text-sm font-bold text-white mt-1">${car.registration} - ${car.brand_model}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์สะสม: <span class="text-emerald-400 font-bold">${mile.toLocaleString()} กม.</span></p>
+                                <p class="text-[10px] text-amber-400/90 mt-1"><i class="fa-solid fa-clock-rotate-left"></i> ${car.permit_note || 'ขออนุญาตระยะยาว / ปฏิบัติงานประจำวงรอบ'}</p>
+                            </div>
+                            <span class="text-xs text-amber-400 font-semibold block">บันทึกการใช้ <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    `;
+                    container.innerHTML += html;
+                }
+            });
+        }
+
+        function _0xselectCar(key, name, mile) {
+            selectedCarKey = key;
+            selectedCarName = name;
+            selectedCarStartMile = mile;
+            document.getElementById('selected-car-title').innerText = name;
+            document.getElementById('pop-start-mile').value = mile;
+            document.getElementById('pop-end-mile').value = mile + 10;
+            document.getElementById('booking-form-box').classList.remove('hidden');
+            document.getElementById('booking-form-box').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function _0xcancelBooking() {
+            document.getElementById('booking-form-box').classList.add('hidden');
+        }
+
+        function _0xsubmitSpecializedBooking() {
+            if (!selectedCarKey) return;
+            let endMile = parseInt(document.getElementById('pop-end-mile').value) || (selectedCarStartMile + 10);
+            let totalDist = endMile - selectedCarStartMile;
+
+            db.ref('vehicles/' + selectedCarKey).update({ mileage: endMile });
+            db.ref('activity_logs').push({
+                user: currentUser.name,
+                position: currentUser.position,
+                org: currentUser.org,
+                action: "บันทึกการใช้รถเฉพาะกิจ",
+                car: selectedCarName,
+                destination: document.getElementById('pop-destination').value,
+                purpose: document.getElementById('pop-purpose').value,
+                startMileage: selectedCarStartMile,
+                endMileage: endMile,
+                totalDistance: totalDist,
+                timestamp: new Date().toLocaleDateString('th-TH') + ", ปฏิบัติงานวงรอบประจำวัน"
+            }).then(() => {
+                alert("บันทึกข้อมูลรถเฉพาะกิจเรียบร้อยแล้ว!");
+                _0xcancelBooking();
+            });
+        }
+    </script>
+        <!-- Footer แสดงเครดิตลิขสิทธิ์และผู้พัฒนา -->
+    <footer class="pt-8 pb-4 text-center no-print space-y-1">
+    <p class="text-xs text-slate-400 font-medium">
+        © 2026 <span class="font-bold text-slate-200">V-SMART POP Edition</span>. All Rights Reserved.
+    </p>
+    <p class="text-[11px] text-slate-500">
+        ออกแบบและพัฒนาโดย <span class="text-sky-400 font-semibold">นายมิ่งภพ ศรีชะบา</span> | ศูนย์สารสนเทศ อบต.ข่วงเปา
+    </p>
+    </footer>
+</body>
+</html>
