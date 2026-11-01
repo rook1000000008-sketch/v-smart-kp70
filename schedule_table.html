@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-SMART POP - ผังตารางเดินรถภาพรวม (Admin)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; 
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f17 60%, #05070a 100%);
+            color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .glass-panel { 
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7); 
+        }
+        .grid-container-box {
+            background-color: #334155;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #475569;
+            width: 100%;
+            overflow-x: auto;
+        }
+        .schedule-table {
+            border-collapse: separate;
+            border-spacing: 2px 6px;
+            width: 100%;
+            min-width: 800px;
+        }
+        .schedule-table th {
+            background-color: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 6px 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .schedule-table td {
+            text-align: center;
+            font-size: 11px;
+            border-radius: 4px;
+            height: 35px;
+        }
+        .slot-available { 
+            background-color: #84cc16; 
+            color: #000; 
+            font-weight: bold;
+            border: 1px solid #65a30d;
+        }
+        .slot-busy { 
+            background-color: #ea580c; 
+            color: #fff; 
+            font-weight: bold;
+            border: 1px solid #c2410c;
+        }
+        .car-plate-style {
+            background-color: #3f3f46;
+            color: #ffffff;
+            border: 1px solid #18181b;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 4px;
+            padding: 4px;
+        }
+    </style>
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-7xl mx-auto">
+
+    <div class="w-full space-y-6">
+        <!-- Header Bar -->
+        <div class="glass-panel rounded-2xl p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 shadow-2xl">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-full bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-2xl shadow-xl shrink-0">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold text-white tracking-wider flex items-center gap-2">
+                        V-SMART POP <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 font-medium">ผังตารางเดินรถภาพรวม (Admin)</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">องค์การบริหารส่วนตำบลข่วงเปา • จ.เชียงใหม่</p>
+                    <p class="text-xs text-emerald-400 font-semibold mt-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-shield"></i> ผู้ดูแลระบบ: <span id="admin-user-display"></span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <!-- ปุ่มสลับมุมมอง (เตรียมไว้สำหรับรองรับแนวตั้ง/แนวนอนในอนาคต) -->
+                <button onclick="toggleLayoutMode()" id="layout-toggle-btn" class="bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-mobile-screen"></i> มุมมอง: แนวนอน (PC)
+                </button>
+                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-house text-sky-400"></i> หน้าแรก
+                </a>
+            </div>
+        </div>
+
+        <!-- Schedule Grid Container -->
+        <div class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 shadow-2xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-3 gap-2">
+                <div>
+                    <h2 class="text-sm md:text-base font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-table-cells text-sky-400"></i> สถานะการใช้รถยนต์ทั้งหมดในระบบ (เรียลไทม์)
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">แสดงผังตารางเวลาการใช้รถของเจ้าหน้าที่เพื่อการตรวจสอบและบริหารจัดการภาพรวม</p>
+                </div>
+                <span class="text-xs text-slate-300 font-medium bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">เวลาปฏิบัติราชการ 08.30 - 16.30 น.</span>
+            </div>
+
+            <div class="grid-container-box" id="grid-wrapper">
+                <table class="w-full schedule-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 16%;">ทะเบียนรถ / ประเภท</th>
+                            <th>08.30</th><th>09.00</th><th>09.30</th><th>10.00</th><th>10.30</th>
+                            <th>11.00</th><th>11.30</th><th>12.00</th><th>12.30</th><th>13.00</th>
+                            <th>13.30</th><th>14.00</th><th>14.30</th><th>15.00</th><th>15.30</th>
+                            <th>16.00</th><th>16.30</th>
+                        </tr>
+                    </thead>
+                    <tbody id="master-schedule-tbody">
+                        <!-- โหลดข้อมูลจาก Firebase อัตโนมัติ -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center gap-6 pt-2 text-xs font-semibold">
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 rounded bg-[#84cc16] border border-[#65a30d]"></div> <span class="text-slate-300">ว่าง (พร้อมใช้งาน)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 rounded bg-[#ea580c] border border-[#c2410c]"></div> <span class="text-slate-300">ไม่ว่าง (มีการใช้งาน / จองแล้ว)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="pt-8 pb-4 text-center space-y-1">
+        <p class="text-xs text-slate-400 font-medium">© 2026 <span class="font-bold text-slate-200">V-SMART POP Edition</span>. All Rights Reserved.</p>
+        <p class="text-[11px] text-slate-500">ออกแบบและพัฒนาโดย <span class="text-sky-400 font-semibold">นายมิ่งภพ ศรีชะบา</span> | ศูนย์สารสนเทศ อบต.ข่วงเปา</p>
+    </footer>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyABcM4oDg7Go9JO8SlZHq-MSkvgv9oIMeA",
+            authDomain: "v-smart-kp70.firebaseapp.com",
+            databaseURL: "https://v-smart-kp70-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "v-smart-kp70",
+            storageBucket: "v-smart-kp70.firebasestorage.app",
+            messagingSenderId: "952805921944",
+            appId: "1:952805921944:web:d6050895b96aaf507a2ced",
+            measurementId: "G-0NWF05EL7S"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = JSON.parse(localStorage.getItem('vsmart_pop_user') || '{}');
+        const timeSlots = ["08.30", "09.00", "09.30", "10.00", "10.30", "11.00", "11.30", "12.00", "12.30", "13.00", "13.30", "14.00", "14.30", "15.00", "15.30", "16.00", "16.30"];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // ตรวจสอบสิทธิ์เฉพาะ Admin (PIN 8888 หรือ 5555)[cite: 9]
+            if (!currentUser.pin || (currentUser.pin !== "8888" && currentUser.pin !== "5555")) {
+                alert("⚠️ หน้าจอนี้สำหรับผู้ดูแลระบบ (Admin) เท่านั้น!");
+                window.location.href = "index.html";
+                return;
+            }
+            document.getElementById('admin-user-display').innerText = `${currentUser.name} (${currentUser.position})`;
+            loadMasterScheduleData();
+        });
+
+        function loadMasterScheduleData() {
+            db.ref('vehicles').on('value', (snapshot) => {
+                let vehicles = snapshot.val() || {};
+                renderMasterTable(vehicles);
+            });
+        }
+
+        function renderMasterTable(vehicles) {
+            let tbody = document.getElementById('master-schedule-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            Object.keys(vehicles).forEach(key => {
+                let car = vehicles[key];
+                let isBusy = (car.status === "in-use" || car.status === "reserved");
+
+                let tr = document.createElement('tr');
+
+                let tdName = document.createElement('td');
+                tdName.className = "car-plate-style truncate px-1";
+                tdName.innerHTML = `<span class="block text-[10px] text-amber-300 font-semibold">${car.type || 'รถยนต์'}</span>${car.registration}`;
+                tdName.title = `${car.registration} - ${car.brand_model}`;
+                tr.appendChild(tdName);
+
+                timeSlots.forEach((slotTime, slotIdx) => {
+                    let tdSlot = document.createElement('td');
+                    // จำลองช่วงเวลาไม่ว่างหากสถานะรถถูกใช้งาน
+                    if (isBusy && (slotIdx >= 2 && slotIdx <= 7)) {
+                        tdSlot.className = "slot-busy";
+                        tdSlot.title = `ไม่ว่าง (${car.current_user || 'ใช้งานอยู่'})`;
+                        tdSlot.innerText = "ไม่ว่าง";
+                    } else {
+                        tdSlot.className = "slot-available";
+                        tdSlot.innerText = "ว่าง";
+                    }
+                    tr.appendChild(tdSlot);
+                });
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        let isVerticalMode = false;
+        function toggleLayoutMode() {
+            isVerticalMode = !isVerticalMode;
+            let btn = document.getElementById('layout-toggle-btn');
+            if (isVerticalMode) {
+                btn.innerHTML = `<i class="fa-solid fa-mobile-screen fa-rotate-90"></i> มุมมอง: แนวตั้ง ( Mobile )`;
+                alert("ℹ️ โหมดแนวตั้งสำหรับมือถือ กำลังพัฒนาเพิ่มเติมในอัปเดตถัดไป ระบบจะสลับกลับเป็นมุมมองมาตรฐานให้อัตโนมัติครับ");
+                isVerticalMode = false;
+                btn.innerHTML = `<i class="fa-solid fa-mobile-screen"></i> มุมมอง: แนวนอน (PC)`;
+            }
+        }
+    </script>
+</body>
+</html>
