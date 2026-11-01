@@ -1,0 +1,9 @@
+node_modules/
+*.json
+*.docx
+*.xlsx
+*.pdf
+*.txt
+*.html
+from work/
+old/

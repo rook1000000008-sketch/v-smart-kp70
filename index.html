@@ -79,6 +79,7 @@
                 <p class="text-xs text-slate-400">กรุณาเลือกประเภท ยานพาหนะ (รวม 22 คัน) ที่ต้องการขออนุญาตใช้งาน</p>
             </div>
 
+            <!-- เมนูหลักเลือกประเภทรถ -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- 1. รถขนส่งเจ้าหน้าที่ -->
                 <a href="transport.html" class="glass-panel p-6 rounded-2xl hover:border-sky-500 transition flex flex-col items-center text-center space-y-3 group">
@@ -88,7 +89,7 @@
                     <div>
                         <h3 class="font-bold text-white text-sm">รถขนส่งเจ้าหน้าที่</h3>
                         <p class="text-xs text-slate-400 mt-1">รถยนต์นั่งส่วนบุคคล / กระบะ (8 คัน)</p>
-                        <span class="inline-block mt-2 text-[10px] bg-sky-500/20 text-sky-300 px-2.5 py-0.5 rounded-full font-semibold">ตารางเดินรถรายวัน</span>
+                        <span class="inline-block mt-2 text-[10px] bg-sky-500/20 text-sky-300 px-2.5 py-0.5 rounded-full font-semibold">จองและบันทึกการใช้</span>
                     </div>
                 </a>
 
@@ -100,7 +101,7 @@
                     <div>
                         <h3 class="font-bold text-white text-sm">รถจักรยานยนต์</h3>
                         <p class="text-xs text-slate-400 mt-1">ปฏิบัติงานตามภารกิจประจำ (6 คัน)</p>
-                        <span class="inline-block mt-2 text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-semibold">ตารางเดินรถรายวัน</span>
+                        <span class="inline-block mt-2 text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-semibold">จองและบันทึกการใช้</span>
                     </div>
                 </a>
 
@@ -117,8 +118,26 @@
                 </a>
             </div>
 
+            <!-- เพิ่มปุ่มพิเศษ: ผังตารางเดินรถภาพรวม (เฉพาะ Admin) -->
+            <div class="pt-2">
+                <button onclick="checkAdminAndOpenSchedule()" class="w-full bg-gradient-to-r from-sky-600/30 to-indigo-600/30 hover:from-sky-600/50 hover:to-indigo-600/50 border border-sky-500/40 p-4 rounded-2xl transition flex items-center justify-between group shadow-lg">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                ผังตารางเดินรถภาพรวม <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30 font-semibold">Admin Only</span>
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-0.5">เปิดดูตารางสถานะรถทุกคันในหน้าจอเดียว (เหมาะสำหรับ PC)</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-sky-400 group-hover:translate-x-1 transition"></i>
+                </button>
+            </div>
+
             <!-- ปุ่มออกจากระบบ / ปิดแอป -->
-            <div class="pt-4 text-center border-t border-slate-800">
+            <div class="pt-2 text-center border-t border-slate-800">
                 <button onclick="_0xlogoutApp()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold px-4 py-2 rounded-xl transition">
                     <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ / ปิดแอป
                 </button>
@@ -181,6 +200,21 @@
                 document.getElementById('category-select-screen').classList.remove('hidden');
             } else {
                 document.getElementById('auth-error').classList.remove('hidden');
+            }
+        }
+
+        function checkAdminAndOpenSchedule() {
+            let savedUser = localStorage.getItem('vsmart_pop_user');
+            if (!savedUser) {
+                alert("กรุณาเข้าสู่ระบบก่อนครับ");
+                return;
+            }
+            let userObj = JSON.parse(savedUser);
+            // ตรวจสอบ PIN แอดมิน (8888 หรือ 5555)[cite: 9]
+            if (userObj.pin === "8888" || userObj.pin === "5555") {
+                window.location.href = "schedule_table.html";
+            } else {
+                alert("⚠️ ขออภัยครับ เมนูนี้สงวนสิทธิ์เฉพาะผู้ดูแลระบบ (Admin) เท่านั้น");
             }
         }
 
