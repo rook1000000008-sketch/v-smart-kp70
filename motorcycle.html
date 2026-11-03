@@ -39,6 +39,13 @@
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 8px; }
         .pop-container { max-width: 900px; margin: 0 auto; background: #ffffff; color: #000000; padding: 35px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); }
+        
+        /* สไตล์ไฮไลต์รถจักรยานยนต์ที่ค้างส่งมอบ/กำลังใช้งาน ให้สะดุดตาเรืองแสง */
+        .active-mission-card {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+            border: 2px solid #f59e0b !important;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.35) !important;
+        }
     </style>
     <!-- Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -73,14 +80,14 @@
         <!-- Navigation Tabs -->
         <div class="grid grid-cols-2 gap-3 text-xs font-semibold no-print">
             <button onclick="_0xswitchTab('booking')" id="tab-btn-booking" class="py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow">
-                <i class="fa-solid fa-motorcycle text-emerald-400"></i> 1. เลือกรถและจองใช้งาน
+                <i class="fa-solid fa-motorcycle text-emerald-400"></i> 1. เลือกรถและจัดการการใช้
             </button>
             <button onclick="_0xswitchTab('report')" id="tab-btn-report" class="py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-chart-pie text-emerald-400"></i> 2. รายงานสรุปประจำวัน
             </button>
         </div>
 
-        <!-- TAB 1: FLEET LISTING & BOOKING -->
+        <!-- TAB 1: FLEET LISTING & BOOKING / RETURN -->
         <div id="tab-content-booking" class="space-y-4 no-print">
             
             <!-- รายการรถจักรยานยนต์ -->
@@ -93,7 +100,7 @@
                         รายชื่อรถจักรยานยนต์ปฏิบัติภารกิจ (6 คัน)
                     </h2>
                     <span class="text-[11px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full font-semibold">
-                        <i class="fa-solid fa-circle-check"></i> พร้อมให้บริการ
+                        <i class="fa-solid fa-circle-check"></i> รถว่างกดจอง | รถที่ท่านใช้กดคืนรถ
                     </span>
                 </div>
 
@@ -102,11 +109,11 @@
                 </div>
             </div>
 
-            <!-- Booking Form Box -->
+            <!-- FORM 1: ฟอร์มขอใช้รถ (ขาออก) -->
             <div id="booking-form-box" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs hidden border-2 border-emerald-500/40">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                     <h2 class="font-bold text-slate-100 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-file-lines text-emerald-400"></i> บันทึกการใช้รถจักรยานยนต์: <span id="selected-car-title" class="text-emerald-300"></span>
+                        <i class="fa-solid fa-paper-plane text-emerald-400"></i> 1. แจ้งขอใช้รถ (ออกเดินทาง): <span id="selected-car-title" class="text-emerald-300"></span>
                     </h2>
                     <button onclick="_0xcancelBooking()" class="text-rose-400 hover:text-rose-300 text-xs font-semibold px-2 py-1"><i class="fa-solid fa-xmark"></i> ยกเลิก</button>
                 </div>
@@ -128,7 +135,7 @@
                         <select id="pop-start-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sky-300 font-bold outline-none focus:border-sky-500"></select>
                     </div>
                     <div>
-                        <label class="block text-slate-300 mb-1 font-medium">ช่วงเวลาเดินทางขากลับ:</label>
+                        <label class="block text-slate-300 mb-1 font-medium">คาดว่าจะกลับเวลา:</label>
                         <select id="pop-end-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-emerald-300 font-bold outline-none focus:border-emerald-500"></select>
                     </div>
                 </div>
@@ -144,24 +151,52 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
                     <div>
                         <label class="block text-emerald-400 mb-1 font-bold">วันที่เดินทาง:</label>
                         <select id="pop-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-emerald-300 font-semibold"></select>
                     </div>
                     <div>
-                        <label class="block text-sky-400 mb-1 font-bold">เลขไมล์ขาออก:</label>
+                        <label class="block text-sky-400 mb-1 font-bold">เลขไมล์ขาออก (ตั้งต้น):</label>
                         <input type="number" id="pop-start-mile" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sky-300 font-bold odometer-font">
-                    </div>
-                    <div>
-                        <label class="block text-emerald-400 mb-1 font-bold">เลขไมล์ขากลับ (จริง):</label>
-                        <input type="number" id="pop-end-mile" class="w-full bg-slate-950 border border-emerald-500 rounded-xl p-2.5 text-emerald-300 font-black odometer-font" placeholder="ระบุไมล์ขากลับ">
                     </div>
                 </div>
 
                 <div class="pt-2 text-center">
-                    <button onclick="_0xsubmitPOPBooking()" class="w-full industrial-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลและคืนรถทันที
+                    <button onclick="_0xsubmitStartBooking()" class="w-full industrial-btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-motorcycle"></i> ยืนยันออกเดินทาง (บันทึกสถานะกำลังใช้งาน)
+                    </button>
+                </div>
+            </div>
+
+            <!-- FORM 2: ฟอร์มคืนรถ/จบภารกิจ (ขากลับ) -->
+            <div id="return-form-box" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs hidden border-2 border-amber-500/60 shadow-xl shadow-amber-500/10">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h2 class="font-bold text-amber-300 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-flag-checkered text-amber-400 animate-bounce"></i> 2. คืนรถจักรยานยนต์ / จบภารกิจ: <span id="return-car-title" class="text-white"></span>
+                    </h2>
+                    <button onclick="_0xcancelReturn()" class="text-rose-400 hover:text-rose-300 text-xs font-semibold px-2 py-1"><i class="fa-solid fa-xmark"></i> ปิด</button>
+                </div>
+
+                <div class="bg-amber-950/30 p-3 rounded-xl border border-amber-500/40 space-y-1">
+                    <p class="text-slate-200">ผู้ใช้งานปัจจุบัน: <span id="return-user-display" class="font-bold text-amber-300"></span></p>
+                    <p class="text-slate-200">จุดหมายปลายทาง: <span id="return-dest-display" class="font-bold text-emerald-300"></span></p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <label class="block text-sky-400 mb-1 font-bold">เลขไมล์ขาออก (เดิม):</label>
+                        <input type="number" id="return-start-mile" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sky-300 font-bold odometer-font">
+                    </div>
+                    <div>
+                        <label class="block text-emerald-400 mb-1 font-bold">เลขไมล์ขากลับ (จริง):</label>
+                        <input type="number" id="return-end-mile" class="w-full bg-slate-950 border border-emerald-500 rounded-xl p-2.5 text-emerald-300 font-black odometer-font" placeholder="ระบุเลขไมล์หน้าปัดปัจจุบัน">
+                    </div>
+                </div>
+
+                <div class="pt-2 text-center">
+                    <button onclick="_0xsubmitReturnCar()" class="w-full industrial-btn bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> สิ้นสุดภารกิจและส่งมอบรถคืนระบบ
                     </button>
                 </div>
             </div>
@@ -305,6 +340,16 @@
             loadFirebaseRealtimeData();
         });
 
+        // ฟังก์ชันสังเคราะห์เสียงพูด (Text-to-Speech)
+        function playThankYouVoice() {
+            if ('speechSynthesis' in window) {
+                let utterance = new SpeechSynthesisUtterance("ขอบคุณที่ใช้บริการครับ");
+                utterance.lang = 'th-TH';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
         function initDateDropdown() {
             let daySelect = document.getElementById('pop-date');
             if(!daySelect) return;
@@ -352,26 +397,68 @@
             if (!container) return;
             container.innerHTML = "";
 
-            Object.keys(vehiclesDataMap).forEach(key => {
+            if (!vehiclesDataMap || Object.keys(vehiclesDataMap).length === 0) {
+                container.innerHTML = "<p class='text-center text-slate-400'>ไม่พบข้อมูลรถจักรยานยนต์ใน Firebase</p>";
+                return;
+            }
+
+            // จัดเรียงลำดับ: ดันรถจักรยานยนต์ที่ User คนนี้กำลังใช้งานอยู่ขึ้นมาอยู่อันดับแรกสุดเสมอ
+            let vehicleKeys = Object.keys(vehiclesDataMap);
+            vehicleKeys.sort((a, b) => {
+                let carA = vehiclesDataMap[a];
+                let carB = vehiclesDataMap[b];
+                let isAUserCar = (carA.status === "in-use" && carA.current_user === currentUser.name);
+                let isBUserCar = (carB.status === "in-use" && carB.current_user === currentUser.name);
+                
+                if (isAUserCar && !isBUserCar) return -1;
+                if (!isAUserCar && isBUserCar) return 1;
+                return 0;
+            });
+
+            vehicleKeys.forEach(key => {
                 let car = vehiclesDataMap[key];
                 let isMoto = car.type && car.type.includes("รถจักรยานยนต์");
                 
                 if (isMoto) {
                     let currentMile = Number(car.mileage) || 0;
-                    let statusBadge = (car.status === "in-use" || car.status === "reserved") ?
-                        `<span class="text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full font-bold">กำลังใช้งาน (${car.current_user || ''})</span>` :
-                        `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
+                    let statusBadge = "";
+                    let destinationInfo = "";
+                    let actionBtnText = "";
+                    let cardClickAction = "";
+                    let cardStyle = "cursor-pointer hover:border-emerald-500/50";
+
+                    let isMyCarInUse = (car.status === "in-use" && car.current_user === currentUser.name);
+                    let isOtherCarInUse = (car.status === "in-use" && car.current_user !== currentUser.name);
+
+                    if (isMyCarInUse) {
+                        cardStyle = "active-mission-card animate-pulse";
+                        statusBadge = `<span class="text-[10px] bg-amber-500 text-slate-950 px-2.5 py-0.5 rounded-full font-black shadow-md"><i class="fa-solid fa-triangle-exclamation"></i> รอคืนรถ (ยังไม่ปิดจ็อบ)</span>`;
+                        destinationInfo = `<p class="text-[11px] text-amber-300 mt-1 font-bold"><i class="fa-solid fa-location-dot"></i> จุดหมาย: ${car.destination || '-'}</p>`;
+                        actionBtnText = `<span class="text-xs text-amber-300 font-extrabold block mt-3 bg-amber-500/20 px-3 py-2 rounded-lg border border-amber-500/50 shadow">🚨 คลิกที่นี่เพื่อคืนรถ / จบภารกิจ <i class="fa-solid fa-flag-checkered"></i></span>`;
+                        cardClickAction = `_0xopenReturnForm('${key}', '${car.registration} - ${car.brand_model}', ${Number(car.start_mileage) || currentMile}, '${car.current_user}', '${car.destination || ''}')`;
+                    } else if (isOtherCarInUse) {
+                        statusBadge = `<span class="text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full font-bold">กำลังใช้งานโดย (${car.current_user})</span>`;
+                        destinationInfo = `<p class="text-[11px] text-slate-400 mt-1 font-medium"><i class="fa-solid fa-location-dot"></i> จุดหมาย: ${car.destination || '-'}</p>`;
+                        actionBtnText = `<span class="text-xs text-slate-500 block mt-3">ไม่ว่าง (ติดภารกิจ)</span>`;
+                        cardClickAction = `alert('⚠️ รถคันนี้กำลังถูกใช้งานโดย ${car.current_user} ครับ');`;
+                    } else {
+                        statusBadge = `<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold">พร้อมใช้งาน</span>`;
+                        destinationInfo = `<p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-400"></i> พร้อมให้บริการ</p>`;
+                        actionBtnText = `<span class="text-xs text-emerald-400 font-semibold block mt-3">เลือกจองออกเดินทาง <i class="fa-solid fa-arrow-right"></i></span>`;
+                        cardClickAction = `_0xopenBookingForm('${key}', '${car.registration} - ${car.brand_model}', ${currentMile})`;
+                    }
 
                     let html = `
-                        <div onclick="_0xselectCar('${key}', '${car.registration} - ${car.brand_model}', ${currentMile})" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-emerald-500/50 transition flex justify-between items-start">
+                        <div onclick="${cardClickAction}" class="glass-panel p-4 rounded-xl ${cardStyle} transition flex justify-between items-start">
                             <div>
                                 <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-semibold">${car.type}</span>
                                 <p class="text-sm font-bold text-white mt-1">${car.registration} - ${car.brand_model}</p>
-                                <p class="text-xs text-slate-400 mt-0.5">ไมล์ควบคุม: <span class="text-emerald-400 font-bold">${currentMile.toLocaleString()} กม.</span></p>
+                                <p class="text-xs text-slate-400 mt-0.5">ไมล์ปัจจุบัน: <span class="text-emerald-400 font-bold">${currentMile.toLocaleString()} กม.</span></p>
+                                ${destinationInfo}
                             </div>
                             <div class="text-right space-y-1">
                                 <div>${statusBadge}</div>
-                                <span class="text-xs text-emerald-400 font-semibold block mt-3">เลือกใช้รถ <i class="fa-solid fa-arrow-right"></i></span>
+                                ${actionBtnText}
                             </div>
                         </div>
                     `;
@@ -380,15 +467,15 @@
             });
         }
 
-        function _0xselectCar(key, name, mile) {
+        function _0xopenBookingForm(key, name, mile) {
             selectedCarKey = key;
             selectedCarName = name;
             selectedCarStartMile = mile;
 
+            document.getElementById('return-form-box').classList.add('hidden');
             let formBox = document.getElementById('booking-form-box');
             document.getElementById('selected-car-title').innerText = name;
             document.getElementById('pop-start-mile').value = mile;
-            document.getElementById('pop-end-mile').value = mile + 15;
             
             formBox.classList.remove('hidden');
             setTimeout(() => { formBox.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
@@ -399,12 +486,8 @@
             selectedCarKey = null;
         }
 
-        function _0xsubmitPOPBooking() {
+        function _0xsubmitStartBooking() {
             if (!selectedCarKey) return;
-            let endMile = parseInt(document.getElementById('pop-end-mile').value) || (selectedCarStartMile + 15);
-            let totalDist = endMile - selectedCarStartMile;
-            if (totalDist < 0) totalDist = 0;
-
             let dest = document.getElementById('pop-destination').value;
             let purpose = document.getElementById('pop-purpose').value;
             let dateStr = document.getElementById('pop-date').value;
@@ -412,30 +495,80 @@
             let eTime = document.getElementById('pop-end-time').value;
 
             db.ref('vehicles/' + selectedCarKey).update({
+                status: "in-use",
+                current_user: currentUser.name,
+                destination: dest,
+                start_mileage: selectedCarStartMile,
+                reservation_meta: `${dateStr}, ${sTime} - ${eTime} น.`
+            }).then(() => {
+                alert("🏍️ บันทึกสถานะออกเดินทางเรียบร้อยแล้ว! สถานะรถในระบบถูกล็อกเป็น 'กำลังใช้งาน'");
+                _0xcancelBooking();
+            });
+        }
+
+        function _0xopenReturnForm(key, name, startMile, userName, dest) {
+            selectedCarKey = key;
+            selectedCarName = name;
+
+            document.getElementById('booking-form-box').classList.add('hidden');
+            let returnBox = document.getElementById('return-form-box');
+            
+            document.getElementById('return-car-title').innerText = name;
+            document.getElementById('return-user-display').innerText = userName;
+            document.getElementById('return-dest-display').innerText = dest || '-';
+            document.getElementById('return-start-mile').value = startMile;
+            document.getElementById('return-end-mile').value = startMile + 15;
+
+            returnBox.classList.remove('hidden');
+            setTimeout(() => { returnBox.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+        }
+
+        function _0xcancelReturn() {
+            document.getElementById('return-form-box').classList.add('hidden');
+            selectedCarKey = null;
+        }
+
+        function _0xsubmitReturnCar() {
+            if (!selectedCarKey) return;
+            let startMile = Number(document.getElementById('return-start-mile').value) || 0;
+            let endMile = parseInt(document.getElementById('return-end-mile').value) || (startMile + 15);
+            let totalDist = endMile - startMile;
+            if (totalDist < 0) totalDist = 0;
+
+            db.ref('vehicles/' + selectedCarKey).update({
                 mileage: endMile,
                 status: "available",
                 current_user: "",
-                destination: ""
+                destination: "",
+                start_mileage: null,
+                reservation_meta: ""
             });
 
             let logData = {
                 user: currentUser.name,
                 position: currentUser.position,
                 org: currentUser.org,
-                action: "บันทึกการใช้รถจักรยานยนต์",
+                action: "บันทึกการใช้รถจักรยานยนต์ (จบภารกิจ)",
                 car: selectedCarName,
-                destination: dest,
-                purpose: purpose,
-                startMileage: selectedCarStartMile,
+                destination: document.getElementById('return-dest-display').innerText,
+                purpose: "ปฏิบัติภารกิจรับ-ส่งหนังสือ/จัดเก็บรายได้/สำรวจพื้นที่",
+                startMileage: startMile,
                 endMileage: endMile,
                 totalDistance: totalDist,
-                timestamp: `${dateStr}, ${sTime} - ${eTime} น.`
+                timestamp: new Date().toLocaleDateString('th-TH') + " (คืนรถสำเร็จ)"
             };
 
             db.ref('activity_logs').push(logData).then(() => {
-                alert("✅ บันทึกข้อมูลและคืนรถเรียบร้อยแล้ว!");
-                _0xcancelBooking();
-                _0xswitchTab('report');
+                // เล่นเสียงพูด "ขอบคุณที่ใช้บริการ"
+                playThankYouVoice();
+
+                alert("✅ สิ้นสุดภารกิจและคืนรถจักรยานยนต์เข้าคลังสำเร็จ!");
+                _0xcancelReturn();
+                setTimeout(() => {
+                    _0xswitchTab('report');
+                }, 100);
+            }).catch((error) => {
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล: " + error.message);
             });
         }
 
@@ -509,7 +642,7 @@
 
             Object.keys(globalLogsMap).forEach(k => {
                 let l = globalLogsMap[k];
-                let isMotoLog = (l.action && l.action.includes("จักรยานยนต์")) || (l.car && l.car.includes("HONDA"));
+                let isMotoLog = (l.action && l.action.includes("จักรยานยนต์")) || (l.car && (l.car.includes("HONDA") || l.car.includes("DREAM") || l.car.includes("WAVE")));
                 let matchDate = (filterDate === "ALL" || (l.timestamp && l.timestamp.includes(filterDate)));
                 let matchCar = (filterCar === "ALL" || l.car === filterCar);
 
