@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; 
@@ -38,9 +37,7 @@
         .custom-scroll { max-height: 520px; overflow-y: auto !important; padding-right: 4px; }
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 8px; }
-        .pop-container { max-width: 900px; margin: 0 auto; background: #ffffff; color: #000000; padding: 35px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); }
         
-        /* สไตล์ไฮไลต์รถที่ค้างส่งมอบ/กำลังใช้งาน ให้สะดุดตาเรืองแสง */
         .active-mission-card {
             background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
             border: 2px solid #f59e0b !important;
@@ -55,11 +52,10 @@
             background: transparent !important;
         }
     </style>
-    <!-- Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
-<body class="min-h-screen p-4 md:p-6 flex flex-col justify-between max-w-4xl mx-auto">
+<body class="min-h-screen p-4 md:p-6 flex flex-col max-w-4xl mx-auto space-y-4">
 
     <div class="w-full space-y-4">
         <!-- Header Bar -->
@@ -85,18 +81,8 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="grid grid-cols-2 gap-3 text-xs font-semibold no-print">
-            <button onclick="_0xswitchTab('booking')" id="tab-btn-booking" class="py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow">
-                <i class="fa-solid fa-car-side text-sky-400"></i> 1. เลือกรถและจัดการการใช้
-            </button>
-            <button onclick="_0xswitchTab('report')" id="tab-btn-report" class="py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700 transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-chart-pie text-emerald-400"></i> 2. รายงานสรุปประจำวัน
-            </button>
-        </div>
-
-        <!-- TAB 1: FLEET LISTING & BOOKING / RETURN -->
-        <div id="tab-content-booking" class="space-y-4 no-print">
+        <!-- FLEET LISTING & BOOKING / RETURN -->
+        <div class="space-y-4">
             
             <!-- รายการรถยนต์สำหรับขอใช้ -->
             <div class="glass-panel rounded-2xl p-4 md:p-6 space-y-4">
@@ -108,7 +94,7 @@
                         รายชื่อรถยนต์ส่วนกลาง (8 คัน)
                     </h2>
                     <span class="text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full font-semibold">
-                        <i class="fa-solid fa-triangle-exclamation"></i> รถว่างกดจอง | รถที่ท่านใช้ (สีส้มเด่นชัด) กดคืนรถ
+                        <i class="fa-solid fa-triangle-exclamation"></i> รถว่างกดจอง | รถที่ท่านใช้ (สีส้ม) กดคืนรถ
                     </span>
                 </div>
 
@@ -140,22 +126,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-slate-300 mb-1 font-medium">ช่วงเวลาเดินทางขาออก:</label>
-                        <select id="pop-start-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sky-300 font-bold outline-none focus:border-sky-500"></select>
+                        <select id="pop-start-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sky-300 font-bold outline-none"></select>
                     </div>
                     <div>
                         <label class="block text-slate-300 mb-1 font-medium">คาดว่าจะกลับเวลา:</label>
-                        <select id="pop-end-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-emerald-300 font-bold outline-none focus:border-emerald-500"></select>
+                        <select id="pop-end-time" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-emerald-300 font-bold outline-none"></select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-slate-300 mb-1 font-medium">จุดหมายปลายทาง:</label>
-                        <input type="text" id="pop-destination" value="พื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
+                        <input type="text" id="pop-destination" value="พื้นที่ตำบลข่วงเปา" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none">
                     </div>
                     <div>
                         <label class="block text-slate-300 mb-1 font-medium">วัตถุประสงค์:</label>
-                        <input type="text" id="pop-purpose" value="ปฏิบัติภารกิจตรวจสอบและบริการประชาชนในพื้นที่" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none focus:border-sky-500">
+                        <input type="text" id="pop-purpose" value="ปฏิบัติภารกิจตรวจสอบและบริการประชาชนในพื้นที่" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white font-semibold outline-none">
                     </div>
                 </div>
 
@@ -181,7 +167,7 @@
             <div id="return-form-box" class="glass-panel rounded-2xl p-5 md:p-6 space-y-4 text-xs hidden border-2 border-amber-500/60 shadow-xl shadow-amber-500/10">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                     <h2 class="font-bold text-amber-300 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-flag-checkered text-amber-400 animate-bounce"></i> 2. คืนรถ / จบภารกิจ (รอปิดจ็อบ): <span id="return-car-title" class="text-white"></span>
+                        <i class="fa-solid fa-flag-checkered text-amber-400 animate-bounce"></i> 2. คืนรถ / จบภารกิจ: <span id="return-car-title" class="text-white"></span>
                     </h2>
                     <button onclick="_0xcancelReturn()" class="text-rose-400 hover:text-rose-300 text-xs font-semibold px-2 py-1"><i class="fa-solid fa-xmark"></i> ปิด</button>
                 </div>
@@ -209,105 +195,10 @@
                 </div>
             </div>
         </div>
-
-        <!-- TAB 2: DAILY SUMMARY REPORT -->
-        <div id="tab-content-report" class="space-y-4 hidden">
-            <div class="glass-panel rounded-2xl p-4 md:p-6 space-y-4 no-print">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
-                    <h2 class="text-xs md:text-sm font-bold text-slate-100 flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs">
-                            <i class="fa-solid fa-chart-pie"></i>
-                        </div>
-                        รายงานสรุปการใช้รถยนต์ประจำวัน
-                    </h2>
-                    
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="_0xclearReportLogs()" class="bg-rose-600/80 hover:bg-rose-700 text-white text-xs font-semibold px-3 py-2 rounded-xl transition shadow flex items-center gap-1.5">
-                            <i class="fa-solid fa-trash-can"></i> เคลียร์
-                        </button>
-
-                        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700 px-2.5 py-1.5 rounded-xl">
-                            <label class="text-[11px] text-slate-300 font-semibold"><i class="fa-solid fa-car text-amber-400"></i> รถ:</label>
-                            <select id="report-filter-car" onchange="renderDailyReport()" class="bg-transparent text-xs text-amber-300 font-semibold outline-none cursor-pointer max-w-[130px]">
-                                <option value="ALL">--- รถทุกคัน ---</option>
-                            </select>
-                        </div>
-
-                        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700 px-2.5 py-1.5 rounded-xl">
-                            <label class="text-[11px] text-slate-300 font-semibold"><i class="fa-solid fa-calendar-days text-sky-400"></i> วันที่:</label>
-                            <select id="report-filter-date" onchange="renderDailyReport()" class="bg-transparent text-xs text-sky-300 font-semibold outline-none cursor-pointer">
-                                <option value="ALL">--- ทุกวัน ---</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-xl text-center">
-                        <span class="text-xs text-slate-400 block">เที่ยววิ่งทั้งหมด</span>
-                        <span id="rep-total-trips" class="text-xl font-black text-sky-400 odometer-font">0 เที่ยว</span>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-xl text-center">
-                        <span class="text-xs text-slate-400 block">ระยะทางรวม</span>
-                        <span id="rep-total-distance" class="text-xl font-black text-emerald-400 odometer-font">0 กม.</span>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-xl text-center">
-                        <span class="text-xs text-slate-400 block">ค่าน้ำมัน (10กม./ลิตร|44บ.)</span>
-                        <span id="rep-estimated-fuel" class="text-xl font-black text-amber-400 odometer-font">0 บาท</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Printable A4 Preview Container -->
-            <div id="daily-report-preview" class="pop-container space-y-4">
-                <div class="text-center space-y-1">
-                    <p class="font-bold text-sm text-black">องค์การบริหารส่วนตำบลข่วงเปา อำเภอจอมทอง จังหวัดเชียงใหม่</p>
-                    <h3 class="font-bold text-base text-black">รายงานสรุปการใช้รถยนต์และประเมินค่าน้ำมันเชื้อเพลิงประจำวัน</h3>
-                    <p class="text-xs text-slate-600">
-                        เงื่อนไข: <span id="rep-doc-car" class="font-bold text-black">รถทุกคัน</span> | ประจำวันที่: <span id="rep-doc-date" class="font-bold underline text-black">ทุกช่วงเวลา</span>
-                    </p>
-                </div>
-
-                <div class="overflow-x-auto pt-2">
-                    <table class="w-full border-collapse border border-slate-400 text-center text-xs text-black">
-                        <thead>
-                            <tr class="bg-slate-100">
-                                <th class="border border-slate-400 p-2">ลำดับ</th>
-                                <th class="border border-slate-400 p-2">หมายเลขทะเบียน / รถ</th>
-                                <th class="border border-slate-400 p-2">ผู้ขอใช้รถ</th>
-                                <th class="border border-slate-400 p-2">จุดหมายปลายทาง</th>
-                                <th class="border border-slate-400 p-2">ไมล์ออก - กลับ</th>
-                                <th class="border border-slate-400 p-2">รวมระยะทาง (กม.)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="daily-report-tbody">
-                            <tr><td colspan="6" class="border border-slate-400 p-4 text-slate-500">ไม่มีประวัติการใช้งานตามเงื่อนไขที่เลือก</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="bg-slate-50 border border-slate-300 p-3 rounded-lg text-xs space-y-1 text-black">
-                    <div class="flex justify-between font-bold">
-                        <span>ระยะทางรวมทั้งสิ้น:</span>
-                        <span id="doc-total-dist">0 กิโลเมตร</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-amber-800">
-                        <span>ประมาณการใช้น้ำมันเชื้อเพลิง:</span>
-                        <span id="doc-total-cost">0 บาท</span>
-                    </div>
-                </div>
-
-                <div class="pt-4 flex justify-center gap-3 no-print border-t">
-                    <button onclick="downloadPDFMobile('daily-report-preview', 'V-SMART-POP-TransportReport.pdf')" class="industrial-btn bg-slate-800 text-white font-bold px-6 py-3 rounded-xl text-xs flex items-center gap-2 shadow-xl">
-                        <i class="fa-solid fa-download text-sky-400"></i> ดาวน์โหลดรายงาน PDF
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Footer -->
-    <footer class="pt-6 pb-2 text-center no-print">
+    <footer class="pt-6 pb-2 text-center">
         <p class="text-xs text-slate-500 font-medium">© 2026 V-SMART POP Edition • นายมิ่งภพ ศรีชะบา | ศูนย์สารสนเทศ อบต.ข่วงเปา</p>
     </footer>
 
@@ -330,7 +221,6 @@
         let selectedCarName = "";
         let selectedCarStartMile = 0;
         let vehiclesDataMap = {};
-        let globalLogsMap = {};
 
         const timeSlots = ["08.30", "09.00", "09.30", "10.00", "10.30", "11.00", "11.30", "12.00", "12.30", "13.00", "13.30", "14.00", "14.30", "15.00", "15.30", "16.00", "16.30"];
         const specializedRegs = ["ขว 53 เชียงใหม่", "84-2021 เชียงใหม่", "ผด 593 เชียงใหม่", "ยม 5205 เชียงใหม่", "ยพ 4470 เชียงใหม่", "ฆข 29 เชียงใหม่", "ตค 3745 เชียงใหม่", "ตค 8841 เชียงใหม่"];
@@ -349,12 +239,11 @@
             loadFirebaseRealtimeData();
         });
 
-        // ฟังก์ชันสังเคราะห์เสียงพูด (Text-to-Speech)
         function playThankYouVoice() {
             if ('speechSynthesis' in window) {
-                let utterance = new SpeechSynthesisUtterance("ขอบคุณที่ใช้บริการ");
+                let utterance = new SpeechSynthesisUtterance("ขอบคุณที่ใช้บริการครับ");
                 utterance.lang = 'th-TH';
-                utterance.rate = 1.0; // ความเร็วปกติ
+                utterance.rate = 1.0;
                 window.speechSynthesis.speak(utterance);
             }
         }
@@ -394,10 +283,7 @@
             db.ref('/').on('value', (snapshot) => {
                 let root = snapshot.val() || {};
                 vehiclesDataMap = root.vehicles || {};
-                globalLogsMap = root.activity_logs || {};
                 renderFleetList();
-                renderCarFilterDropdown();
-                renderDailyReport();
             });
         }
 
@@ -411,7 +297,6 @@
                 return;
             }
 
-            // จัดเรียงลำดับ: ดันรถที่ User คนนี้กำลังใช้งานอยู่ขึ้นมาอยู่อันดับแรกสุดเสมอ
             let vehicleKeys = Object.keys(vehiclesDataMap);
             vehicleKeys.sort((a, b) => {
                 let carA = vehiclesDataMap[a];
@@ -442,7 +327,6 @@
                 let isOtherCarInUse = (car.status === "in-use" && car.current_user !== currentUser.name);
 
                 if (isMyCarInUse) {
-                    // ใช้คลาสพิเศษสีส้มทองเรืองแสงสะดุดตา
                     cardStyle = "active-mission-card animate-pulse";
                     statusBadge = `<span class="text-[10px] bg-amber-500 text-slate-950 px-2.5 py-0.5 rounded-full font-black shadow-md"><i class="fa-solid fa-triangle-exclamation"></i> รอคืนรถ (ยังไม่ปิดจ็อบ)</span>`;
                     destinationInfo = `<p class="text-[11px] text-amber-300 mt-1 font-bold"><i class="fa-solid fa-location-dot"></i> จุดหมาย: ${car.destination || '-'}</p>`;
@@ -512,7 +396,7 @@
                 start_mileage: selectedCarStartMile,
                 reservation_meta: `${dateStr}, ${sTime} - ${eTime} น.`
             }).then(() => {
-                alert("🚗 บันทึกสถานะออกเดินทางเรียบร้อยแล้ว! สถานะรถในระบบถูกล็อกเป็น 'กำลังใช้งาน'");
+                alert("🚗 บันทึกสถานะออกเดินทางเรียบร้อยแล้ว!");
                 _0xcancelBooking();
             });
         }
@@ -570,144 +454,10 @@
             };
 
             db.ref('activity_logs').push(logData).then(() => {
-                // เล่นเสียงพูด "ขอบคุณที่ใช้บริการ"
                 playThankYouVoice();
-
-                alert("✅ สิ้นสุดภารกิจและคืนรถเข้าคลังสำเร็จ!");
+                alert("✅ สิ้นสุดภารกิจและส่งมอบรถคืนระบบสำเร็จ!");
                 _0xcancelReturn();
-                setTimeout(() => {
-                    _0xswitchTab('report');
-                }, 100);
-            }).catch((error) => {
-                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล: " + error.message);
             });
-        }
-
-        function _0xclearReportLogs() {
-            if (confirm("คุณต้องการลบประวัติการใช้งานรถทั้งหมดในรายงานสรุปประจำวันใช่หรือไม่?")) {
-                db.ref('activity_logs').remove().then(() => { alert("✅ เคลียร์ประวัติเรียบร้อยแล้ว!"); });
-            }
-        }
-
-        function renderCarFilterDropdown() {
-            let carSelect = document.getElementById('report-filter-car');
-            if (!carSelect) return;
-            let currentCarVal = carSelect.value;
-            carSelect.innerHTML = `<option value="ALL">--- รถทุกคัน ---</option>`;
-            let carNamesSet = new Set();
-            if (vehiclesDataMap) {
-                Object.keys(vehiclesDataMap).forEach(k => {
-                    let car = vehiclesDataMap[k];
-                    let isMoto = car.type && car.type.includes("รถจักรยานยนต์");
-                    let isSpecial = specializedRegs.includes(car.registration) || car.category === 'specialized';
-                    if (!isMoto && !isSpecial && car.registration) {
-                        carNamesSet.add(`${car.registration} - ${car.brand_model}`);
-                    }
-                });
-            }
-            Array.from(carNamesSet).sort().forEach(cName => {
-                let opt = document.createElement('option'); opt.value = cName; opt.text = cName;
-                carSelect.appendChild(opt);
-            });
-            if (currentCarVal) carSelect.value = currentCarVal;
-        }
-
-        function _0xswitchTab(tab) {
-            let bTab = document.getElementById('tab-content-booking');
-            let rTab = document.getElementById('tab-content-report');
-            let bBtn = document.getElementById('tab-btn-booking');
-            let rBtn = document.getElementById('tab-btn-report');
-
-            if (tab === 'booking') {
-                bTab.classList.remove('hidden'); rTab.classList.add('hidden');
-                bBtn.className = "py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow";
-                rBtn.className = "py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800";
-            } else {
-                bTab.classList.add('hidden'); rTab.classList.remove('hidden');
-                rBtn.className = "py-3.5 rounded-xl industrial-btn text-white font-bold flex items-center justify-center gap-2 shadow";
-                bBtn.className = "py-3.5 rounded-xl bg-slate-900/60 text-slate-400 border border-slate-800";
-                renderDailyReport();
-            }
-        }
-
-        function renderDailyReport() {
-            let selectDateEl = document.getElementById('report-filter-date');
-            let selectCarEl = document.getElementById('report-filter-car');
-            if (!selectDateEl || !selectCarEl) return;
-            
-            let datesSet = new Set();
-            Object.keys(globalLogsMap).forEach(k => {
-                let l = globalLogsMap[k];
-                if (l.timestamp) datesSet.add(l.timestamp.split(',')[0].trim());
-            });
-
-            let sortedDates = Array.from(datesSet).sort().reverse();
-            let currentSelectedDate = selectDateEl.value;
-
-            selectDateEl.innerHTML = `<option value="ALL">--- ทุกวัน ---</option>`;
-            sortedDates.forEach(d => {
-                let opt = document.createElement('option'); opt.value = d; opt.text = d;
-                selectDateEl.appendChild(opt);
-            });
-            if (currentSelectedDate) selectDateEl.value = currentSelectedDate;
-
-            let filterDate = selectDateEl.value;
-            let filterCar = selectCarEl.value;
-            let tbody = document.getElementById('daily-report-tbody');
-            tbody.innerHTML = "";
-
-            let matched = [];
-            let totalDist = 0;
-
-            Object.keys(globalLogsMap).forEach(k => {
-                let l = globalLogsMap[k];
-                let isTransportLog = !l.action || l.action.includes("ขนส่งเจ้าหน้าที่") || (!l.action.includes("จักรยานยนต์") && !l.action.includes("เฉพาะกิจ"));
-                let matchDate = (filterDate === "ALL" || (l.timestamp && l.timestamp.includes(filterDate)));
-                let matchCar = (filterCar === "ALL" || l.car === filterCar);
-
-                if (isTransportLog && matchDate && matchCar) {
-                    matched.push(l);
-                    totalDist += Number(l.totalDistance) || 0;
-                }
-            });
-
-            document.getElementById('rep-doc-car').innerText = filterCar === "ALL" ? "รถทุกคัน" : filterCar;
-            document.getElementById('rep-doc-date').innerText = filterDate === "ALL" ? "ทุกช่วงเวลา" : filterDate;
-            document.getElementById('rep-total-trips').innerText = matched.length + " เที่ยว";
-            document.getElementById('rep-total-distance').innerText = totalDist.toLocaleString() + " กม.";
-            document.getElementById('rep-estimated-fuel').innerText = Math.round((totalDist / 10) * 44).toLocaleString() + " บาท";
-
-            document.getElementById('doc-total-dist').innerText = totalDist.toLocaleString() + " กิโลเมตร";
-            document.getElementById('doc-total-cost').innerText = Math.round((totalDist / 10) * 44).toLocaleString() + " บาท";
-
-            if (matched.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="border border-slate-400 p-4 text-slate-500">ไม่มีประวัติการใช้งาน</td></tr>`;
-                return;
-            }
-
-            let idx = 1;
-            matched.forEach(l => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="border border-slate-400 p-2">${idx++}</td>
-                        <td class="border border-slate-400 p-2">${l.car || '-'}</td>
-                        <td class="border border-slate-400 p-2">${l.user || '-'}</td>
-                        <td class="border border-slate-400 p-2">${l.destination || '-'}</td>
-                        <td class="border border-slate-400 p-2">${l.startMileage} - ${l.endMileage}</td>
-                        <td class="border border-slate-400 p-2">${l.totalDistance}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        function downloadPDFMobile(elementId, filename) {
-            const el = document.getElementById(elementId);
-            html2pdf().from(el).set({
-                margin: 10, filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save();
         }
     </script>
 </body>
